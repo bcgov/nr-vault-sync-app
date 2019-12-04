@@ -1,0 +1,34 @@
+{
+  "name": "vault-policy",
+  "version": "1.0.0",
+  "description": "Vault policy generation tool for applications",
+  "main": "index.js",
+  "scripts": {
+    "lint": "tsc --noEmit && eslint \"**/*.{js,ts}\" --quiet --fix",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "ts-node src/index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://apps.nrs.gov.bc.ca/int/stash/scm/appdev/vault-policy.git"
+  },
+  "author": "Matthew Bystedt <matthew.bystedt@gov.bc.ca>",
+  "license": "Closed",
+  "dependencies": {
+    "@types/ejs": "^2.7.0",
+    "@types/object-hash": "^1.3.0",
+    "ejs": "^3.0.1",
+    "node-vault": "^0.9.11",
+    "object-hash": "^2.0.1",
+    "typescript": "^3.7.2"
+  },
+  "devDependencies": {
+    "@types/node": "^12.12.14",
+    "@types/node-vault": "^0.9.0",
+    "@typescript-eslint/eslint-plugin": "^2.9.0",
+    "@typescript-eslint/parser": "^2.9.0",
+    "eslint": "^6.7.2",
+    "eslint-config-google": "^0.14.0",
+    "ts-node": "^8.5.4"
+  }
+}

@@ -1,0 +1,17 @@
+{
+    "groups": [
+        {
+            "name": "app-projects",
+            "type": "internal",
+            "policies": [
+                "app-<%= project %>"
+            ]
+        }
+    ],
+    "policies": [
+        {
+            "name": "app-<%= project %>",
+            "template": "project.hcl.tpl"
+        }
+    ]
+}
