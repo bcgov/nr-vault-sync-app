@@ -9,7 +9,12 @@ The tool will take following environment variables. The default is in the bracke
 * VAULT_ADDR - The address of the vault server ('http://127.0.0.1:8200')
 * VAULT_TOKEN - The token to use when connecting (myroot)
 
-## Configuration
+## Supported npm commands ##
+
+* npm start - deploy configuration to provided vault instance
+* npm run lint - lint source code
+
+## Configuration ##
 
 See: [Confluence Documentation](https://apps.nrs.gov.bc.ca/int/confluence/display/AD/How+to+configure+vault+policies)
 
