@@ -9,14 +9,12 @@
     "groups": [
         {
             "name": "app-deliveries",
-            "type": "internal",
             "policies": [
                 "app-<%= project %>-<%= application %>-appdev"
             ]
         },
         {
             "name": "app-<%= project %>-<%= application %>",
-            "type": "internal",
             "metadata": {
                 "project": "<%= project %>",
                 "application": "<%= application %>"
