@@ -16,7 +16,7 @@ The tool will take following environment variables. The default is in the bracke
 
 ## Configuration ##
 
-See: [Confluence Documentation](https://apps.nrs.gov.bc.ca/int/confluence/display/AD/How+to+configure+vault+policies)
+See: [Confluence Documentation](https://apps.nrs.gov.bc.ca/int/confluence/display/AD/How+to+configure+the+Vault+Policy+Generator+tool)
 
 ## Local testing ##
 
