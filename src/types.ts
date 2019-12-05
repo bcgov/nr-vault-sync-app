@@ -10,7 +10,7 @@ export interface ProjectConfig {
 };
 
 export interface Deliverable {
-  sync(): void;
+  sync(): Promise<any>;
 };
 
 export interface AppRoleConfig {

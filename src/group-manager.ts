@@ -11,9 +11,9 @@ class GroupManager {
   /**
    * Sync the group information with vault
    */
-  sync(): Promise<any> {
-    return Promise.all(Object.values(this.groupHash).map((param) => {
-      return vault.read(`identity/group/name/${param.name}`).then((group) => {
+  async sync(): Promise<any> {
+    for (const param of Object.values(this.groupHash)) {
+      await vault.read(`identity/group/name/${param.name}`).then((group) => {
         // Exists - merge in policies and groups
         group.data.policies = param.policies;
         return vault.write(`identity/group/name/${param.name}`, group.data);
@@ -21,7 +21,7 @@ class GroupManager {
         // 404 - Create the group
         return vault.write(`identity/group/name/${param.name}`, param);
       });
-    }));
+    }
   }
 
   /**

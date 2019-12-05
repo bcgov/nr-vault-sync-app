@@ -24,10 +24,14 @@ class ConfigurationManager {
     /**
      * Syncs the configuration with vault
      */
-    sync(): void {
-      DeliverableFactory.generate(this.config.project, undefined, this.gm).forEach((dp) => dp.sync());
+    async sync(): Promise<any> {
+      for (const dp of DeliverableFactory.generate(this.config.project, undefined, this.gm)) {
+        await dp.sync();
+      }
       for (const appConfig of this.config.applications) {
-        DeliverableFactory.generate(appConfig, this.config.project, this.gm).forEach((dp) => dp.sync());
+        for (const dp of DeliverableFactory.generate(appConfig, this.config.project, this.gm)) {
+          await dp.sync();
+        }
       }
     }
 }

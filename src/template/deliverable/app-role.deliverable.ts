@@ -25,7 +25,6 @@ export class AppRoleDeliverable implements Deliverable {
       policies: this.appRoleConfig.token_policies
           .map((policy) => ejs.render(policy, this.deliverableSubs)).join(', '),
     };
-    console.log(param);
 
     return vault.addApproleRole(param);
   }
