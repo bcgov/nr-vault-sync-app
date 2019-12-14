@@ -38,6 +38,7 @@ class DeliverableFactory {
     );
     if (tmplConfig.policies) {
       rval = rval.concat(tmplConfig.policies.map((policy) => {
+        console.log(path.join(templatePath, 'policy', policy.template));
         const tmplStr = fs.readFileSync(path.join(templatePath, 'policy', policy.template), 'UTF8');
         return new PolicyDeliverable(policy, deliverableSubs, tmplStr);
       }));
