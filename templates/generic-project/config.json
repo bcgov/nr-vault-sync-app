@@ -5,12 +5,22 @@
             "policies": [
                 "app-<%= project %>"
             ]
+        },
+        {
+            "name": "app-deliveries",
+            "policies": [
+                "app-<%= project %>-appdev"
+            ]
         }
     ],
     "policies": [
         {
             "name": "app-<%= project %>",
             "template": "project.hcl.tpl"
+        },
+        {
+            "name": "app-<%= project %>-appdev",
+            "template": "appdev.hcl.tpl"
         }
     ]
 }
