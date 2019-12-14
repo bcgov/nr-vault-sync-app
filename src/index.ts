@@ -14,7 +14,6 @@ console.log('Starting sync...');
 const gm = new GroupManager();
 (async () => {
   for (const file of configurationFiles) {
-    console.log(`Config: ${file}`);
     const cm = new ConfigurationManager(path.join(CONFIG_DIR, file), gm);
     await cm.sync();
   }
