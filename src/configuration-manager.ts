@@ -18,6 +18,7 @@ class ConfigurationManager {
      * @param gm The group manager
      */
     constructor(private path: string, private gm: GroupManager) {
+      console.log(`ConfigurationManager file: ${path}`);
       this.config = JSON.parse(fs.readFileSync(this.path, 'utf-8'));
     }
 
