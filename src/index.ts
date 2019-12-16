@@ -23,7 +23,7 @@ const gm = new GroupManager();
   }
 
   await gm.sync();
-})().catch(e => {
+})().catch((e) => {
   console.log('Error');
   process.exit(-1);
 }).then(() => {
