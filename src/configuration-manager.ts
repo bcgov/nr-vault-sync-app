@@ -27,11 +27,17 @@ class ConfigurationManager {
      */
     async sync(): Promise<any> {
       for (const dp of DeliverableFactory.generate(this.config.project, undefined, this.gm)) {
-        await dp.sync();
+        await dp.sync().catch((e) => {
+          console.log(e);
+          throw (e);
+        });
       }
       for (const appConfig of this.config.applications) {
         for (const dp of DeliverableFactory.generate(appConfig, this.config.project, this.gm)) {
-          await dp.sync();
+          await dp.sync().catch((e) => {
+            console.log(e);
+            throw (e);
+          });
         }
       }
     }
