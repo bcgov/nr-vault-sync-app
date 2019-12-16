@@ -3,8 +3,12 @@ import * as path from 'path';
 
 import ConfigurationManager from './configuration-manager';
 import GroupManager from './group-manager';
+import {vault} from './vault';
 
 const CONFIG_DIR = path.join(__dirname, '../config');
+
+console.log('Vault Policy Application Sync');
+console.log(`Server: ${vault.endpoint}`);
 
 // Scan config folder
 const configurationFiles = fs.readdirSync(CONFIG_DIR);
