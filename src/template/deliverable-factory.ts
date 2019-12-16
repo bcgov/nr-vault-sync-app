@@ -34,7 +34,7 @@ class DeliverableFactory {
     const templatePath = path.join(__dirname, '../../templates', config.template);
     console.log(path.join(templatePath, 'config.json'));
     const tmplConfig: TemplateConfig = JSON.parse(
-        fs.readFileSync(path.join(templatePath, 'config.json'), 'UTF8'),
+      fs.readFileSync(path.join(templatePath, 'config.json'), 'UTF8'),
     );
     if (tmplConfig.policies) {
       rval = rval.concat(tmplConfig.policies.map((policy) => {
