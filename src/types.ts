@@ -2,6 +2,7 @@ export interface TemplateConfig {
   key: string;
   template: string;
   environments: string[];
+  policyext: PolicyExtension;
 };
 
 export interface ProjectConfig {
@@ -42,4 +43,8 @@ export interface TemplateConfig {
 
 export interface DeliverableSubs {
   [key: string]: string | string[];
+}
+
+export interface PolicyExtension {
+  [key: string]: string[];
 }

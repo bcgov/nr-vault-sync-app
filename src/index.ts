@@ -24,7 +24,8 @@ const gm = new GroupManager();
 
   await gm.sync();
 })().catch((e) => {
-  console.log('Error');
+  console.log('Exception thrown during run:');
+  console.log(e);
   process.exit(-1);
 }).then(() => {
   console.log('Done!');
