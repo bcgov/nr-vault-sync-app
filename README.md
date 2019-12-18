@@ -23,3 +23,7 @@ See: [Confluence Documentation](https://apps.nrs.gov.bc.ca/int/confluence/displa
 The following will start up vault in docker. The default environment variables should work with it.
 
 `docker run --cap-add=IPC_LOCK -e 'VAULT_DEV_ROOT_TOKEN_ID=myroot' -e 'VAULT_DEV_LISTEN_ADDRESS=0.0.0.0:8200' --name=dev-vault -p 8200:8200 vault`
+
+You will need to enable the 'AppRole' authentication method.
+
+`vault auth enable approle`
