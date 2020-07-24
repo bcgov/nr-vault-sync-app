@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 import {Argv, Arguments, Options} from 'yargs';
 import * as winston from 'winston';
-import { PolicyApi } from '../api/policy.api';
+import {PolicyApi} from '../api/policy.api';
 
 export const command = 'sync';
 export const aliases = [];
@@ -26,5 +26,4 @@ export const handler = async (argv: Arguments) => {
   if (prjName) {
     await policyApi.sync('environment/project', prjName, appName);
   }
-
 };

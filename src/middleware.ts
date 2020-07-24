@@ -5,7 +5,7 @@ import nv from 'node-vault';
 // eslint-disable-next-line no-unused-vars
 import {Arguments} from 'yargs';
 
-export let vault: nv.client; 
+export let vault: nv.client;
 const defaultLogLevel = 2;
 const LOG_LEVEL_MIN = 0;
 const LOG_LEVEL_MAX = 5;
@@ -65,7 +65,7 @@ export function configureLogger(argv: Arguments) {
 
   return winston.configure({
     format: format.combine(
-      format.cli(),
+        format.cli(),
     ),
     transports: [
       new winston.transports.Console(),
