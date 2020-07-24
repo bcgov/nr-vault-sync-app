@@ -1,0 +1,26 @@
+{
+  "groups": [
+  ],
+  "policies": [
+    {
+        "name": "<%= tmplFilename %>/<%= project %>",
+        "template": "project-db-admin.hcl.tpl"
+    },
+    {
+        "name": "<%= tmplFilename %>/<%= project %>",
+        "template": "project-db-read.hcl.tpl"
+    },
+    {
+        "name": "<%= tmplFilename %>/<%= project %>",
+        "template": "project-kv-admin.hcl.tpl"
+    },
+    {
+        "name": "<%= tmplFilename %>/<%= project %>",
+        "template": "project-kv-read.hcl.tpl"
+    },
+    {
+        "name": "<%= tmplFilename %>/<%= project %>",
+        "template": "project-kv-write.hcl.tpl"
+    }
+  ]
+}
