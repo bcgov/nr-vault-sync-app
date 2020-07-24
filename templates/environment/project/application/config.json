@@ -1,0 +1,39 @@
+{
+  "groups": [
+      {
+          "name": "app-deliveries",
+          "policies": [
+            "app-kv-admin/<%= project %>-<%= app %>",
+            "app-db-read/<%= project %>-<%= app %>"
+          ]
+      },
+      {
+          "name": "dba",
+          "policies": [
+            "app-db-admin/<%= project %>-<%= app %>"
+          ]
+      }
+  ],
+  "policies": [
+      {
+          "name": "<%= tmplFilename %>/<%= project %>-<%= application %>",
+          "template": "app-db-admin.hcl.tpl"
+      },
+      {
+          "name": "<%= tmplFilename %>/<%= project %>-<%= application %>",
+          "template": "app-db-read.hcl.tpl"
+      },
+      {
+          "name": "<%= tmplFilename %>/<%= project %>-<%= application %>",
+          "template": "app-kv-admin.hcl.tpl"
+      },
+      {
+          "name": "<%= tmplFilename %>/<%= project %>-<%= application %>",
+          "template": "app-kv-read.hcl.tpl"
+      },
+      {
+          "name": "<%= tmplFilename %>/<%= project %>-<%= application %>",
+          "template": "app-kv-write.hcl.tpl"
+      }
+  ]
+}

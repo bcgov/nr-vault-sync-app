@@ -1,4 +1,4 @@
 
-path "secret/data/app/<%= project %>" {
+path "<%= secertKvPath %>/data/<%= project %>" {
   capabilities = ["create", "read", "update", "delete", "list"]
 }

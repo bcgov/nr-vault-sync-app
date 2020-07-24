@@ -1,0 +1,18 @@
+{
+  "groups": [
+  ],
+  "policies": [
+    {
+        "name": "<%= tmplFilename %>",
+        "template": "env-db-admin.hcl.tpl"
+    },
+    {
+        "name": "<%= tmplFilename %>",
+        "template": "env-db-read.hcl.tpl"
+    },
+    {
+      "name": "<%= tmplFilename %>",
+      "template": "env-user-generic.hcl.tpl"
+    }
+  ]
+}
