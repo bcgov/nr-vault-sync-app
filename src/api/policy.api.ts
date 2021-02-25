@@ -1,14 +1,19 @@
 import * as ejs from 'ejs';
 import * as fs from 'fs';
 import * as path from 'path';
-
 // eslint-disable-next-line no-unused-vars
-import {vault} from '../middleware';
+import nv from 'node-vault';
 
 /**
  * The policy deliverable enables the syncing of vault policies
  */
 export class PolicyApi {
+  /**
+   * Construct the policy api
+   * @param vault The vault client to use
+   */
+  constructor(private vault: nv.client) {}
+
   /**
    * Syncs policies with vault
    */
@@ -30,12 +35,12 @@ export class PolicyApi {
           {
             project,
             application,
-            secertKvPath: 'secrets',
+            secertKvPath: 'secret',
             databasePath: 'database',
           },
       );
 
-      await vault.addPolicy({
+      await this.vault.addPolicy({
         name: policyName,
         rules: policyBody,
       });
