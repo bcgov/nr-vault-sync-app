@@ -1,4 +1,3 @@
-
 path "<%= databasePath %>/config" {
   capabilities = ["list"]
 }
@@ -26,4 +25,3 @@ path "<%= databasePath %>/roles/*" {
 path "<%= databasePath %>/creds/*" {
   capabilities = ["read"]
 }
-
