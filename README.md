@@ -14,7 +14,11 @@ The Vault Sync tool or VST is for generating and syncing vault policies, groups 
 The tool will take following environment variables. The default is in the brackets.
 
 * VAULT_ADDR - The address of the vault server ('http://127.0.0.1:8200')
-* VAULT_TOKEN - The token to use when connecting (myroot)
+* VAULT_TOKEN - The token to use when connecting to vault (myroot)
+
+* KEYCLOAK_ADDR - The address of the keycloak server ('http://127.0.0.1:8080')
+* KEYCLOAK_USERNAME - The username to use when connecting to Keycloak (admin)
+* KEYCLOAK_PASSWORD - The password to use when connecting to Keycloak (password)
 
 
 ## Supported npm commands ##
@@ -35,6 +39,10 @@ The following will start up vault in docker. The default environment variables s
 You will need to enable the 'AppRole' authentication method.
 
 `vault auth enable approle`
+
+The following will start up keycloak in docker. The default environment variables should work with it.
+
+`docker run -p 8080:8080 -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=password jboss/keycloak`
 
 # Usage
 <!-- usage -->
