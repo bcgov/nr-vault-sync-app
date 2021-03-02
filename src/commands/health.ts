@@ -22,6 +22,6 @@ export default class Health extends Command {
     const vault = vaultFactory(flags['vault-addr'], flags['vault-token']);
 
     this.log(`Vault health - ${vault.endpoint}`);
-    this.log(JSON.stringify(await vault.health()));
+    this.log(JSON.stringify(await vault.health(), undefined, 2));
   }
 }

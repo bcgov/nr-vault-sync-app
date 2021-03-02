@@ -5,7 +5,7 @@ import {vaultFactory} from '../api/api.factory';
 
 jest.mock('../api/api.factory');
 
-describe('policy command', () => {
+describe('policy sync command', () => {
   let stdoutSpy: any;
   beforeEach(() => {
     stdoutSpy = jest.spyOn(process.stdout, 'write')
@@ -22,7 +22,7 @@ describe('policy command', () => {
     }) as unknown as nv.client);
 
     // Test command
-    await PolicySync.run([]);
+    await PolicySync.run(['--vault-addr', 'addr', '--vault-token', 'token']);
 
     expect(stdoutSpy).toHaveBeenCalledWith('TBD\n');
   });
