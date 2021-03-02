@@ -51,7 +51,7 @@ $ npm install -g vstool
 $ vstool COMMAND
 running command...
 $ vstool (-v|--version|version)
-vstool/1.0.0 win32-x64 node-v12.16.2
+vstool/1.0.0 win32-x64 node-v12.18.3
 $ vstool --help [COMMAND]
 USAGE
   $ vstool COMMAND
@@ -61,9 +61,27 @@ USAGE
 
 # Commands
 <!-- commands -->
+* [`vstool group-sync [FILE]`](#vstool-group-sync-file)
 * [`vstool health`](#vstool-health)
 * [`vstool help [COMMAND]`](#vstool-help-command)
 * [`vstool init [VAULT-ADDR] [VAULT-TOKEN]`](#vstool-init-vault-addr-vault-token)
+
+## `vstool group-sync [FILE]`
+
+Syncs a group from Keycloak to Vault.
+
+```
+USAGE
+  $ vstool group-sync [FILE]
+
+OPTIONS
+  -h, --help                             show CLI help
+  --keycloak-addr=keycloak-addr          [default: http://127.0.0.1:8080] The keycloak address
+  --keycloak-password=keycloak-password  [default: admin] The keycloak password
+  --keycloak-username=keycloak-username  [default: admin] The keycloak username
+  --vault-addr=vault-addr                [default: http://127.0.0.1:8200] The vault address
+  --vault-token=vault-token              [default: myroot] The vault token
+```
 
 ## `vstool health`
 

@@ -3,7 +3,7 @@ import {help,vaultAddr, vaultToken, keycloakAddr, keycloakUsername, keycloakPass
 import {vaultFactory, keycloakFactory} from '../api/api.factory';
 
 export default class GroupSync extends Command {
-  static description = 'Syncs a group from Keycloak to Vault.'
+  static description = 'Given a group name, creates that group in Keycloak and syncs it to Vault.'
 
   static flags = {
     ...help,
