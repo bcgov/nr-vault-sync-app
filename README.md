@@ -52,18 +52,6 @@ USAGE
 ...
 ```
 <!-- usagestop -->
-```sh-session
-$ npm install -g vstool
-$ vstool COMMAND
-running command...
-$ vstool (-v|--version|version)
-vstool/1.0.0 win32-x64 node-v12.16.2
-$ vstool --help [COMMAND]
-USAGE
-  $ vstool COMMAND
-...
-```
-<!-- usagestop -->
 
 The script in /bin/run can also run the code without installing it.
 
