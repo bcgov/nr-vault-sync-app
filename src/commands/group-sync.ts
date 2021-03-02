@@ -1,8 +1,9 @@
 import {Command, flags} from '@oclif/command'
 import {help,vaultAddr, vaultToken, keycloakAddr, keycloakUsername, keycloakPassword} from '../flags';
-import {vaultFactory, keycloakFactory} from '../api/api.factory';
-import {VaultController} from '../group-sync/vault.controller'
-import {KeycloakController} from '../group-sync/keycloak.controller'
+import {vaultFactory} from '../vault/vault.factory';
+import {keycloakFactory} from '../keycloak/keycloak.factory';
+import {VaultController} from '../vault/vault.controller'
+import {KeycloakController} from '../keycloak/keycloak.controller'
 
 export default class GroupSync extends Command {
   static description = 'Given a group name, creates that group in Keycloak and syncs it to Vault.'

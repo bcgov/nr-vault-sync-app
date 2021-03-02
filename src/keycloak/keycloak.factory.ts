@@ -1,24 +1,6 @@
-import nv from 'node-vault';
 import KeycloakAdminClient from 'keycloak-admin';
 
-let vault: nv.client;
 let keycloak: KeycloakAdminClient;
-
-/**
- * Vault api factory
- * @param vaultAddr The vault server address
- * @param vaultToken The vault access token
- */
-export function vaultFactory(vaultAddr: string, vaultToken: string): nv.client {
-  if (!vault) {
-    vault = nv({
-      apiVersion: 'v1',
-      endpoint: vaultAddr,
-      token: vaultToken,
-    });
-  }
-  return vault;
-}
 
 /**
  * Keycloak api factory
