@@ -57,7 +57,7 @@
   "scripts": {
     "lint": "eslint \"**/*.{js,ts}\" --quiet --fix --config .eslintrc.json",
     "postpack": "rimraf oclif.manifest.json",
-    "posttest": "eslint . --ext .ts --config .eslintrc",
+    "posttest": "eslint . --ext .ts --fix --config .eslintrc.json",
     "prepack": "rimraf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
     "test": "jest",
     "e2e": "jest --config=jest.e2e.config.js",
