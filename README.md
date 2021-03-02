@@ -9,24 +9,26 @@ The Vault Sync tool or VST is for generating and syncing vault policies, groups 
 * [Commands](#commands)
 <!-- tocstop -->
 
-## Environment Variables ##
+## Environment Variables
 
-The tool will take following environment variables. The default is in the brackets.
+The tool can use the following environment variables in place of command arguments. The default is in the brackets.
 
 * VAULT_ADDR - The address of the vault server ('http://127.0.0.1:8200')
 * VAULT_TOKEN - The token to use when connecting (myroot)
 
 
-## Supported npm commands ##
+## Supported npm commands
 
 * npm start - deploy configuration to provided vault instance
 * npm run lint - lint source code
+* npm run test - Run unit tests
+* npm run e2e - Run end-to-end tests
 
-## Configuration ##
+## Configuration
 
 See: [Confluence Documentation](https://apps.nrs.gov.bc.ca/int/confluence/display/AD/How+to+configure+the+Vault+Policy+Generator+tool)
 
-## Local testing ##
+## Local testing
 
 The following will start up vault in docker. The default environment variables should work with it.
 
@@ -50,6 +52,15 @@ USAGE
 ...
 ```
 <!-- usagestop -->
+
+The script in /bin/run can also run the code without installing it.
+
+```sh-session
+$ ./bin/run COMMAND
+running command...
+$ ./bin/run (-v|--version|version)
+...
+```
 
 # Commands
 <!-- commands -->
