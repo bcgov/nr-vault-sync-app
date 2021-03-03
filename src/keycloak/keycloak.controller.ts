@@ -1,4 +1,6 @@
+// eslint-disable-next-line no-unused-vars
 import KeycloakAdminClient from 'keycloak-admin';
+
 /**
  * Keycloak controller.
  */
@@ -6,7 +8,10 @@ export class KeycloakController {
   /**
   * Constructor. Accepts a keycloak admin client, and log & error to enable this.log/this.error.
   */
-  constructor(private keycloak: KeycloakAdminClient, private log: Function, private error: Function) {}
+  constructor(
+    private keycloak: KeycloakAdminClient,
+    private log: Function,
+    private error: Function) {}
 
   /**
    * Find or create a group in Keycloak.

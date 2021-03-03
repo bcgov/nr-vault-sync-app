@@ -1,9 +1,9 @@
 // eslint-disable-next-line no-unused-vars
 import nv from 'node-vault';
 import PolicySync from './policy-sync';
-import {vaultFactory} from '../api/api.factory';
+import {vaultFactory} from '../vault/vault.factory';
 
-jest.mock('../api/api.factory');
+jest.mock('../vault/vault.factory');
 
 describe('policy sync command', () => {
   let stdoutSpy: any;

@@ -1,5 +1,5 @@
 import {Command} from '@oclif/command';
-import {vaultFactory} from '../api/api.factory';
+import {vaultFactory} from '../vault/vault.factory';
 import {help, vaultAddr, vaultToken} from '../flags';
 import {PolicySyncController} from '../policy-sync/policy-sync.controller';
 
