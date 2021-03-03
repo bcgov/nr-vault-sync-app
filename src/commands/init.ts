@@ -1,6 +1,6 @@
 import {Command} from '@oclif/command';
 import * as fs from 'fs';
-import {vaultFactory} from '../api/api.factory';
+import {vaultFactory} from '../vault/vault.factory';
 import {help, secretShares, secretThreshold, vaultAddr, vaultToken} from '../flags';
 
 /**
