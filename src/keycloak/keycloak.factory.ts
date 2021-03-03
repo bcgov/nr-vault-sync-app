@@ -11,7 +11,7 @@ let keycloakAuthPromise: Promise<any>;
  */
 export async function keycloakFactory(keycloakAddr: string, keycloakUsername: string, keycloakPassword: string): Promise<KeycloakAdminClient> {
   if (!keycloakAuthPromise) {
-    keycloak = new KeycloakAdminClient();
+    keycloak = new KeycloakAdminClient({baseUrl: keycloakAddr});
 
     keycloakAuthPromise = keycloak.auth({
       username: keycloakUsername,

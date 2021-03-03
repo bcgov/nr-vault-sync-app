@@ -5,6 +5,9 @@ import {keycloakFactory} from '../keycloak/keycloak.factory';
 import {VaultController} from '../vault/vault.controller';
 import {KeycloakController} from '../keycloak/keycloak.controller';
 
+/**
+ * Vault and Keycloak user group sync command
+ */
 export default class GroupSync extends Command {
   static description = 'Given a group name, creates that group in Keycloak and syncs it to Vault.'
 
@@ -18,7 +21,9 @@ export default class GroupSync extends Command {
   }
 
   static args = [{name: 'groupname'}]
-
+  /**
+   * Run the command
+   */
   async run() {
     const {args, flags} = this.parse(GroupSync);
 

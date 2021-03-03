@@ -1,8 +1,17 @@
 import nv from 'node-vault';
 
+/**
+  * Vault controller.
+  */
 export class VaultController {
+  /**
+  * Constructor. Accepts a vault client, and log & error to enable this.log/this.error.
+  */
   constructor(private vault: nv.client, private log: Function, private error: Function) {}
 
+  /**
+    * Find a user group in Vault; create it if it does not exist.
+    */
   public async syncGroup(groupname: string, keycloakGroupId: string = '') {
     this.vault.read(`identity/group/name/${groupname}`)
         .then((group: any) => {
@@ -27,6 +36,9 @@ export class VaultController {
         });
   }
 
+  /**
+    * Create a group in Vault.
+    */
   async createGroupInVault(groupname: string, keycloakGroupId: string) {
     const response = await this.vault.write(
         `identity/group/name/${groupname}`,
