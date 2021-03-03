@@ -1,7 +1,7 @@
 import {vault} from './vault';
 import nv from 'node-vault';
 
-describe('Vault', () => {
+xdescribe('Vault', () => {
   let appVault: nv.client;
 
   beforeAll(async () => {

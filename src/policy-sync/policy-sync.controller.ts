@@ -5,14 +5,25 @@ import * as path from 'path';
 import nv from 'node-vault';
 
 /**
- * The policy deliverable enables the syncing of vault policies
+ * The policy controller manages the sync of vault policies
  */
-export class PolicyApi {
+export class PolicySyncController {
   /**
-   * Construct the policy api
+   * Construct the policy controller
    * @param vault The vault client to use
    */
   constructor(private vault: nv.client) {}
+
+
+  /**
+   * Syncs all policies to vault
+   * @param policyPath The path to the configuration
+   */
+  public async syncAll(policyPath: string) {
+    // eslint-disable-next-line no-unused-vars
+    // const dir = path.join(__dirname, '../../templates', policyPath);
+
+  }
 
   /**
    * Syncs policies with vault

@@ -1,3 +1,5 @@
+
+// eslint-disable-next-line no-unused-vars
 import nv from 'node-vault';
 
 /**

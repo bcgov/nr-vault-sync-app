@@ -1,4 +1,4 @@
-import {Command, flags} from '@oclif/command';
+import {Command} from '@oclif/command';
 import {help, vaultAddr, vaultToken, keycloakAddr, keycloakUsername, keycloakPassword} from '../flags';
 import {vaultFactory} from '../vault/vault.factory';
 import {keycloakFactory} from '../keycloak/keycloak.factory';
@@ -27,7 +27,10 @@ export default class GroupSync extends Command {
   async run() {
     const {args, flags} = this.parse(GroupSync);
 
-    const keycloak = await keycloakFactory(flags['keycloak-addr'], flags['keycloak-username'], flags['keycloak-password']);
+    const keycloak = await keycloakFactory(
+        flags['keycloak-addr'],
+        flags['keycloak-username'],
+        flags['keycloak-password']);
     const keycloakController = new KeycloakController(keycloak, this.log, this.error);
 
     const vault = vaultFactory(flags['vault-addr'], flags['vault-token']);
