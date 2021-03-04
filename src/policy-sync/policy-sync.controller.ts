@@ -34,21 +34,21 @@ export class PolicySyncController {
     const config = JSON.parse(fs.readFileSync(path.join(dir, 'config.json'), 'UTF8'));
     for (const policy of config.policies) {
       const policyName = ejs.render(
-          policy.name,
-          {
-            project,
-            application,
-            tmplFilename: policy.template.slice(0, -8),
-          },
+        policy.name,
+        {
+          project,
+          application,
+          tmplFilename: policy.template.slice(0, -8),
+        },
       );
       const policyBody = ejs.render(
-          fs.readFileSync(path.join(dir, policy.template), 'UTF8'),
-          {
-            project,
-            application,
-            secertKvPath: 'secret',
-            databasePath: 'database',
-          },
+        fs.readFileSync(path.join(dir, policy.template), 'UTF8'),
+        {
+          project,
+          application,
+          secertKvPath: 'secret',
+          databasePath: 'database',
+        },
       );
 
       await this.vault.addPolicy({

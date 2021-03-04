@@ -12,11 +12,11 @@ jest.mock('../keycloak/keycloak.factory');
 
 beforeAll(() => {
   jest
-      .spyOn(VaultController.prototype, 'syncGroup')
-      .mockResolvedValue(void(0));
+    .spyOn(VaultController.prototype, 'syncGroup')
+    .mockResolvedValue(void(0));
   jest
-      .spyOn(KeycloakController.prototype, 'syncGroup')
-      .mockResolvedValue(void(0));
+    .spyOn(KeycloakController.prototype, 'syncGroup')
+    .mockResolvedValue(void(0));
 });
 
 

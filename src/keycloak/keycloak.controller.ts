@@ -52,9 +52,9 @@ export class KeycloakController {
    */
   async createGroupInKeycloak(groupname: string) {
     const group = await this.keycloak.groups.create({name: groupname})
-        .catch((error: any) => {
-          return this.error(`Error creating group '${groupname}' in Keycloak: Error ${error.response.statusCode}!`);
-        });
+      .catch((error: any) => {
+        return this.error(`Error creating group '${groupname}' in Keycloak: Error ${error.response.statusCode}!`);
+      });
     this.log(`Group ${groupname} created in Keycloak.`);
     return group;
   }

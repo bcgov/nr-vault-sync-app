@@ -28,9 +28,9 @@ export default class GroupSync extends Command {
     const {args, flags} = this.parse(GroupSync);
 
     const keycloak = await keycloakFactory(
-        flags['keycloak-addr'],
-        flags['keycloak-username'],
-        flags['keycloak-password']);
+      flags['keycloak-addr'],
+      flags['keycloak-username'],
+      flags['keycloak-password']);
     const keycloakController = new KeycloakController(keycloak, this.log, this.error);
 
     const vault = vaultFactory(flags['vault-addr'], flags['vault-token']);
@@ -39,8 +39,8 @@ export default class GroupSync extends Command {
     this.log(`Creating group '${args.groupname}' in Keycloak and in Vault.`);
 
     keycloakController.syncGroup(args.groupname)
-        .then((keycloakGroupID: string) => {
-          vaultController.syncGroup(args.groupname, keycloakGroupID);
-        });
+      .then((keycloakGroupID: string) => {
+        vaultController.syncGroup(args.groupname, keycloakGroupID);
+      });
   }
 }

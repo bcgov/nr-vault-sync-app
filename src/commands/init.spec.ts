@@ -9,7 +9,7 @@ describe('init command', () => {
   let stdoutSpy: any;
   beforeEach(() => {
     stdoutSpy = jest.spyOn(process.stdout, 'write')
-        .mockImplementation(() => true);
+      .mockImplementation(() => true);
   });
 
   afterEach(() => jest.restoreAllMocks());
