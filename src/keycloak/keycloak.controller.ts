@@ -17,13 +17,15 @@ export class KeycloakController {
    * Find or create a group in Keycloak.
    */
   public async syncGroup(groupname: string) {
-    let group = await this.findGroupInKeycloak(groupname);
-    if (group) {
-      this.log(`Group ${groupname} already exists in Keycloak.`);
-    } else {
-      group = await this.createGroupInKeycloak(groupname);
-    }
-    return group.id;
+    await this.findGroupInKeycloak(groupname)
+      .then(async (group) => {
+        if (group) {
+          this.log(`Group ${groupname} already exists in Keycloak.`);
+          return group.id;
+        } else {
+          await this.createGroupInKeycloak(groupname);
+        }
+      });
   }
 
   /**
@@ -51,11 +53,13 @@ export class KeycloakController {
    * Create a group in Keycloak.
    */
   async createGroupInKeycloak(groupname: string) {
-    const group = await this.keycloak.groups.create({name: groupname})
+    this.keycloak.groups.create({name: groupname})
+      .then((group) => {
+        this.log(`Group ${groupname} created in Keycloak.`);
+        return group.id;
+      })
       .catch((error: any) => {
         return this.error(`Error creating group '${groupname}' in Keycloak: Error ${error.response.statusCode}!`);
       });
-    this.log(`Group ${groupname} created in Keycloak.`);
-    return group;
   }
 }
