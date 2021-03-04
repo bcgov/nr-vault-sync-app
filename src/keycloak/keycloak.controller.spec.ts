@@ -1,15 +1,14 @@
 import {KeycloakController} from '../keycloak/keycloak.controller';
-import {keycloakFactory} from '../keycloak/keycloak.factory';
-import KeycloakAdminClient from 'keycloak-admin';
-// eslint-disable-next-line no-unused-vars
 
 describe('user groups in Keycloak', () => {
-  test('group exists', async () => {
-    const log = jest.fn((message: string) => {
-      console.log(`logging ${message}`);
-    });
-    const error = jest.fn((message: string) => {});
+  const log = jest.fn((message: string) => {});
+  const error = jest.fn((message: string) => {});
+  afterEach(() => {
+    log.mockClear();
+    error.mockClear();
+  });
 
+  test('group exists', async () => {
     const mockFind = jest.fn().mockImplementation(() => Promise.resolve([{name: 'existing', id: '1234'}]));
 
     const KeycloakAdminClient = jest.fn().mockImplementation(() => {
@@ -29,11 +28,6 @@ describe('user groups in Keycloak', () => {
   });
 
   test('group does not exist', async () => {
-    const log = jest.fn((message: string) => {
-      console.log(`logging ${message}`);
-    });
-    const error = jest.fn((message: string) => {});
-
     const mockFind = jest.fn().mockImplementation(() => Promise.resolve([]));
     const mockCreate = jest.fn().mockImplementation(() => Promise.resolve({id: 1234}));
 
@@ -54,11 +48,43 @@ describe('user groups in Keycloak', () => {
       });
   });
 
-  test('group lookup fails', () => {
+  test('group lookup fails', async () => {
+    const mockFind = jest.fn().mockImplementation(() => Promise.reject({response: {statusCode: 999}}));
 
+    const KeycloakAdminClient = jest.fn().mockImplementation(() => {
+      return {groups: {find: mockFind}};
+    });
+
+    const keycloak = new KeycloakAdminClient;
+
+    const vc = new KeycloakController(keycloak, log, error);
+    await vc.syncGroup('find-fails')
+      .then(() => {
+        expect(mockFind).toHaveBeenCalledTimes(1);
+        expect(log).toHaveBeenCalledTimes(0);
+        expect(error).toHaveBeenCalledTimes(1);
+        expect(error).toHaveBeenCalledWith(`Error finding group 'find-fails' in Keycloak: Error 999!`);
+      });
   });
 
-  test('group creation fails', () => {
+  test('group creation fails', async () => {
+    const mockFind = jest.fn().mockImplementation(() => Promise.resolve([]));
+    const mockCreate = jest.fn().mockImplementation(() => Promise.reject('oh no'));
 
+    const KeycloakAdminClient = jest.fn().mockImplementation(() => {
+      return {groups: {find: mockFind, create: mockCreate}};
+    });
+
+    const keycloak = new KeycloakAdminClient;
+
+    const vc = new KeycloakController(keycloak, log, error);
+    await vc.syncGroup('newgroup-fails')
+      .then(() => {
+        expect(mockFind).toHaveBeenCalledTimes(1);
+        expect(mockCreate).toHaveBeenCalledTimes(1);
+        expect(log).toHaveBeenCalledTimes(0);
+        expect(error).toHaveBeenCalledTimes(1);
+        expect(error).toHaveBeenCalledWith(`Error creating group 'newgroup-fails' in Keycloak! Is Keycloak running?`);
+      });
   });
 });

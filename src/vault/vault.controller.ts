@@ -1,4 +1,3 @@
-
 // eslint-disable-next-line no-unused-vars
 import nv from 'node-vault';
 
@@ -9,7 +8,11 @@ export class VaultController {
   /**
   * Constructor. Accepts a vault client, and log & error to enable this.log/this.error.
   */
-  constructor(private vault: nv.client, private log: Function, private error: Function) {}
+  constructor(
+    private vault: nv.client,
+    private log: Function,
+    private error: Function,
+  ) {}
 
   /**
     * Find a user group in Vault; create it if it does not exist.

@@ -39,7 +39,7 @@ export default class GroupSync extends Command {
     this.log(`Creating group '${args.groupname}' in Keycloak and in Vault.`);
 
     keycloakController.syncGroup(args.groupname)
-      .then((keycloakGroupID: string) => {
+      .then((keycloakGroupID: string | undefined) => {
         vaultController.syncGroup(args.groupname, keycloakGroupID);
       });
   }
