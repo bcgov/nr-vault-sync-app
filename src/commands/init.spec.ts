@@ -1,7 +1,7 @@
-// eslint-disable-next-line no-unused-vars
 import nv from 'node-vault';
 import Init from './init';
 import {vaultFactory} from '../vault/vault.factory';
+import {mocked} from 'ts-jest/utils';
 
 jest.mock('../vault/vault.factory');
 
@@ -15,10 +15,10 @@ describe('init command', () => {
   afterEach(() => jest.restoreAllMocks());
 
   it('does not run when initialized', async () => {
-    const mockVaultFactory = vaultFactory as jest.MockedFunction<typeof vaultFactory>;
+    const mockVaultFactory = mocked(vaultFactory);
     mockVaultFactory.mockImplementation(() => ({
       endpoint: 'endpoint',
-      health: jest.fn().mockReturnValue({initialized: true, version: 'best'}),
+      health: jest.fn().mockReturnValue(Promise.resolve({initialized: true, version: 'best'})),
     }) as unknown as nv.client);
 
     // Test command

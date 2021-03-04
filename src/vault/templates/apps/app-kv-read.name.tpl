@@ -1,0 +1,1 @@
+<%= project %>/<%= application %>/<%= environment %>-kv-read

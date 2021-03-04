@@ -1,4 +1,5 @@
 import {Command} from '@oclif/command';
+import 'reflect-metadata';
 import {help, vaultAddr, vaultToken, keycloakAddr, keycloakUsername, keycloakPassword} from '../flags';
 import {vaultFactory} from '../vault/vault.factory';
 import {keycloakFactory} from '../keycloak/keycloak.factory';

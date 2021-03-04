@@ -1,6 +1,7 @@
-// eslint-disable-next-line no-unused-vars
+import {injectable} from 'inversify';
 import nv from 'node-vault';
 
+@injectable()
 /**
   * Vault controller.
   */

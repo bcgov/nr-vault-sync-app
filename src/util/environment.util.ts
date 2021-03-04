@@ -17,7 +17,7 @@ const envAlias: {[key: string]: string} = {
 };
 
 /**
- *
+ * Utility class for environment strings
  */
 export default class EnvironmentUtil {
   /**

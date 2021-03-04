@@ -1,0 +1,1 @@
+<%= project %>/<%= environment %>-kv-admin

@@ -1,4 +1,3 @@
-// eslint-disable-next-line no-unused-vars
 import KeycloakAdminClient from 'keycloak-admin';
 // eslint-disable-next-line no-unused-vars
 import GroupRepresentation from 'keycloak-admin/lib/defs/groupRepresentation';
