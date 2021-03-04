@@ -9,7 +9,7 @@ describe('user groups in Keycloak', () => {
   });
 
   test('group exists', async () => {
-    const mockFind = jest.fn().mockImplementation(() => Promise.resolve([{name: 'existing', id: '1234'}]));
+    const mockFind = jest.fn().mockResolvedValue([{name: 'existing', id: '1234'}]);
 
     const KeycloakAdminClient = jest.fn().mockImplementation(() => {
       return {groups: {find: mockFind}};
@@ -28,8 +28,8 @@ describe('user groups in Keycloak', () => {
   });
 
   test('group does not exist', async () => {
-    const mockFind = jest.fn().mockImplementation(() => Promise.resolve([]));
-    const mockCreate = jest.fn().mockImplementation(() => Promise.resolve({id: 1234}));
+    const mockFind = jest.fn().mockResolvedValue([]);
+    const mockCreate = jest.fn().mockResolvedValue({id: 1234});
 
     const KeycloakAdminClient = jest.fn().mockImplementation(() => {
       return {groups: {find: mockFind, create: mockCreate}};
@@ -49,7 +49,7 @@ describe('user groups in Keycloak', () => {
   });
 
   test('group lookup fails', async () => {
-    const mockFind = jest.fn().mockImplementation(() => Promise.reject({response: {statusCode: 999}}));
+    const mockFind = jest.fn().mockRejectedValue({response: {statusCode: 999}});
 
     const KeycloakAdminClient = jest.fn().mockImplementation(() => {
       return {groups: {find: mockFind}};
@@ -68,8 +68,8 @@ describe('user groups in Keycloak', () => {
   });
 
   test('group creation fails', async () => {
-    const mockFind = jest.fn().mockImplementation(() => Promise.resolve([]));
-    const mockCreate = jest.fn().mockImplementation(() => Promise.reject('oh no'));
+    const mockFind = jest.fn().mockResolvedValue([]);
+    const mockCreate = jest.fn().mockRejectedValue('oh no');
 
     const KeycloakAdminClient = jest.fn().mockImplementation(() => {
       return {groups: {find: mockFind, create: mockCreate}};

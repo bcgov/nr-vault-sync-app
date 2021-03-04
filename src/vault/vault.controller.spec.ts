@@ -3,13 +3,16 @@ import {vaultFactory} from '../vault/vault.factory';
 // eslint-disable-next-line no-unused-vars
 
 describe('user groups in Vault', () => {
-  afterEach(() => jest.restoreAllMocks());
+  const log = jest.fn((message: string) => {});
+  const error = jest.fn((message: string) => {});
+  const vault = vaultFactory('addr', 'token');
+  afterEach(() => {
+    log.mockClear();
+    error.mockClear();
+  });
 
   test('group exists', async () => {
-    const log = jest.fn((message: string) => {});
-    const error = jest.fn((message: string) => {});
     const readFn = jest.fn().mockResolvedValue('exists');
-    const vault = vaultFactory('addr', 'token');
     vault.read = readFn;
 
     const vc = new VaultController(vault, log, error);
@@ -21,11 +24,8 @@ describe('user groups in Vault', () => {
   });
 
   test('group does not exist', async () => {
-    const log = jest.fn((message: string) => {});
-    const error = jest.fn((message: string) => {});
     const readFn = jest.fn().mockRejectedValueOnce({response: {statusCode: 404}}).mockResolvedValueOnce('newgroup');
     const writeFn = jest.fn().mockResolvedValue({name: 'new'});
-    const vault = vaultFactory('addr', 'token');
     vault.read = readFn;
     vault.write = writeFn;
 
@@ -40,11 +40,35 @@ describe('user groups in Vault', () => {
       });
   });
 
-  test('group lookup fails', () => {
+  test('group lookup fails', async () => {
+    const readFn = jest.fn().mockRejectedValue({response: {statusCode: 999}});
+    vault.read = readFn;
 
+    const vc = new VaultController(vault, log, error);
+    await vc.syncGroup('find-fails')
+      .then(() => {
+        expect(readFn).toHaveBeenCalledTimes(1);
+        expect(log).toHaveBeenCalledTimes(0);
+        expect(error).toHaveBeenCalledTimes(1);
+        expect(error).toHaveBeenCalledWith(`Error searching for group 'find-fails' in Vault: Error 999!`);
+      });
   });
 
-  test('group creation fails', () => {
+  test('group creation fails', async () => {
+    const readFn = jest.fn().mockRejectedValue({response: {statusCode: 404}});
+    const writeFn = jest.fn().mockRejectedValue({response: {statusCode: 999}});
 
+    vault.read = readFn;
+    vault.write = writeFn;
+
+    const vc = new VaultController(vault, log, error);
+    await vc.syncGroup('newgroup-fails')
+      .catch(() => {
+        expect(readFn).toHaveBeenCalledTimes(1);
+        expect(writeFn).toHaveBeenCalledTimes(1);
+        expect(log).toHaveBeenCalledTimes(0);
+        expect(error).toHaveBeenCalledTimes(1);
+        expect(error).toHaveBeenCalledWith(`Error creating group 'newgroup-fails' in Vault: Error 999!`);
+      });
   });
 });

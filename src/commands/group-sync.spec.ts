@@ -1,5 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 import nv from 'node-vault';
+// eslint-disable-next-line no-unused-vars
 import KeycloakAdminClient from 'keycloak-admin';
 import GroupSync from './group-sync';
 import {vaultFactory} from '../vault/vault.factory';
@@ -23,21 +24,21 @@ beforeAll(() => {
 describe('group sync command', () => {
   afterEach(() => jest.restoreAllMocks());
 
-  it('run', async () => {
+  it('runs', async () => {
     const mockVaultFactory = vaultFactory as jest.MockedFunction<typeof vaultFactory>;
-    mockVaultFactory.mockImplementation(() => ({
-      endpoint: 'endpoint',
-      health: jest.fn().mockReturnValue({}),
-    }) as unknown as nv.client);
+    mockVaultFactory.mockImplementation(() => ({}) as unknown as nv.client);
 
     const mockKeycloakFactory = keycloakFactory as jest.MockedFunction<typeof keycloakFactory>;
-    mockKeycloakFactory.mockImplementation(() => ({
-      endpoint: 'endpoint',
-      health: jest.fn().mockReturnValue({}),
-    }) as unknown as Promise<KeycloakAdminClient>);
+    mockKeycloakFactory.mockImplementation(() => ({}) as unknown as Promise<KeycloakAdminClient>);
 
     // Test command
-    await GroupSync.run(['--vault-addr', 'vaddr', '--vault-token', 'token', '--keycloak-addr', 'kaddr', '--keycloak-username', 'user', '--keycloak-password', 'pass']);
+    await GroupSync.run([
+      '--vault-addr', 'vaddr',
+      '--vault-token', 'token',
+      '--keycloak-addr', 'kaddr',
+      '--keycloak-username', 'user',
+      '--keycloak-password', 'pass'],
+    );
 
     expect(vaultFactory).toBeCalledTimes(1);
     expect(vaultFactory).toBeCalledWith('vaddr', 'token');
