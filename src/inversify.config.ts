@@ -11,15 +11,24 @@ import {PolicyRegistrationService} from './services/policy-registration.service'
 import {ConfigFileService} from './services/impl/config-file.service';
 import {ConfigService} from './services/config.service';
 import winston from 'winston';
+import {GroupImportService} from './services/group-import.service';
+import {GroupImportFileService} from './services/impl/group-import-file.service';
+import KeycloakAdminClient from 'keycloak-admin';
+import {keycloakFactory} from './keycloak/keycloak.factory';
+import {VaultController} from './vault/vault.controller';
+import {KeycloakRoleController} from './keycloak/keycloak-role.controller';
 
 const vsContainer = new Container();
 // Services
 vsContainer.bind<AppService>(TYPES.AppService).to(AppFileService);
 vsContainer.bind<ConfigService>(TYPES.ConfigService).to(ConfigFileService);
 vsContainer.bind<PolicyRegistrationService>(TYPES.PolicyRegistrationService).to(PolicyRegistrationMemoryService);
+vsContainer.bind<GroupImportService>(TYPES.GroupImport).to(GroupImportFileService);
 
 // Controllers
 vsContainer.bind<VaultPolicyController>(TYPES.VaultPolicyController).to(VaultPolicyController);
+vsContainer.bind<VaultController>(TYPES.VaultController).to(VaultController);
+vsContainer.bind<KeycloakRoleController>(TYPES.KeycloakRoleController).to(KeycloakRoleController);
 
 // logging
 vsContainer.bind<winston.Logger>(TYPES.Logger).toConstantValue(logger);
@@ -34,4 +43,16 @@ export {vsContainer};
 export function bindVault(addr: string, token: string) {
   vsContainer.bind<nv.client>(TYPES.Vault).toConstantValue(
     vaultFactory(addr, token));
+}
+
+/**
+ * Bind keycloak api to the vs container
+ * @param addr The keycloak address
+ * @param username The keycloak sername
+ * @param password The keycloak password
+ */
+export async function bindKeycloak(addr: string, username: string, password: string) {
+  const client = await keycloakFactory(addr, username, password);
+
+  vsContainer.bind<KeycloakAdminClient>(TYPES.KeycloakAdminClient).toConstantValue(client);
 }

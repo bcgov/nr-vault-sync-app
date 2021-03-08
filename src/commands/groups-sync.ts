@@ -6,10 +6,10 @@ import {bindKeycloak, bindVault, vsContainer} from '../inversify.config';
 import {TYPES} from '../inversify.types';
 
 /**
- * Vault and Keycloak user group sync command
+ * Vault and Keycloak user groups and users sync command
  */
-export default class GroupSync extends Command {
-  static description = 'Given a group name, creates that group in Keycloak and syncs it to Vault.'
+export default class GroupsSync extends Command {
+  static description = 'Given a JSON file, creates roles & users in Keycloak and groups in Vault'
 
   static flags = {
     ...help,
@@ -20,18 +20,16 @@ export default class GroupSync extends Command {
     ...keycloakPassword,
   }
 
-  static args = [{name: 'groupname'}]
+  static args = [{name: 'filepath'}]
   /**
    * Run the command
    */
   async run() {
-    const {args, flags} = this.parse(GroupSync);
-
-    this.log(`Creating group '${args.groupname}' in Keycloak and in Vault.`);
+    const {flags} = this.parse(GroupsSync);
 
     bindVault(flags['vault-addr'], flags['vault-token']);
     await bindKeycloak(flags['keycloak-addr'], flags['keycloak-username'], flags['keycloak-password']);
 
-    await vsContainer.get<KeycloakRoleController>(TYPES.KeycloakRoleController).syncRoleAndGroup(args.groupname);
+    await vsContainer.get<KeycloakRoleController>(TYPES.KeycloakRoleController).syncRolesAndGroups();
   }
 }
