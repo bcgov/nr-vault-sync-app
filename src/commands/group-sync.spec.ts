@@ -7,6 +7,7 @@ import {vaultFactory} from '../vault/vault.factory';
 import {VaultController} from '../vault/vault.controller';
 import {keycloakFactory} from '../keycloak/keycloak.factory';
 import {KeycloakController} from '../keycloak/keycloak.controller';
+import {mocked} from 'ts-jest/utils';
 
 jest.mock('../vault/vault.factory');
 jest.mock('../keycloak/keycloak.factory');
@@ -25,11 +26,8 @@ describe('group sync command', () => {
   afterEach(() => jest.restoreAllMocks());
 
   it('runs', async () => {
-    const mockVaultFactory = vaultFactory as jest.MockedFunction<typeof vaultFactory>;
-    mockVaultFactory.mockImplementation(() => ({}) as unknown as nv.client);
-
-    const mockKeycloakFactory = keycloakFactory as jest.MockedFunction<typeof keycloakFactory>;
-    mockKeycloakFactory.mockImplementation(() => ({}) as unknown as Promise<KeycloakAdminClient>);
+    mocked(vaultFactory);
+    mocked(keycloakFactory);
 
     // Test command
     await GroupSync.run([

@@ -19,36 +19,22 @@ export class KeycloakController {
   /**
    * Find or create a group in Keycloak.
    */
-  public async syncGroup(groupname: string): Promise<string | undefined> {
-    let groupID: string | undefined;
-    await this.findGroupInKeycloak(groupname)
+  public async syncGroup(groupname: string): Promise<string> {
+    return this.findGroupInKeycloak(groupname)
       .then(async (group) => {
         if (group) {
           this.log(`Group ${groupname} already exists in Keycloak.`);
-          groupID = group.id;
+          return group.id;
         } else {
           await this.createGroupInKeycloak(groupname)
             .then((groupid) => {
-              groupID = groupid;
+              return groupid;
             });
         }
       })
       .catch((error) => {
         return this.error(`Error finding group '${groupname}' in Keycloak: Error ${error.response.statusCode}!`);
       });
-    return groupID;
-  }
-
-  /**
-   * Find an entry in an array with a name field that matches a given name key.
-   */
-  search(nameKey: string, array: Array<any>): any | undefined {
-    for (let i=0; i < array.length; i++) {
-      if (array[i].name === nameKey) {
-        return array[i];
-      }
-    }
-    return undefined;
   }
 
   /**
@@ -56,22 +42,20 @@ export class KeycloakController {
    */
   async findGroupInKeycloak(groupname: string): Promise<GroupRepresentation | undefined> {
     const groups = await this.keycloak.groups.find();
-    return this.search(groupname, groups);
+    return groups.find((x) => x.name === groupname);
   }
 
   /**
    * Create a group in Keycloak.
    */
-  async createGroupInKeycloak(groupname: string): Promise<string | undefined> {
-    let groupid: string | undefined;
-    this.keycloak.groups.create({name: groupname})
+  async createGroupInKeycloak(groupname: string): Promise<string> {
+    return this.keycloak.groups.create({name: groupname})
       .then((group) => {
         this.log(`Group ${groupname} created in Keycloak.`);
-        groupid = group.id;
+        return group.id;
       })
       .catch(() => {
         return this.error(`Error creating group '${groupname}' in Keycloak! Is Keycloak running?`);
       });
-    return groupid;
   }
 }
