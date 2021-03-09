@@ -133,10 +133,10 @@ export default class VaultPolicyController {
    */
   private renderPolicyBody(group: string, templateName: string, data: ejs.Data | undefined) {
     return ejs.render(
-        fs.readFileSync(path.join(VaultPolicyController.templatesdir, group, `${templateName}.hcl.tpl`), 'UTF8'),
-        {
-          ...data,
-        },
+      fs.readFileSync(path.join(VaultPolicyController.templatesdir, group, `${templateName}.hcl.tpl`), 'UTF8'),
+      {
+        ...data,
+      },
     );
   }
 
@@ -149,10 +149,10 @@ export default class VaultPolicyController {
   private renderPolicyName(group: string, templateName: string, data: ejs.Data | undefined) {
     if (fs.existsSync(path.join(VaultPolicyController.templatesdir, group, `${templateName}.name.tpl`))) {
       return `${group}/${ejs.render(
-          fs.readFileSync(path.join(VaultPolicyController.templatesdir, group, `${templateName}.name.tpl`), 'UTF8'),
-          {
-            ...data,
-          },
+        fs.readFileSync(path.join(VaultPolicyController.templatesdir, group, `${templateName}.name.tpl`), 'UTF8'),
+        {
+          ...data,
+        },
       )}`;
     } else {
       return `${group}/${templateName}`;
@@ -167,8 +167,8 @@ export default class VaultPolicyController {
   public async removeUnregisteredPolicies(group: string, partialRegistration: boolean) {
     const policies = (await this.vault.policies()).data.policies;
     const policiesToRemove = await this.policyRegistrationService.filterPoliciesForUnregistered(
-        policies.filter((policyName: string) => policyName.startsWith(group)),
-        partialRegistration);
+      policies.filter((policyName: string) => policyName.startsWith(group)),
+      partialRegistration);
 
     for (const name of policiesToRemove) {
       await this.vault.removePolicy({name});

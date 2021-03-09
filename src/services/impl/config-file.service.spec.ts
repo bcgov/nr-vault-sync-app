@@ -19,7 +19,7 @@ describe('config-file.service', () => {
     new ConfigFileService();
     new ConfigFileService();
     expect(mockFs.readFileSync).toBeCalledWith(
-        expect.stringContaining('config.json'), 'UTF8');
+      expect.stringContaining('config.json'), 'UTF8');
     expect(mockFs.readFileSync).toBeCalledTimes(1);
   });
 

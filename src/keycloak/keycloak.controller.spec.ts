@@ -1,8 +1,8 @@
 import {KeycloakController} from '../keycloak/keycloak.controller';
 
 describe('user groups in Keycloak', () => {
-  const log = jest.fn((message: string) => {});
-  const error = jest.fn((message: string) => {});
+  const log = jest.fn(() => {});
+  const error = jest.fn(() => {});
   afterEach(() => {
     log.mockClear();
     error.mockClear();

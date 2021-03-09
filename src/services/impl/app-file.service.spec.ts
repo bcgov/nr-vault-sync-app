@@ -51,7 +51,7 @@ describe('app-file.service', () => {
     new AppFileService(cs);
     new AppFileService(cs);
     expect(mockFs.readFileSync).toBeCalledWith(
-        expect.stringContaining('applications.json'), 'UTF8');
+      expect.stringContaining('applications.json'), 'UTF8');
     expect(mockFs.readFileSync).toBeCalledTimes(1);
   });
 
@@ -76,7 +76,7 @@ describe('app-file.service', () => {
     const afs = new AppFileService(cs);
 
     await expect(afs.getApp('APP-fff'))
-        .rejects
-        .toThrow();
+      .rejects
+      .toThrow();
   });
 });

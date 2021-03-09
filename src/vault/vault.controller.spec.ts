@@ -1,10 +1,10 @@
+import 'reflect-metadata';
 import {VaultController} from '../vault/vault.controller';
 import {vaultFactory} from '../vault/vault.factory';
-// eslint-disable-next-line no-unused-vars
 
 describe('user groups in Vault', () => {
-  const log = jest.fn((message: string) => {});
-  const error = jest.fn((message: string) => {});
+  const log = jest.fn(() => {});
+  const error = jest.fn(() => {});
   const vault = vaultFactory('addr', 'token');
   afterEach(() => {
     log.mockClear();

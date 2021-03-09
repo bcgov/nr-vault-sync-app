@@ -1,7 +1,4 @@
-// eslint-disable-next-line no-unused-vars
-import nv from 'node-vault';
-// eslint-disable-next-line no-unused-vars
-import KeycloakAdminClient from 'keycloak-admin';
+import 'reflect-metadata';
 import GroupSync from './group-sync';
 import {vaultFactory} from '../vault/vault.factory';
 import {VaultController} from '../vault/vault.controller';
@@ -18,7 +15,7 @@ beforeAll(() => {
     .mockResolvedValue(void(0));
   jest
     .spyOn(KeycloakController.prototype, 'syncGroup')
-    .mockResolvedValue(void(0));
+    .mockResolvedValue('');
 });
 
 

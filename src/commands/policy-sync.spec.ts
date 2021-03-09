@@ -2,9 +2,9 @@ import nv from 'node-vault';
 import 'reflect-metadata';
 import PolicySync from './policy-sync';
 import {vaultFactory} from '../vault/vault.factory';
-import VaultPolicyController from '../vault/vault-policy.controller';
 import {mocked} from 'ts-jest/utils';
 import {decorate, injectable} from 'inversify';
+import VaultPolicyController from '../vault/vault-policy.controller';
 
 decorate(injectable(), VaultPolicyController);
 

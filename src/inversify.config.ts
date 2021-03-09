@@ -33,5 +33,5 @@ export {vsContainer};
  */
 export function bindVault(addr: string, token: string) {
   vsContainer.bind<nv.client>(TYPES.Vault).toConstantValue(
-      vaultFactory(addr, token));
+    vaultFactory(addr, token));
 }
