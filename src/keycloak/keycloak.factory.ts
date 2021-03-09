@@ -10,9 +10,9 @@ let keycloakAuthPromise: Promise<any>;
  * @param keycloakPassword The keycloak password
  */
 export async function keycloakFactory(
-    keycloakAddr: string,
-    keycloakUsername: string,
-    keycloakPassword: string): Promise<KeycloakAdminClient> {
+  keycloakAddr: string,
+  keycloakUsername: string,
+  keycloakPassword: string): Promise<KeycloakAdminClient> {
   if (!keycloakAuthPromise) {
     keycloak = new KeycloakAdminClient({baseUrl: keycloakAddr});
 
