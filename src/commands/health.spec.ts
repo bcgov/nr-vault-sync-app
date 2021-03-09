@@ -1,7 +1,7 @@
-// eslint-disable-next-line no-unused-vars
 import nv from 'node-vault';
 import Health from './health';
 import {vaultFactory} from '../vault/vault.factory';
+import {mocked} from 'ts-jest/utils';
 
 jest.mock('../vault/vault.factory');
 
@@ -15,7 +15,7 @@ describe('health command', () => {
   afterEach(() => jest.restoreAllMocks());
 
   it('run', async () => {
-    const mockVaultFactory = vaultFactory as jest.MockedFunction<typeof vaultFactory>;
+    const mockVaultFactory = mocked(vaultFactory);
     mockVaultFactory.mockImplementation(() => ({
       endpoint: 'endpoint',
       health: jest.fn().mockReturnValue({}),

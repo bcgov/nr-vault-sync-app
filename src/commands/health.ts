@@ -1,4 +1,5 @@
 import {Command} from '@oclif/command';
+import 'reflect-metadata';
 import {vaultFactory} from '../vault/vault.factory';
 import {help, vaultAddr, vaultToken} from '../flags';
 

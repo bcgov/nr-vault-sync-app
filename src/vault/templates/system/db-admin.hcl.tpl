@@ -1,16 +1,19 @@
+# Adobe/cryptr support
+# Scope: Database admin users
+
 path "<%= databasePath %>/config" {
   capabilities = ["list"]
 }
 
-path "<%= databasePath %>/config/<%= project %>-*" {
+path "<%= databasePath %>/config/*" {
   capabilities = ["create", "read", "update", "delete"]
 }
 
-path "<%= databasePath %>/reset/<%= project %>-*" {
+path "<%= databasePath %>/reset/*" {
   capabilities = ["create", "update"]
 }
 
-path "<%= databasePath %>/rotate-root/<%= project %>-*" {
+path "<%= databasePath %>/rotate-root/*" {
   capabilities = ["create", "update"]
 }
 
@@ -18,10 +21,10 @@ path "<%= databasePath %>/roles" {
   capabilities = ["list"]
 }
 
-path "<%= databasePath %>/roles/<%= project %>-*" {
+path "<%= databasePath %>/roles/*" {
   capabilities = ["create", "read", "update", "delete"]
 }
 
-path "<%= databasePath %>/creds/<%= project %>-*" {
+path "<%= databasePath %>/creds/*" {
   capabilities = ["read"]
 }

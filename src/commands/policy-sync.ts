@@ -1,7 +1,9 @@
 import {Command} from '@oclif/command';
-import {vaultFactory} from '../vault/vault.factory';
+import 'reflect-metadata';
 import {help, vaultAddr, vaultToken} from '../flags';
-import {PolicySyncController} from '../policy-sync/policy-sync.controller';
+import VaultPolicyController from '../vault/vault-policy.controller';
+import {bindVault, vsContainer} from '../inversify.config';
+import {TYPES} from '../inversify.types';
 
 /**
  * Policy sync command
@@ -20,9 +22,9 @@ export default class PolicySync extends Command {
    */
   async run() {
     const {flags} = this.parse(PolicySync);
-    const vault = vaultFactory(flags['vault-addr'], flags['vault-token']);
-    const policySyncController = new PolicySyncController(vault);
-    this.log('TBD');
-    policySyncController.syncAll('TBD');
+    this.log('Vault Policy Sync');
+    bindVault(flags['vault-addr'], flags['vault-token']);
+
+    await vsContainer.get<VaultPolicyController>(TYPES.VaultPolicyController).syncAll();
   }
 }
