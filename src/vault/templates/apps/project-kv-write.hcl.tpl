@@ -1,4 +1,12 @@
 
-path "<%= secertKvPath %>/data/<%= project %>" {
-  capabilities = ["update", "list"]
+path "<%= secertKvPath %>/data/<%= environment %>/<%= project %>" {
+  capabilities = ["create", "update"]
+}
+
+path "<%= secertKvPath %>/data/<%= environment %>/<%= project %>/+" {
+  capabilities = ["create", "update"]
+}
+
+path "<%= secertKvPath %>/data/<%= environment %>/<%= project %>/+/+" {
+  capabilities = ["create", "update"]
 }

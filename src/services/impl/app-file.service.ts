@@ -15,32 +15,47 @@ export class AppFileService implements AppService {
   private static readonly applications
     = JSON.parse(fs.readFileSync(AppFileService.applicationPath, 'UTF8'));
 
-  private readonly enabledApps: AppConfig;
-
   /**
    * Construct the app service
    * @param config The application config service
    */
   constructor(
-    @inject(TYPES.ConfigService) private config: ConfigService) {
-    this.enabledApps = this.config.getApps();
-  }
-
+    @inject(TYPES.ConfigService) private config: ConfigService) { }
 
   /**
    * Gets all apps
    */
-  async getAllApps(): Promise<Application[]> {
-    return AppFileService.applications.filter((app: Application) => app.app in this.enabledApps);
+  public async getAllApps(): Promise<Application[]> {
+    const appConfig = await this.config.getApps();
+    return AppFileService.applications
+      .filter((app: Application) => app.app in appConfig)
+      .map((app: Application) => this.decorateApp(app, appConfig[app.app]));
   }
 
   /**
    * Gets a specific app
    */
-  async getApp(appName: string): Promise<Application> {
-    if (appName in this.enabledApps) {
-      return AppFileService.applications.find((app: Application) => app.app === appName);
+  public async getApp(appName: string): Promise<Application> {
+    const appConfig = await this.config.getApps();
+    if (appName in appConfig) {
+      return this.decorateApp(
+        AppFileService.applications.find((app: Application) => app.app === appName),
+        appConfig[appName],
+      );
     }
     throw new Error('App does not exist or is not enabled');
+  }
+
+  /**
+   * Decorates the application info with config information.
+   * @param app The application info
+   * @param appConfig The application config
+   * @returns The decorated application info
+   */
+  private decorateApp(app: Application, appConfig: AppConfig): Application {
+    return {
+      ...app,
+      config: appConfig,
+    };
   }
 }

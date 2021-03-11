@@ -1,39 +1,35 @@
-import nv from 'node-vault';
 import 'reflect-metadata';
 import PolicySync from './policy-sync';
-import {vaultFactory} from '../vault/vault.factory';
 import {mocked} from 'ts-jest/utils';
-import {decorate, injectable} from 'inversify';
-import VaultPolicyController from '../vault/vault-policy.controller';
+import {bindVault, vsContainer} from '../inversify.config';
 
-decorate(injectable(), VaultPolicyController);
-
-jest.mock('../vault/vault-policy.controller');
-jest.mock('../vault/vault.factory');
+jest.mock('../inversify.config');
 
 describe('policy sync command', () => {
   let stdoutSpy: any;
   beforeEach(() => {
-    mocked(VaultPolicyController).mockClear();
     stdoutSpy = jest.spyOn(process.stdout, 'write')
       .mockImplementation(() => true);
   });
 
   afterEach(() => jest.restoreAllMocks());
 
-  it('run', async () => {
-    const mockVaultFactory = mocked(vaultFactory);
-    mockVaultFactory.mockImplementation(() => ({
-      endpoint: 'endpoint',
-      health: jest.fn().mockReturnValue({}),
-    }) as unknown as nv.client);
-
+  it('run without root', async () => {
+    const mockVpcInstance = {
+      sync: jest.fn(),
+    };
+    const mockBindVault = mocked(bindVault);
+    const mockVsContainer = mocked(vsContainer);
+    mockBindVault.mockReturnValue();
+    mockVsContainer.get.mockReturnValue(mockVpcInstance);
 
     // Test command
     await PolicySync.run(['--vault-addr', 'addr', '--vault-token', 'token']);
-    const vpcInstance = mocked(VaultPolicyController).mock.instances[0];
 
-    expect(vpcInstance.syncAll).toHaveBeenCalled();
+    expect(mockBindVault).toBeCalledTimes(1);
+    expect(mockBindVault).toBeCalledWith('addr', 'token');
+    expect(mockVpcInstance.sync).toHaveBeenCalled();
+    expect(mockVpcInstance.sync).toHaveBeenCalledWith([]);
     expect(stdoutSpy).toHaveBeenCalledWith('Vault Policy Sync\n');
   });
 });

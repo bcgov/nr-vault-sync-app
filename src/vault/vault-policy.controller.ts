@@ -34,31 +34,43 @@ export default class VaultPolicyController {
     @inject(TYPES.Logger) private logger: winston.Logger) {}
 
   /**
-   * Syncs all policies to vault
+   * Syncs policies to vault
    */
-  public async syncAll() {
+  public async sync(root: string[]) {
     // VAULT_ROOT_SYSTEM
-    await this.syncSystem();
-    await this.syncKvSecretEngines();
-    await this.removeUnregisteredPolicies(VAULT_ROOT_SYSTEM, false);
+    if (root.length === 0 || root[0] === VAULT_ROOT_SYSTEM) {
+      this.logger.info(`- Sync system Policies`);
+      await this.syncSystem();
+      await this.syncKvSecretEngines();
+      await this.removeUnregisteredPolicies(VAULT_ROOT_SYSTEM, false);
+    }
     // VAULT_ROOT_APPS
-    await this.syncAllApplications();
-    await this.removeUnregisteredPolicies(VAULT_ROOT_APPS, false);
+    if (root.length === 0 || root[0] === VAULT_ROOT_APPS) {
+      this.logger.info(`- Sync Application Policies`);
+      await this.syncAllApplications();
+      await this.removeUnregisteredPolicies(VAULT_ROOT_APPS, false);
+    }
+    if (root.length === 2 && root[0] === VAULT_ROOT_APPS) {
+      this.logger.info(`- Sync Application: ${root[1]}`);
+      await this.syncApplicationByName(root[1]);
+      await this.removeUnregisteredPolicies(VAULT_ROOT_APPS, true);
+    }
   }
 
   /**
    * Sync system policies to vault
    */
   public async syncSystem() {
+    await this.addPolicy(VAULT_ROOT_SYSTEM, 'admin-super');
+    await this.addPolicy(VAULT_ROOT_SYSTEM, 'admin-general');
     await this.addPolicy(VAULT_ROOT_SYSTEM, 'user-generic');
-    await this.addPolicy(VAULT_ROOT_SYSTEM, 'admin');
   }
 
   /**
    * Sync kv engine policies to vault
    */
   public async syncKvSecretEngines() {
-    for (const secertKvPath of this.config.getVaultKvStores()) {
+    for (const secertKvPath of await this.config.getVaultKvStores()) {
       await this.addPolicy(VAULT_ROOT_SYSTEM, 'kv-admin', {secertKvPath});
     }
   }
@@ -68,16 +80,25 @@ export default class VaultPolicyController {
    */
   public async syncAllApplications() {
     for (const application of await this.appService.getAllApps()) {
-      this.logger.info(`app: ${application.app}`);
       await this.syncApplication(application);
     }
   }
 
   /**
-   * Syncs policies with vault
+   * Syncs application policies with vault
+   * @param appName The name of the application to sync
    */
   public async syncApplicationByName(appName: string) {
-    return this.syncApplication(await this.appService.getApp(appName));
+    const app = await (async () => {
+      try {
+        return await this.appService.getApp(appName);
+      } catch (error) {
+        this.logger.error(`App not found: ${appName}`);
+      }
+    })();
+    if (app) {
+      return this.syncApplication(app);
+    }
   }
 
   /**
@@ -91,6 +112,7 @@ export default class VaultPolicyController {
       try {
         normEvn = EnvironmentUtil.normalize(environment);
       } catch (err) {
+        this.logger.debug(`Unsupported environment: ${environment}`);
         continue;
       }
 
@@ -99,14 +121,13 @@ export default class VaultPolicyController {
         secertKvPath: 'apps',
         project: appInfo.project.toLowerCase(),
         environment: normEvn,
+        appCanReadProject: appInfo.config?.kvApps.readProject,
       };
 
       await this.addPolicy(VAULT_ROOT_APPS, 'project-kv-read', policyData);
       await this.addPolicy(VAULT_ROOT_APPS, 'project-kv-write', policyData);
-      await this.addPolicy(VAULT_ROOT_APPS, 'project-kv-admin', policyData);
       await this.addPolicy(VAULT_ROOT_APPS, 'app-kv-read', policyData);
       await this.addPolicy(VAULT_ROOT_APPS, 'app-kv-write', policyData);
-      await this.addPolicy(VAULT_ROOT_APPS, 'app-kv-admin', policyData);
     }
   }
 
@@ -118,11 +139,13 @@ export default class VaultPolicyController {
    */
   public async addPolicy(group: string, templateName: string, data?: ejs.Data | undefined) {
     const name = this.renderPolicyName(group, templateName, data);
-    this.policyRegistrationService.registerPolicy(name);
-    return this.vault.addPolicy({
-      name,
-      rules: this.renderPolicyBody(group, templateName, data),
-    });
+    if (!await this.policyRegistrationService.hasRegisteredPolicy(name)) {
+      this.policyRegistrationService.registerPolicy(name);
+      return this.vault.addPolicy({
+        name,
+        rules: this.renderPolicyBody(group, templateName, data),
+      });
+    }
   }
 
   /**
@@ -166,12 +189,17 @@ export default class VaultPolicyController {
    */
   public async removeUnregisteredPolicies(group: string, partialRegistration: boolean) {
     const policies = (await this.vault.policies()).data.policies;
-    const policiesToRemove = await this.policyRegistrationService.filterPoliciesForUnregistered(
-      policies.filter((policyName: string) => policyName.startsWith(group)),
-      partialRegistration);
+    try {
+      const policiesToRemove = await this.policyRegistrationService.filterPoliciesForUnregistered(
+        policies.filter((policyName: string) => policyName.startsWith(group)),
+        partialRegistration);
 
-    for (const name of policiesToRemove) {
-      await this.vault.removePolicy({name});
+      for (const name of policiesToRemove) {
+        await this.vault.removePolicy({name});
+      }
+    } catch (error) {
+      this.logger.error(`Could not remove unused policies: ${group}`);
+      this.logger.error(`If this is a partial sync this could be expected.`);
     }
   }
 }
