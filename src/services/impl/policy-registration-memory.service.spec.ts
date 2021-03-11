@@ -26,6 +26,13 @@ describe('policy-registration-memory.service', () => {
     expect(unregistered).toEqual(['something/something']);
   });
 
+  it('can check for a registered policy', async () => {
+    const prms = new PolicyRegistrationMemoryService(logger);
+    await prms.registerPolicies(['system/admin', 'system/bob']);
+    expect(await prms.hasRegisteredPolicy('something/something')).toBe(true);
+    expect(await prms.hasRegisteredPolicy('something/notinthere')).toBe(true);
+  });
+
   it('can clear policies', async () => {
     const prms = new PolicyRegistrationMemoryService(logger);
     await prms.registerPolicies(['system/admin', 'system/bob']);

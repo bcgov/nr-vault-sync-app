@@ -50,8 +50,9 @@ export default class VaultPolicyController {
    * Sync system policies to vault
    */
   public async syncSystem() {
+    await this.addPolicy(VAULT_ROOT_SYSTEM, 'admin-super');
+    await this.addPolicy(VAULT_ROOT_SYSTEM, 'admin-general');
     await this.addPolicy(VAULT_ROOT_SYSTEM, 'user-generic');
-    await this.addPolicy(VAULT_ROOT_SYSTEM, 'admin');
   }
 
   /**
@@ -74,7 +75,8 @@ export default class VaultPolicyController {
   }
 
   /**
-   * Syncs policies with vault
+   * Syncs application policies with vault
+   * @param appName The name of the application to sync
    */
   public async syncApplicationByName(appName: string) {
     return this.syncApplication(await this.appService.getApp(appName));
@@ -103,10 +105,8 @@ export default class VaultPolicyController {
 
       await this.addPolicy(VAULT_ROOT_APPS, 'project-kv-read', policyData);
       await this.addPolicy(VAULT_ROOT_APPS, 'project-kv-write', policyData);
-      await this.addPolicy(VAULT_ROOT_APPS, 'project-kv-admin', policyData);
       await this.addPolicy(VAULT_ROOT_APPS, 'app-kv-read', policyData);
       await this.addPolicy(VAULT_ROOT_APPS, 'app-kv-write', policyData);
-      await this.addPolicy(VAULT_ROOT_APPS, 'app-kv-admin', policyData);
     }
   }
 
@@ -118,11 +118,13 @@ export default class VaultPolicyController {
    */
   public async addPolicy(group: string, templateName: string, data?: ejs.Data | undefined) {
     const name = this.renderPolicyName(group, templateName, data);
-    this.policyRegistrationService.registerPolicy(name);
-    return this.vault.addPolicy({
-      name,
-      rules: this.renderPolicyBody(group, templateName, data),
-    });
+    if (!await this.policyRegistrationService.hasRegisteredPolicy(name)) {
+      this.policyRegistrationService.registerPolicy(name);
+      return this.vault.addPolicy({
+        name,
+        rules: this.renderPolicyBody(group, templateName, data),
+      });
+    }
   }
 
   /**

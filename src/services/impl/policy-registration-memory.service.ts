@@ -36,6 +36,14 @@ export class PolicyRegistrationMemoryService implements PolicyRegistrationServic
   }
 
   /**
+   * Returns if a policy has been registered this run with the name
+   * @param policyName The name of the policy to check
+   */
+  async hasRegisteredPolicy(policyName: string): Promise<boolean> {
+    return policyName in this.policyDb;
+  }
+
+  /**
    * Clears all registered policies
    */
   async clearPolicies(): Promise<void> {

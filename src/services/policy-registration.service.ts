@@ -15,6 +15,12 @@ export interface PolicyRegistrationService {
   registerPolicies(policyNames: string[]): Promise<void>;
 
   /**
+   * Returns if a policy has been registered this run with the name
+   * @param policyName The name of the policy to check
+   */
+  hasRegisteredPolicy(policyName: string): Promise<boolean>;
+
+  /**
    * Clears all registered policies
    */
   clearPolicies(): Promise<void>;

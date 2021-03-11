@@ -1,9 +1,11 @@
+# Write policy for application
+# Scope: Approle
 
-path "<%= secertKvPath %>/data/<%= project %>/<%= application %>" {
-  capabilities = ["update", "list"]
+path "<%= secertKvPath %>/data/<%= environment %>/<%= project %>/<%= application %>" {
+  capabilities = ["create", "update", "list"]
 }
 
-path "<%= secertKvPath %>/data/<%= project %>/<%= application %>/*" {
-  capabilities = ["update", "list"]
+path "<%= secertKvPath %>/data/<%= environment %>/<%= project %>/<%= application %>/*" {
+  capabilities = ["create", "update", "list"]
 }
 
