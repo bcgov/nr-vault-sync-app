@@ -29,8 +29,8 @@ describe('policy-registration-memory.service', () => {
   it('can check for a registered policy', async () => {
     const prms = new PolicyRegistrationMemoryService(logger);
     await prms.registerPolicies(['system/admin', 'system/bob']);
-    expect(await prms.hasRegisteredPolicy('something/something')).toBe(true);
-    expect(await prms.hasRegisteredPolicy('something/notinthere')).toBe(true);
+    expect(await prms.hasRegisteredPolicy('system/admin')).toBe(true);
+    expect(await prms.hasRegisteredPolicy('something/notinthere')).toBe(false);
   });
 
   it('can clear policies', async () => {
