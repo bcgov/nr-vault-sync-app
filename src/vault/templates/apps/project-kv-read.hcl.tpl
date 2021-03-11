@@ -11,10 +11,18 @@ path "apps/metadata/<%= environment %>/<%= project %>" {
   capabilities = ["list", "read"]
 }
 
-path "apps/metadata/<%= environment %>/<%= project %>/*" {
+path "apps/metadata/<%= environment %>/<%= project %>/+" {
   capabilities = ["list", "read"]
 }
 
-path "<%= secertKvPath %>/data/<%= environment %>/<%= project %>/*" {
+path "<%= secertKvPath %>/data/<%= environment %>/<%= project %>/+" {
+  capabilities = ["read", "list"]
+}
+
+path "apps/metadata/<%= environment %>/<%= project %>/+/+" {
+  capabilities = ["list", "read"]
+}
+
+path "<%= secertKvPath %>/data/<%= environment %>/<%= project %>/+/+" {
   capabilities = ["read", "list"]
 }

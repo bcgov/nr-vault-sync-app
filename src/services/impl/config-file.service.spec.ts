@@ -26,7 +26,7 @@ describe('config-file.service', () => {
   it('getVaultKvStores', async () => {
     // Test command
     const cfs = new ConfigFileService();
-    const rVal = cfs.getVaultKvStores();
+    const rVal = await cfs.getVaultKvStores();
 
     expect(rVal).toEqual(['bob']);
   });
@@ -34,7 +34,7 @@ describe('config-file.service', () => {
   it('getApps', async () => {
     // Test command
     const cfs = new ConfigFileService();
-    const rVal = cfs.getApps();
+    const rVal = await cfs.getApps();
 
     expect(rVal).toEqual({});
   });

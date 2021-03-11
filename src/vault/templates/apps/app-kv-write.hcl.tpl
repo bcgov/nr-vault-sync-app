@@ -5,7 +5,7 @@ path "<%= secertKvPath %>/data/<%= environment %>/<%= project %>/<%= application
   capabilities = ["create", "update", "list"]
 }
 
-path "<%= secertKvPath %>/data/<%= environment %>/<%= project %>/<%= application %>/*" {
+path "<%= secertKvPath %>/data/<%= environment %>/<%= project %>/<%= application %>/+" {
   capabilities = ["create", "update", "list"]
 }
 

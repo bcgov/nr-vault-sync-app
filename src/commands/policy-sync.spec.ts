@@ -14,9 +14,9 @@ describe('policy sync command', () => {
 
   afterEach(() => jest.restoreAllMocks());
 
-  it('run', async () => {
+  it('run without root', async () => {
     const mockVpcInstance = {
-      syncAll: jest.fn(),
+      sync: jest.fn(),
     };
     const mockBindVault = mocked(bindVault);
     const mockVsContainer = mocked(vsContainer);
@@ -28,7 +28,8 @@ describe('policy sync command', () => {
 
     expect(mockBindVault).toBeCalledTimes(1);
     expect(mockBindVault).toBeCalledWith('addr', 'token');
-    expect(mockVpcInstance.syncAll).toHaveBeenCalled();
+    expect(mockVpcInstance.sync).toHaveBeenCalled();
+    expect(mockVpcInstance.sync).toHaveBeenCalledWith([]);
     expect(stdoutSpy).toHaveBeenCalledWith('Vault Policy Sync\n');
   });
 });

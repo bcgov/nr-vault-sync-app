@@ -28,7 +28,15 @@ export const vaultToken = {
     default: 'myroot',
     description: 'The vault token',
     env: 'VAULT_TOKEN',
-    name: 'vault-token',
+  })};
+
+export const root = {
+  'root': flags.string({
+    multiple: true,
+    default: [],
+    description: 'The root to constrict policy sync to. ' +
+      'This can be set multiple times to further constrict such as -root=apps -root=cool-app-war',
+    env: 'POLICY_ROOT',
   })};
 
 export const keycloakAddr = {

@@ -1,3 +1,5 @@
+import {AppConfig} from './config.service';
+
 /**
  * Application details
  */
@@ -5,6 +7,7 @@ export interface Application {
   env: string[];
   app: string;
   project: string;
+  config?: AppConfig;
 }
 
 /**

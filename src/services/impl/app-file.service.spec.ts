@@ -60,7 +60,7 @@ describe('app-file.service', () => {
     const apps = await afs.getAllApps();
 
     expect(apps).toEqual([
-      mockData[1],
+      {...mockData[1], config: {'enabled': true}},
     ]);
     expect(cs.getApps).toBeCalled();
   });
@@ -69,7 +69,7 @@ describe('app-file.service', () => {
     const afs = new AppFileService(cs);
     const app = await afs.getApp('APP-TUS');
 
-    expect(app).toEqual(mockData[1]);
+    expect(app).toEqual({...mockData[1], config: {'enabled': true}});
   });
 
   it('getApp - does not exist', async () => {
