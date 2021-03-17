@@ -34,8 +34,8 @@ export const root = {
   'root': flags.string({
     multiple: true,
     default: [],
-    description: 'The root to constrict policy sync to. ' +
-      'This can be set multiple times to further constrict such as -root=apps -root=cool-app-war',
+    description: 'The root to constrict the policy sync to. ' +
+      'Some roots can be further constricted such as -root=apps -root=cool-app-war ',
     env: 'POLICY_ROOT',
   })};
 

@@ -1,29 +1,27 @@
-import 'reflect-metadata';
-import GroupSync from './group-sync';
+import GroupsSync from './groups-sync';
 import {mocked} from 'ts-jest/utils';
 import {bindKeycloak, bindVault, vsContainer} from '../inversify.config';
 
 jest.mock('../inversify.config');
 
-describe('group sync command', () => {
+describe('groups sync command', () => {
   afterEach(() => jest.restoreAllMocks());
 
   it('runs', async () => {
     const mockKcInstance = {
-      syncRoleAndGroup: jest.fn().mockResolvedValue('bob'),
+      syncRolesAndGroups: jest.fn(),
     };
     const mockBindVault = mocked(bindVault);
     mockBindVault.mockReturnValue();
-
     const mockBindKeycloak = mocked(bindKeycloak);
     mockBindKeycloak.mockResolvedValue();
 
     const mockVsContainer = mocked(vsContainer);
-    mockVsContainer.get.mockReturnValueOnce(mockKcInstance);
+    mockVsContainer.get.mockReturnValue(mockKcInstance);
 
     // Test command
-    await GroupSync.run([
-      'group-name',
+    await GroupsSync.run([
+      './inputs/test.json',
       '--vault-addr', 'vaddr',
       '--vault-token', 'token',
       '--keycloak-addr', 'kaddr',
@@ -36,7 +34,7 @@ describe('group sync command', () => {
 
     expect(mockBindKeycloak).toBeCalledTimes(1);
     expect(mockBindKeycloak).toBeCalledWith('kaddr', 'user', 'pass');
-    expect(mockKcInstance.syncRoleAndGroup).toBeCalledTimes(1);
-    expect(mockKcInstance.syncRoleAndGroup).toBeCalledWith('group-name');
+
+    expect(mockKcInstance.syncRolesAndGroups).toBeCalledTimes(1);
   });
 });
