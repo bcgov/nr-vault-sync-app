@@ -30,7 +30,7 @@ The tool can use the following environment variables in place of command argumen
 
 ## Configuration
 
-See: [Confluence Documentation](https://apps.nrs.gov.bc.ca/int/confluence/display/AD/How+to+configure+the+Vault+Policy+Generator+tool)
+See: [Confluence Documentation](https://apps.nrs.gov.bc.ca/int/confluence/x/m4FvBQ)
 
 ## Local testing
 
@@ -72,45 +72,26 @@ $ ./bin/run (-v|--version|version)
 
 # Commands
 <!-- commands -->
-* [`vstool group-sync [GROUPNAME]`](#vstool-group-sync-groupname)
-* [`vstool groups-sync [FILEPATH]`](#vstool-groups-sync-filepath)
+* [`vstool group-sync [FILE]`](#vstool-group-sync-file)
 * [`vstool health`](#vstool-health)
 * [`vstool help [COMMAND]`](#vstool-help-command)
 * [`vstool init [VAULT-ADDR] [VAULT-TOKEN]`](#vstool-init-vault-addr-vault-token)
+* [`vstool keycloak-group-sync [GROUPNAME]`](#vstool-keycloak-group-sync-groupname)
+* [`vstool keycloak-groups-sync [FILEPATH]`](#vstool-keycloak-groups-sync-filepath)
 * [`vstool policy-sync`](#vstool-policy-sync)
 
-## `vstool group-sync [GROUPNAME]`
+## `vstool group-sync [FILE]`
 
-Given a group name, creates that group in Keycloak and syncs it to Vault.
-
-```
-USAGE
-  $ vstool group-sync [GROUPNAME]
-
-OPTIONS
-  -h, --help                             show CLI help
-  --keycloak-addr=keycloak-addr          [default: http://127.0.0.1:8080/auth] The keycloak address
-  --keycloak-password=keycloak-password  [default: password] The keycloak password
-  --keycloak-username=keycloak-username  [default: admin] The keycloak username
-  --vault-addr=vault-addr                [default: http://127.0.0.1:8200] The vault address
-  --vault-token=vault-token              [default: myroot] The vault token
-```
-
-## `vstool groups-sync [FILEPATH]`
-
-Given a JSON file, creates its groups in Keycloak and syncs them to Vault.
+Syncs configured groups to Vault
 
 ```
 USAGE
-  $ vstool groups-sync [FILEPATH]
+  $ vstool group-sync [FILE]
 
 OPTIONS
-  -h, --help                             show CLI help
-  --keycloak-addr=keycloak-addr          [default: http://127.0.0.1:8080/auth] The keycloak address
-  --keycloak-password=keycloak-password  [default: password] The keycloak password
-  --keycloak-username=keycloak-username  [default: admin] The keycloak username
-  --vault-addr=vault-addr                [default: http://127.0.0.1:8200] The vault address
-  --vault-token=vault-token              [default: myroot] The vault token
+  -h, --help                 show CLI help
+  --vault-addr=vault-addr    [default: http://127.0.0.1:8200] The vault address
+  --vault-token=vault-token  [default: myroot] The vault token
 ```
 
 ## `vstool health`
@@ -160,6 +141,40 @@ OPTIONS
   --vault-token=vault-token            [default: myroot] The vault token
 ```
 
+## `vstool keycloak-group-sync [GROUPNAME]`
+
+Given a group name, creates that group in Keycloak and syncs it to Vault.
+
+```
+USAGE
+  $ vstool keycloak-group-sync [GROUPNAME]
+
+OPTIONS
+  -h, --help                             show CLI help
+  --keycloak-addr=keycloak-addr          [default: http://127.0.0.1:8080/auth] The keycloak address
+  --keycloak-password=keycloak-password  [default: password] The keycloak password
+  --keycloak-username=keycloak-username  [default: admin] The keycloak username
+  --vault-addr=vault-addr                [default: http://127.0.0.1:8200] The vault address
+  --vault-token=vault-token              [default: myroot] The vault token
+```
+
+## `vstool keycloak-groups-sync [FILEPATH]`
+
+Given a JSON file, creates roles & users in Keycloak and groups in Vault
+
+```
+USAGE
+  $ vstool keycloak-groups-sync [FILEPATH]
+
+OPTIONS
+  -h, --help                             show CLI help
+  --keycloak-addr=keycloak-addr          [default: http://127.0.0.1:8080/auth] The keycloak address
+  --keycloak-password=keycloak-password  [default: password] The keycloak password
+  --keycloak-username=keycloak-username  [default: admin] The keycloak username
+  --vault-addr=vault-addr                [default: http://127.0.0.1:8200] The vault address
+  --vault-token=vault-token              [default: myroot] The vault token
+```
+
 ## `vstool policy-sync`
 
 Syncs configured policies to Vault
@@ -170,7 +185,12 @@ USAGE
 
 OPTIONS
   -h, --help                 show CLI help
+
+  --root=root                [default: ] The root to constrict the policy sync to. Some roots can be further constricted
+                             such as -root=apps -root=cool-app-war
+
   --vault-addr=vault-addr    [default: http://127.0.0.1:8200] The vault address
+
   --vault-token=vault-token  [default: myroot] The vault token
 ```
 <!-- commandsstop -->

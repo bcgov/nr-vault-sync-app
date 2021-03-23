@@ -6,6 +6,11 @@ import {bindKeycloak, bindVault, vsContainer} from '../inversify.config';
 jest.mock('../inversify.config');
 
 describe('group sync command', () => {
+  let stdoutSpy: any;
+  beforeEach(() => {
+    stdoutSpy = jest.spyOn(process.stdout, 'write')
+      .mockImplementation(() => true);
+  });
   afterEach(() => jest.restoreAllMocks());
 
   it('runs', async () => {
@@ -38,5 +43,7 @@ describe('group sync command', () => {
     expect(mockBindKeycloak).toBeCalledWith('kaddr', 'user', 'pass');
     expect(mockKcInstance.syncRoleAndGroup).toBeCalledTimes(1);
     expect(mockKcInstance.syncRoleAndGroup).toBeCalledWith('group-name');
+
+    expect(stdoutSpy).toHaveBeenCalledWith('Creating group \'group-name\' in Keycloak and in Vault.\n');
   });
 });

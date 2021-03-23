@@ -48,7 +48,7 @@ export default class HclUtil {
         },
       )}`;
     } else {
-      return `${group}/${templateName}`;
+      return group ? `${group}/${templateName}` : templateName;
     }
   }
 }
