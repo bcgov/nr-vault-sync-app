@@ -26,21 +26,24 @@ export class AppFileService implements AppService {
    * Gets all apps
    */
   public async getAllApps(): Promise<Application[]> {
-    const appConfig = await this.config.getApps();
+    const appConfigArr = await this.config.getApps();
+    const appConfigObj =
+    appConfigArr.reduce<{[key: string]: AppConfig}>((o, config) => ({...o, [config.name]: config}), {});
+
     return AppFileService.applications
-      .filter((app: Application) => app.app in appConfig)
-      .map((app: Application) => this.decorateApp(app, appConfig[app.app]));
+      .filter((app: Application) => app.app in appConfigObj)
+      .map((app: Application) => this.decorateApp(app, appConfigObj[app.app]));
   }
 
   /**
    * Gets a specific app
    */
   public async getApp(appName: string): Promise<Application> {
-    const appConfig = await this.config.getApps();
-    if (appName in appConfig) {
+    const appConfig = await this.config.getApp(appName);
+    if (appConfig) {
       return this.decorateApp(
         AppFileService.applications.find((app: Application) => app.app === appName),
-        appConfig[appName],
+        appConfig,
       );
     }
     throw new Error('App does not exist or is not enabled');

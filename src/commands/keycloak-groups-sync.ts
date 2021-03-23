@@ -8,7 +8,7 @@ import {TYPES} from '../inversify.types';
 /**
  * Vault and Keycloak user groups and users sync command
  */
-export default class GroupsSync extends Command {
+export default class KeycloakGroupsSync extends Command {
   static description = 'Given a JSON file, creates roles & users in Keycloak and groups in Vault'
 
   static flags = {
@@ -25,7 +25,7 @@ export default class GroupsSync extends Command {
    * Run the command
    */
   async run() {
-    const {flags} = this.parse(GroupsSync);
+    const {flags} = this.parse(KeycloakGroupsSync);
 
     bindVault(flags['vault-addr'], flags['vault-token']);
     await bindKeycloak(flags['keycloak-addr'], flags['keycloak-username'], flags['keycloak-password']);

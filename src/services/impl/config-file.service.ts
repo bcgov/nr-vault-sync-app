@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import {injectable} from 'inversify';
-import {AppConfigDict, ConfigService} from '../config.service';
+import {AppConfig, ConfigService, TeamConfig, VaultConfig} from '../config.service';
 
 @injectable()
 /**
@@ -10,20 +10,34 @@ import {AppConfigDict, ConfigService} from '../config.service';
 export class ConfigFileService implements ConfigService {
   private static readonly policyFilePath
     = path.join(__dirname, '../../../config', 'config.json');
-  private static readonly config
+  private static readonly config: VaultConfig
     = JSON.parse(fs.readFileSync(ConfigFileService.policyFilePath, 'UTF8'));
 
   /**
    * Return the paths to the KV secret stores
    */
-  getVaultKvStores(): Promise<string[]> {
+  async getVaultKvStores(): Promise<string[]> {
     return ConfigFileService.config.kv;
   }
 
   /**
    * Return all applications in the configuration
    */
-  getApps(): Promise<AppConfigDict> {
+  async getApps(): Promise<AppConfig[]> {
     return ConfigFileService.config.apps;
+  }
+
+  /**
+   * Return all applications in the configuration
+   */
+  async getApp(appName: string): Promise<AppConfig | undefined> {
+    return ConfigFileService.config.apps.find((app) => app.name === appName);
+  }
+
+  /**
+   * Return all teams in the configuration
+   */
+  async getTeams(): Promise<TeamConfig[]> {
+    return ConfigFileService.config.teams;
   }
 }

@@ -15,8 +15,10 @@ import {GroupImportService} from './services/group-import.service';
 import {GroupImportFileService} from './services/impl/group-import-file.service';
 import KeycloakAdminClient from 'keycloak-admin';
 import {keycloakFactory} from './keycloak/keycloak.factory';
-import {VaultController} from './vault/vault.controller';
+import VaultGroupController from './vault/vault-group.controller';
 import {KeycloakRoleController} from './keycloak/keycloak-role.controller';
+import EnvironmentUtil from './util/environment.util';
+import HclUtil from './util/hcl.util';
 
 const vsContainer = new Container();
 // Services
@@ -27,10 +29,14 @@ vsContainer.bind<GroupImportService>(TYPES.GroupImport).to(GroupImportFileServic
 
 // Controllers
 vsContainer.bind<VaultPolicyController>(TYPES.VaultPolicyController).to(VaultPolicyController);
-vsContainer.bind<VaultController>(TYPES.VaultController).to(VaultController);
+vsContainer.bind<VaultGroupController>(TYPES.VaultGroupController).to(VaultGroupController);
 vsContainer.bind<KeycloakRoleController>(TYPES.KeycloakRoleController).to(KeycloakRoleController);
 
-// logging
+// Util
+vsContainer.bind<EnvironmentUtil>(TYPES.EnvironmentUtil).to(EnvironmentUtil);
+vsContainer.bind<HclUtil>(TYPES.HclUtil).to(HclUtil);
+
+// Logging
 vsContainer.bind<winston.Logger>(TYPES.Logger).toConstantValue(logger);
 
 export {vsContainer};
