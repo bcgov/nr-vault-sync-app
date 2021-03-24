@@ -126,7 +126,7 @@ export default class VaultPolicyController {
         secertKvPath: 'apps',
         project: appInfo.project.toLowerCase(),
         environment: normEvn,
-        appCanReadProject: appInfo.config?.kvApps.readProject,
+        appCanReadProject: appInfo.config?.kvApps?.readProject,
       };
 
       await this.addPolicy(VAULT_ROOT_APPS, 'project-kv-read', policyData);
