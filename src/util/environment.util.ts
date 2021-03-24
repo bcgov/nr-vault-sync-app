@@ -1,3 +1,4 @@
+import {injectable} from 'inversify';
 
 /**
  * Library of environment aliases
@@ -16,6 +17,7 @@ const envAlias: {[key: string]: string} = {
   'SMTDELIVERY': 'dev',
 };
 
+@injectable()
 /**
  * Utility class for environment strings
  */

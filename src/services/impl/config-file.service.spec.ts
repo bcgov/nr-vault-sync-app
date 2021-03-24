@@ -4,10 +4,20 @@ import {mocked} from 'ts-jest/utils';
 
 jest.mock('fs');
 const mockFs = mocked(fs);
-mockFs.readFileSync.mockReturnValue(JSON.stringify({
-  kv: ['bob'],
-  apps: {},
-}));
+const mockConfig = {
+  'kv': ['bob'],
+  'apps': [
+    {'name': 'APP-TUS', 'enabled': true},
+  ],
+  'teams': [
+    {
+      'kv': 'teams',
+      'name': 'appdelivery',
+      'policies': [],
+    },
+  ],
+};
+mockFs.readFileSync.mockReturnValue(JSON.stringify(mockConfig));
 
 import {ConfigFileService} from './config-file.service';
 
@@ -31,11 +41,35 @@ describe('config-file.service', () => {
     expect(rVal).toEqual(['bob']);
   });
 
+  it('getApp', async () => {
+    // Test command
+    const cfs = new ConfigFileService();
+    const rVal = await cfs.getApp('APP-TUS');
+
+    expect(rVal).toEqual(mockConfig.apps[0]);
+  });
+
+  it('getApp - Unknown', async () => {
+    // Test command
+    const cfs = new ConfigFileService();
+    const rVal = await cfs.getApp('APP-UNK');
+
+    expect(rVal).toEqual(undefined);
+  });
+
   it('getApps', async () => {
     // Test command
     const cfs = new ConfigFileService();
     const rVal = await cfs.getApps();
 
-    expect(rVal).toEqual({});
+    expect(rVal).toEqual(mockConfig.apps);
+  });
+
+  it('getTeams', async () => {
+    // Test command
+    const cfs = new ConfigFileService();
+    const rVal = await cfs.getTeams();
+
+    expect(rVal).toEqual(mockConfig.teams);
   });
 });

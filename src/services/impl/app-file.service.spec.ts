@@ -39,8 +39,13 @@ describe('app-file.service', () => {
   let cs: ConfigService;
   beforeEach(() => {
     cs = {
-      getApps: jest.fn().mockReturnValue({
-        'APP-TUS': {'enabled': true},
+      getApps: jest.fn().mockResolvedValue([{
+        'enabled': true,
+        'name': 'APP-TUS',
+      }]),
+      getApp: jest.fn().mockResolvedValue({
+        'enabled': true,
+        'name': 'APP-TUS',
       }),
     } as unknown as ConfigService;
   });
@@ -60,7 +65,10 @@ describe('app-file.service', () => {
     const apps = await afs.getAllApps();
 
     expect(apps).toEqual([
-      {...mockData[1], config: {'enabled': true}},
+      {...mockData[1], config: {
+        'enabled': true,
+        'name': 'APP-TUS',
+      }},
     ]);
     expect(cs.getApps).toBeCalled();
   });
@@ -69,11 +77,15 @@ describe('app-file.service', () => {
     const afs = new AppFileService(cs);
     const app = await afs.getApp('APP-TUS');
 
-    expect(app).toEqual({...mockData[1], config: {'enabled': true}});
+    expect(app).toEqual({...mockData[1], config: {
+      'enabled': true,
+      'name': 'APP-TUS',
+    }});
   });
 
   it('getApp - does not exist', async () => {
     const afs = new AppFileService(cs);
+    mocked(cs.getApp).mockResolvedValue(undefined);
 
     await expect(afs.getApp('APP-fff'))
       .rejects

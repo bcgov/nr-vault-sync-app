@@ -2,7 +2,7 @@ import winston from 'winston';
 import 'reflect-metadata';
 import {KeycloakRoleController} from './keycloak-role.controller';
 import KeycloakAdminClient from 'keycloak-admin';
-import {VaultController} from '../vault/vault.controller';
+import VaultGroupController from '../vault/vault-group.controller';
 import {GroupImportService} from '../services/group-import.service';
 
 jest.mock('keycloak-admin');
@@ -15,7 +15,7 @@ const mockLogger = {
 
 const mockVcInstance = {
   syncGroup: jest.fn().mockResolvedValue(void(0)),
-} as unknown as VaultController;
+} as unknown as VaultGroupController;
 
 describe('keycloakrolecontroller.service', () => {
   afterEach(() => {

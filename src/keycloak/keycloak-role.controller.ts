@@ -4,7 +4,7 @@ import {Group, GroupImportService} from '../services/group-import.service';
 import winston from 'winston';
 import KeycloakAdminClient from 'keycloak-admin';
 import UserRepresentation from 'keycloak-admin/lib/defs/userRepresentation';
-import {VaultController} from '../vault/vault.controller';
+import VaultGroupController from '../vault/vault-group.controller';
 
 @injectable()
 /**
@@ -17,7 +17,7 @@ export class KeycloakRoleController {
   */
   constructor(
     @inject(TYPES.KeycloakAdminClient) private keycloak: KeycloakAdminClient,
-    @inject(TYPES.VaultController) private vaultController: VaultController,
+    @inject(TYPES.VaultGroupController) private vaultController: VaultGroupController,
     @inject(TYPES.Logger) private logger: winston.Logger,
     @multiInject(TYPES.GroupImport) private groupImports: GroupImportService[],
   ) {}
@@ -50,7 +50,7 @@ export class KeycloakRoleController {
 
     await this.ensureVaultClient();
     const roleId = await this.syncRoleAndUsers(name, usernames);
-    await this.vaultController.syncGroup(name, roleId);
+    await this.vaultController.syncGroup(name, [], roleId ? {roleId}: {});
   }
 
   /**

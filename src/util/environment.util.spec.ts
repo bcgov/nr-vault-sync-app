@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import EnvironmentUtil from './environment.util';
 
 describe('environment util', () => {
