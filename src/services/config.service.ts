@@ -1,6 +1,6 @@
 export interface AppConfig {
   enabled: boolean;
-  kvApps: {
+  kvApps?: {
     readProject: boolean;
   };
   name: string;
