@@ -73,6 +73,19 @@ describe('app-file.service', () => {
     expect(cs.getApps).toBeCalled();
   });
 
+  it('getAllApps - config error', async () => {
+    mocked(cs.getApps).mockResolvedValue([{
+      'enabled': true,
+      'name': 'APP-TUS-WRONG',
+    }]);
+    const afs = new AppFileService(cs);
+    await expect(afs.getAllApps())
+      .rejects
+      .toThrow();
+
+    expect(cs.getApps).toBeCalled();
+  });
+
   it('getApp - exists', async () => {
     const afs = new AppFileService(cs);
     const app = await afs.getApp('APP-TUS');
