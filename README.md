@@ -38,8 +38,9 @@ The following will start up vault in docker. The default environment variables s
 
 `docker run --rm --cap-add=IPC_LOCK -e 'VAULT_DEV_ROOT_TOKEN_ID=myroot' -e 'VAULT_DEV_LISTEN_ADDRESS=0.0.0.0:8200' --name=dev-vault -p 8200:8200 vault`
 
-You will need to enable the 'AppRole' authentication method.
+You will need to add a oidc authentication method to do local testing of group syncs.
 
+`vault auth enable oidc`
 `vault auth enable approle`
 
 The following will start up keycloak in docker. The default environment variables should work with it.

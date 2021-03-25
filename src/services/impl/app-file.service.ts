@@ -30,9 +30,14 @@ export class AppFileService implements AppService {
     const appConfigObj =
     appConfigArr.reduce<{[key: string]: AppConfig}>((o, config) => ({...o, [config.name]: config}), {});
 
-    return AppFileService.applications
-      .filter((app: Application) => app.app in appConfigObj)
+    const decoratedApps = AppFileService.applications
+      .filter((app: Application) => app.app in appConfigObj && appConfigObj[app.app].enabled)
       .map((app: Application) => this.decorateApp(app, appConfigObj[app.app]));
+
+    if (decoratedApps.length !== appConfigArr.length) {
+      throw new Error(`Configured app(s) could not be found. Check config. App names should be lowercase.`);
+    }
+    return decoratedApps;
   }
 
   /**
@@ -40,13 +45,14 @@ export class AppFileService implements AppService {
    */
   public async getApp(appName: string): Promise<Application> {
     const appConfig = await this.config.getApp(appName);
-    if (appConfig) {
+    const app = AppFileService.applications.find((app: Application) => app.app === appName);
+    if (app && appConfig && appConfig.enabled) {
       return this.decorateApp(
-        AppFileService.applications.find((app: Application) => app.app === appName),
+        app,
         appConfig,
       );
     }
-    throw new Error('App does not exist or is not enabled');
+    throw new Error(`App '${appName}' does not exist or is not enabled`);
   }
 
   /**

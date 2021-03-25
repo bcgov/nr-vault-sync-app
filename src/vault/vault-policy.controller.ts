@@ -122,7 +122,7 @@ export default class VaultPolicyController {
       }
 
       const policyData = {
-        application: appInfo.app,
+        application: appInfo.app.toLowerCase(),
         secertKvPath: 'apps',
         project: appInfo.project.toLowerCase(),
         environment: normEvn,
@@ -190,6 +190,7 @@ export default class VaultPolicyController {
 
       for (const name of policiesToRemove) {
         await this.vault.removePolicy({name});
+        this.logger.info(`Removed: ${name}`);
       }
     } catch (error) {
       this.logger.error(`Could not remove unused policies: ${group}`);
