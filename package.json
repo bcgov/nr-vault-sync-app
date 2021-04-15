@@ -15,7 +15,6 @@
     "@types/request": "^2.48.5",
     "ejs": "^3.0.1",
     "inversify": "^5.0.5",
-    "keycloak-admin": "^1.14.8",
     "node-vault": "^0.9.18",
     "object-hash": "^2.0.1",
     "reflect-metadata": "^0.1.13",
