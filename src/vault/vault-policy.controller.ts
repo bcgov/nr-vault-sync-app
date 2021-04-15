@@ -5,13 +5,13 @@ import {TYPES} from '../inversify.types';
 import {Application, AppService} from '../services/app.service';
 import winston from 'winston';
 import EnvironmentUtil from '../util/environment.util';
-import {ConfigService, TeamConfig} from '../services/config.service';
+import {ConfigService, GroupConfig} from '../services/config.service';
 import {PolicyRegistrationService} from '../services/policy-registration.service';
 import HclUtil from '../util/hcl.util';
 
 const VAULT_ROOT_SYSTEM = 'system';
 const VAULT_ROOT_APPS = 'apps';
-const VAULT_ROOT_TEAMS = 'teams';
+const VAULT_ROOT_GROUPS = 'groups';
 
 
 @injectable()
@@ -54,11 +54,11 @@ export default class VaultPolicyController {
       await this.syncApplicationByName(root[1]);
       await this.removeUnregisteredPolicies(VAULT_ROOT_APPS, true);
     }
-    // VAULT_ROOT_TEAMS
-    if (root.length === 0 || root[0] === VAULT_ROOT_TEAMS) {
-      this.logger.info(`- Sync team policies`);
-      await this.syncTeams();
-      await this.removeUnregisteredPolicies(VAULT_ROOT_TEAMS, false);
+    // VAULT_ROOT_GROUPS
+    if (root.length === 0 || root[0] === VAULT_ROOT_GROUPS) {
+      this.logger.info(`- Sync group policies`);
+      await this.syncGroups();
+      await this.removeUnregisteredPolicies(VAULT_ROOT_GROUPS, false);
     }
   }
 
@@ -137,25 +137,25 @@ export default class VaultPolicyController {
   }
 
   /**
-   * Syncs policies with vault for teams
+   * Syncs policies with vault for groups
    */
-  public async syncTeams() {
-    const teams = await this.config.getTeams();
-    for (const team of teams) {
-      this.addPolicy(VAULT_ROOT_TEAMS, 'user', {
-        ...team,
+  public async syncGroups() {
+    const groups = await this.config.getGroups();
+    for (const group of groups) {
+      this.addPolicy(VAULT_ROOT_GROUPS, 'user', {
+        ...group,
       });
     }
   }
 
   /**
-   * Decorate an array of team policies with built-in ones.
-   * @param team The team config to decorate
+   * Decorate an array of group policies with built-in ones.
+   * @param group The group config to decorate
    */
-  public decorateTeamPolicy(team: TeamConfig): string[] {
+  public decorateGroupPolicy(group: GroupConfig): string[] {
     return [
-      ...(team.policies ? team.policies : []),
-      this.hclUtil.renderName('/', VAULT_ROOT_TEAMS, 'user', {...team}),
+      ...(group.policies ? group.policies : []),
+      this.hclUtil.renderName('/', VAULT_ROOT_GROUPS, 'user', {...group}),
     ];
   }
 

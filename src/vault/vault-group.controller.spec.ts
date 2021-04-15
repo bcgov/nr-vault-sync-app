@@ -23,13 +23,13 @@ describe('vault.controller', () => {
   } as unknown as winston.Logger;
 
   const mockConfigService = {
-    getTeams: jest.fn(() => {
+    getGroups: jest.fn(() => {
       [];
     }),
   } as unknown as ConfigService;
 
   const mockVpcController = {
-    decorateTeamPolicy: jest.fn((policy) => policy),
+    decorateGroupPolicy: jest.fn((policy) => policy),
   } as unknown as VaultPolicyController;
 
   const vault = {

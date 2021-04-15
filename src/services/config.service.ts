@@ -6,7 +6,7 @@ export interface AppConfig {
   name: string;
 };
 
-export interface TeamConfig {
+export interface GroupConfig {
   kv?: string;
   name: string;
   policies?: string[];
@@ -15,7 +15,7 @@ export interface TeamConfig {
 export interface VaultConfig {
   kv: string[];
   apps: AppConfig[];
-  teams: TeamConfig[];
+  groups: GroupConfig[];
 }
 
 /**
@@ -38,9 +38,9 @@ export interface ConfigService {
   getApp(appName: string): Promise<AppConfig | undefined>;
 
   /**
-   * Return all teams in the configuration
+   * Return all groups in the configuration
    */
-  getTeams(): Promise<TeamConfig[]>;
+  getGroups(): Promise<GroupConfig[]>;
 }
 
 

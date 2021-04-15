@@ -1,5 +1,5 @@
-# Team policy
-# Scope: Team users
+# Groups policy
+# Scope: Users in different groups  (e.g. appdelivery, infra, dba)
 
 <% if (locals.kv) { %>
 
