@@ -16,6 +16,11 @@ The tool can use the following environment variables in place of command argumen
 * VAULT_ADDR - The address of the vault server ('http://127.0.0.1:8200')
 * VAULT_TOKEN - The token to use when connecting to vault (myroot)
 
+To set the environment variables, source the target environment's setenv-*.sh file. For example, to set the address and token for the
+dev environment, run the following command:
+
+`source setenv-dev.sh`
+
 ## Supported npm commands
 
 * npm start - deploy configuration to provided vault instance
