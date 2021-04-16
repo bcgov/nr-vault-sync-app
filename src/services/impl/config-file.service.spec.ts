@@ -9,9 +9,9 @@ const mockConfig = {
   'apps': [
     {'name': 'APP-TUS', 'enabled': true},
   ],
-  'teams': [
+  'groups': [
     {
-      'kv': 'teams',
+      'kv': 'groups',
       'name': 'appdelivery',
       'policies': [],
     },
@@ -65,11 +65,11 @@ describe('config-file.service', () => {
     expect(rVal).toEqual(mockConfig.apps);
   });
 
-  it('getTeams', async () => {
+  it('getGroups', async () => {
     // Test command
     const cfs = new ConfigFileService();
-    const rVal = await cfs.getTeams();
+    const rVal = await cfs.getGroups();
 
-    expect(rVal).toEqual(mockConfig.teams);
+    expect(rVal).toEqual(mockConfig.groups);
   });
 });

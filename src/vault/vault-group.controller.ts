@@ -24,9 +24,9 @@ export default class VaultGroupController {
    *
    */
   public async sync() {
-    const teams = await this.config.getTeams();
-    for (const team of teams) {
-      await this.syncGroup(team.name, this.vpcController.decorateTeamPolicy(team));
+    const groups = await this.config.getGroups();
+    for (const group of groups) {
+      await this.syncGroup(group.name, this.vpcController.decorateGroupPolicy(group));
     }
   }
 

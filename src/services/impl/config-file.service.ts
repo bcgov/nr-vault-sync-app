@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import {injectable} from 'inversify';
-import {AppConfig, ConfigService, TeamConfig, VaultConfig} from '../config.service';
+import {AppConfig, ConfigService, GroupConfig, VaultConfig} from '../config.service';
 
 @injectable()
 /**
@@ -35,9 +35,9 @@ export class ConfigFileService implements ConfigService {
   }
 
   /**
-   * Return all teams in the configuration
+   * Return all groups in the configuration
    */
-  async getTeams(): Promise<TeamConfig[]> {
-    return ConfigFileService.config.teams;
+  async getGroups(): Promise<GroupConfig[]> {
+    return ConfigFileService.config.groups;
   }
 }
