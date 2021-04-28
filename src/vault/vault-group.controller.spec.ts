@@ -15,7 +15,7 @@ function createNetworkError(statusCode: number) {
   return err;
 }
 
-describe('vault.controller', () => {
+describe('vault-group.controller', () => {
   const mockLogger = {
     info: jest.fn(() => { }),
     error: jest.fn(() => { }),
