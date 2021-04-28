@@ -9,7 +9,7 @@ import {TYPES} from '../inversify.types';
  * Policy sync command
  */
 export default class PolicySync extends Command {
-  static description = 'Syncs configured policies to Vault';
+  static description = 'Syncs policies to Vault';
 
   static flags = {
     ...help,

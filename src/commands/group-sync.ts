@@ -9,15 +9,13 @@ import {TYPES} from '../inversify.types';
  * Group sync command
  */
 export default class GroupSync extends Command {
-  static description = 'Syncs configured groups to Vault';
+  static description = 'Syncs external groups in Vault to connect roles with Vault policies';
 
   static flags = {
     ...help,
     ...vaultToken,
     ...vaultAddr,
   };
-
-  static args = [{name: 'file'}]
 
   /**
    * Run the command

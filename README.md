@@ -11,7 +11,7 @@ The Vault Sync tool or VST is for generating and syncing vault policies, groups 
 
 ## Environment Variables
 
-The tool can use the following environment variables in place of command arguments. The default is in the brackets.
+The tool can use the following environment variables in place of command arguments. The default is in the brackets. The defaults are for testing with a local Vault instance.
 
 * VAULT_ADDR - The address of the vault server ('http://127.0.0.1:8200')
 * VAULT_TOKEN - The token to use when connecting to vault (myroot)
@@ -34,11 +34,11 @@ See: [Confluence Documentation](https://apps.nrs.gov.bc.ca/int/confluence/x/m4Fv
 
 ## Local testing
 
-The following will start up vault in docker. The default environment variables should work with it.
+The following will start up vault in docker. The Vault Sync Tool defaults for the address and token should work with it.
 
 `docker run --rm --cap-add=IPC_LOCK -e 'VAULT_DEV_ROOT_TOKEN_ID=myroot' -e 'VAULT_DEV_LISTEN_ADDRESS=0.0.0.0:8200' --name=dev-vault -p 8200:8200 vault`
 
-You will need to add a oidc authentication method to do local testing of group syncs.
+You will need to add an OIDC authentication method to do local testing of group syncs.
 
 `vault auth enable oidc`
 `vault auth enable approle`
@@ -69,19 +69,19 @@ $ ./bin/run (-v|--version|version)
 
 # Commands
 <!-- commands -->
-* [`vstool group-sync [FILE]`](#vstool-group-sync-file)
+* [`vstool group-sync`](#vstool-group-sync)
 * [`vstool health`](#vstool-health)
 * [`vstool help [COMMAND]`](#vstool-help-command)
 * [`vstool init [VAULT-ADDR] [VAULT-TOKEN]`](#vstool-init-vault-addr-vault-token)
 * [`vstool policy-sync`](#vstool-policy-sync)
 
-## `vstool group-sync [FILE]`
+## `vstool group-sync`
 
-Syncs configured groups to Vault
+Syncs external groups in Vault to connect roles with Vault policies
 
 ```
 USAGE
-  $ vstool group-sync [FILE]
+  $ vstool group-sync
 
 OPTIONS
   -h, --help                 show CLI help
@@ -138,7 +138,7 @@ OPTIONS
 
 ## `vstool policy-sync`
 
-Syncs configured policies to Vault
+Syncs policies to Vault
 
 ```
 USAGE
