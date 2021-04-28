@@ -1,10 +1,11 @@
-# Vault Sync Tool #
+# Vault Sync Tool
 
 The Vault Sync tool or VST is for generating and syncing vault policies, groups and appRoles.
 
+See: [Confluence Documentation](https://apps.nrs.gov.bc.ca/int/confluence/x/m4FvBQ)
 
 <!-- toc -->
-* [Vault Sync Tool #](#vault-sync-tool-)
+* [Vault Sync Tool](#vault-sync-tool)
 * [Usage](#usage)
 * [Commands](#commands)
 <!-- tocstop -->
