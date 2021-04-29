@@ -4,6 +4,7 @@ import winston from 'winston';
 import {TYPES} from '../inversify.types';
 import {ConfigService} from '../services/config.service';
 import VaultPolicyController from './vault-policy.controller';
+import VaultApi from './vault.api';
 
 @injectable()
 /**
@@ -15,6 +16,7 @@ export default class VaultGroupController {
    */
   constructor(
     @inject(TYPES.Vault) private vault: nv.client,
+    @inject(TYPES.VaultApi) private vaultApi: VaultApi,
     @inject(TYPES.ConfigService) private config: ConfigService,
     @inject(TYPES.VaultPolicyController) private vpcController: VaultPolicyController,
     @inject(TYPES.Logger) private logger: winston.Logger,
@@ -34,7 +36,7 @@ export default class VaultGroupController {
    * Find a user group in Vault; create it if it does not exist.
    */
   public async syncGroup(groupName: string, policies: string[], metadata: {[key: string]: string} = {}): Promise<any> {
-    const accessor = await this.getAccessor();
+    const accessor = await this.vaultApi.getOidcAccessor();
 
     let group = await this.vault.write(
       `identity/group/name/${groupName}`, {
@@ -58,30 +60,6 @@ export default class VaultGroupController {
     }
     this.logger.info(`Vault group: ${groupName}`);
     return group;
-  }
-
-  /**
-   * Get the accessor from Vault for the Keycloak (OIDC) instance.
-   */
-  public async getAccessor(): Promise<string> {
-    return this.vault.read(`/sys/auth`)
-      .then((response) => {
-        for (const value of Object.values(response.data) as any) {
-          if (value.type === 'oidc') {
-            return value.accessor;
-          }
-        }
-        this.logger.error(`Cannot find an OIDC auth type - is your Vault configured correctly?`);
-        throw new Error('No OIDC configured');
-      })
-      .catch((error) => {
-        if (error.response) {
-          this.logger.error(
-            `Could not lookup accessor in Vault: Error ${error.response.statusCode}`);
-          throw new Error('Could not lookup accessor');
-        }
-        throw error;
-      });
   }
 
   /**
