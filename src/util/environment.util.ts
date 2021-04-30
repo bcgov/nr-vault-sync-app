@@ -6,6 +6,7 @@ import {injectable} from 'inversify';
 const envAlias: {[key: string]: string} = {
   'PRODUCTION': 'prod',
   'TEST': 'test',
+  'DELIVERY': 'dev',
   'DEVELOPMENT': 'dev',
   'INTEGRATION': 'int',
   'WFPRD': 'prod',
