@@ -14,6 +14,7 @@ import winston from 'winston';
 import VaultGroupController from './vault/vault-group.controller';
 import EnvironmentUtil from './util/environment.util';
 import HclUtil from './util/hcl.util';
+import VaultApi from './vault/vault.api';
 
 const vsContainer = new Container();
 // Services
@@ -28,6 +29,7 @@ vsContainer.bind<VaultGroupController>(TYPES.VaultGroupController).to(VaultGroup
 // Util
 vsContainer.bind<EnvironmentUtil>(TYPES.EnvironmentUtil).to(EnvironmentUtil);
 vsContainer.bind<HclUtil>(TYPES.HclUtil).to(HclUtil);
+vsContainer.bind<VaultApi>(TYPES.VaultApi).to(VaultApi);
 
 // Logging
 vsContainer.bind<winston.Logger>(TYPES.Logger).toConstantValue(logger);

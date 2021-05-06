@@ -4,6 +4,7 @@ import winston from 'winston';
 import VaultGroupController from './vault-group.controller';
 import {ConfigService} from '../services/config.service';
 import VaultPolicyController from './vault-policy.controller';
+import VaultApi from './vault.api';
 
 /**
  * Helper function to create an HTTP error
@@ -37,19 +38,45 @@ describe('vault-group.controller', () => {
     write: jest.fn(),
   } as unknown as nv.client;
 
+  const vaultApi = {
+    getOidcAccessor: jest.fn(),
+  } as unknown as VaultApi;
+
   afterEach(() => {
     jest.clearAllMocks();
+    mockConfigService.getGroups = jest.fn(async () => {
+      return [];
+    });
+  });
+
+  test('sync: multiple groups', async () => {
+    const mockGroupData = [{name: 'bob'}, {name: 'sue'}];
+    mockConfigService.getGroups = jest.fn(async () => {
+      return mockGroupData;
+    });
+    const vc = new VaultGroupController(vault, vaultApi, mockConfigService, mockVpcController, mockLogger);
+    jest.spyOn(vc, 'syncGroup').mockResolvedValue('');
+    await vc.sync();
+
+    expect(mockConfigService.getGroups).toBeCalledTimes(1);
+    expect(mockVpcController.decorateGroupPolicy).toBeCalledTimes(2);
+    expect(mockVpcController.decorateGroupPolicy).toHaveBeenCalledWith(mockGroupData[0]);
+    expect(mockVpcController.decorateGroupPolicy).toHaveBeenCalledWith(mockGroupData[1]);
+    expect(vc.syncGroup).toBeCalledTimes(2);
+    expect(vc.syncGroup).toHaveBeenCalledWith(mockGroupData[0].name, mockGroupData[0]);
+    expect(vc.syncGroup).toHaveBeenCalledWith(mockGroupData[1].name, mockGroupData[1]);
   });
 
   test('syncGroup: group exists', async () => {
     vault.read = jest.fn()
-      .mockResolvedValueOnce({'data': {'oidc/': {'type': 'oidc', 'accessor': '123'}}})
       .mockResolvedValueOnce({'data': {'alias': {'something': 'something'}}});
     vault.write = jest.fn().mockResolvedValueOnce(undefined);
+    vaultApi.getOidcAccessor = jest.fn().mockResolvedValueOnce('123');
 
-    const vc = new VaultGroupController(vault, mockConfigService, mockVpcController, mockLogger);
+    const vc = new VaultGroupController(vault, vaultApi, mockConfigService, mockVpcController, mockLogger);
     await vc.syncGroup('existing', []);
-    expect(vault.read).toBeCalledTimes(2);
+    expect(vaultApi.getOidcAccessor).toHaveBeenCalledTimes(1);
+    expect(vault.read).toBeCalledTimes(1);
     expect(vault.write).toBeCalledTimes(1);
     expect(mockLogger.info).toBeCalledTimes(1);
     expect(mockLogger.info).toBeCalledWith(`Vault group: existing`);
@@ -57,16 +84,16 @@ describe('vault-group.controller', () => {
   });
 
   test('syncGroup: group does not exist', async () => {
-    vault.read = jest.fn()
-      .mockResolvedValueOnce({'data': {'oidc/': {'type': 'oidc', 'accessor': '123'}}});
     vault.write = jest.fn()
       .mockResolvedValueOnce({name: 'newgroup', data: {id: '11223'}})
       .mockResolvedValueOnce(undefined)
       .mockResolvedValueOnce('');
+    vaultApi.getOidcAccessor = jest.fn().mockResolvedValueOnce('123');
 
-    const vc = new VaultGroupController(vault, mockConfigService, mockVpcController, mockLogger);
+
+    const vc = new VaultGroupController(vault, vaultApi, mockConfigService, mockVpcController, mockLogger);
     await vc.syncGroup('newgroup', []);
-    expect(vault.read).toHaveBeenCalledTimes(1);
+    expect(vaultApi.getOidcAccessor).toHaveBeenCalledTimes(1);
     expect(vault.write).toHaveBeenCalledTimes(3);
     expect(mockLogger.info).toHaveBeenCalledTimes(1);
     expect(mockLogger.info).toBeCalledWith(`Vault group: newgroup`);
@@ -74,14 +101,13 @@ describe('vault-group.controller', () => {
   });
 
   test('syncGroup: group write fails', async () => {
-    vault.read = jest.fn()
-      .mockResolvedValueOnce({'data': {'oidc/': {'type': 'oidc', 'accessor': '123'}}});
     vault.write = jest.fn().mockRejectedValue(createNetworkError(999));
+    vaultApi.getOidcAccessor = jest.fn().mockResolvedValueOnce('123');
 
-    const vc = new VaultGroupController(vault, mockConfigService, mockVpcController, mockLogger);
+    const vc = new VaultGroupController(vault, vaultApi, mockConfigService, mockVpcController, mockLogger);
     await expect(vc.syncGroup('write-fails', []))
       .rejects.toThrow();
-    expect(vault.read).toHaveBeenCalledTimes(1);
+    expect(vaultApi.getOidcAccessor).toHaveBeenCalledTimes(1);
     expect(vault.write).toHaveBeenCalledTimes(1);
     expect(mockLogger.info).toHaveBeenCalledTimes(0);
     expect(mockLogger.error).toHaveBeenCalledTimes(1);
@@ -89,28 +115,25 @@ describe('vault-group.controller', () => {
   });
 
   test('syncGroup: accessor lookup fails', async () => {
-    vault.read = jest.fn()
-      .mockRejectedValueOnce(createNetworkError(876));
+    vaultApi.getOidcAccessor = jest.fn().mockImplementation(() => {
+      throw new Error();
+    });
 
-    const vc = new VaultGroupController(vault, mockConfigService, mockVpcController, mockLogger);
+    const vc = new VaultGroupController(vault, vaultApi, mockConfigService, mockVpcController, mockLogger);
     await expect(vc.syncGroup('find-fails', [])).rejects.toThrow();
-    expect(vault.read).toHaveBeenCalledTimes(1);
-    expect(mockLogger.info).toHaveBeenCalledTimes(0);
-    expect(mockLogger.error).toHaveBeenCalledTimes(1);
-    expect(mockLogger.error).toHaveBeenCalledWith(`Could not lookup accessor in Vault: Error 876`);
+    expect(vaultApi.getOidcAccessor).toHaveBeenCalledTimes(1);
   });
 
   test('syncGroup: alias creation fails', async () => {
-    vault.read = jest.fn()
-      .mockResolvedValueOnce({'data': {'oidc/': {'type': 'oidc', 'accessor': '123'}}});
     vault.write = jest.fn()
       .mockResolvedValueOnce({name: 'newgroup', data: {id: '11223'}})
       .mockResolvedValueOnce(undefined)
       .mockRejectedValueOnce(createNetworkError(777));
+    vaultApi.getOidcAccessor = jest.fn().mockResolvedValueOnce('123');
 
-    const vc = new VaultGroupController(vault, mockConfigService, mockVpcController, mockLogger);
+    const vc = new VaultGroupController(vault, vaultApi, mockConfigService, mockVpcController, mockLogger);
     await expect(vc.syncGroup('newgroup-failias', [])).rejects.toThrow();
-    expect(vault.read).toHaveBeenCalledTimes(1);
+    expect(vaultApi.getOidcAccessor).toHaveBeenCalledTimes(1);
     expect(vault.write).toHaveBeenCalledTimes(3);
     expect(mockLogger.info).toHaveBeenCalledTimes(0);
     expect(mockLogger.error).toHaveBeenCalledTimes(1);

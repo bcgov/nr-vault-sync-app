@@ -7,9 +7,10 @@ const TYPES = {
   HclUtil: Symbol.for('HclUtil'),
   Logger: Symbol.for('Logger'),
   PolicyRegistrationService: Symbol.for('PolicyRegistrationService'),
+  Vault: Symbol.for('Vault'),
+  VaultApi: Symbol.for('VaultApi'),
   VaultPolicyController: Symbol.for('VaultPolicyController'),
   VaultGroupController: Symbol.for('VaultGroupController'),
-  Vault: Symbol.for('Vault'),
 };
 
 export {TYPES};

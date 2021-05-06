@@ -8,10 +8,11 @@ import EnvironmentUtil from '../util/environment.util';
 import {ConfigService, GroupConfig} from '../services/config.service';
 import {PolicyRegistrationService} from '../services/policy-registration.service';
 import HclUtil from '../util/hcl.util';
+import VaultApi from './vault.api';
 
-const VAULT_ROOT_SYSTEM = 'system';
-const VAULT_ROOT_APPS = 'apps';
-const VAULT_ROOT_GROUPS = 'groups';
+export const VAULT_ROOT_SYSTEM = 'system';
+export const VAULT_ROOT_APPS = 'apps';
+export const VAULT_ROOT_GROUPS = 'groups';
 
 
 @injectable()
@@ -19,12 +20,15 @@ const VAULT_ROOT_GROUPS = 'groups';
  * The policy controller manages the sync of vault policies
  */
 export default class VaultPolicyController {
+  private policyDecoData: ejs.Data | undefined;
+
   /**
    * Construct the policy controller
    * @param vault The vault client to use
    */
   constructor(
     @inject(TYPES.Vault) private vault: nv.client,
+    @inject(TYPES.VaultApi) private vaultApi: VaultApi,
     @inject(TYPES.AppService) private appService: AppService,
     @inject(TYPES.ConfigService) private config: ConfigService,
     @inject(TYPES.HclUtil) private hclUtil: HclUtil,
@@ -160,6 +164,27 @@ export default class VaultPolicyController {
   }
 
   /**
+   * Decorate policy template data with globals
+   * @param data The data to decorate
+   */
+  private async decoratePolicyData(data: ejs.Data = {}): Promise<ejs.Data> {
+    if (this.policyDecoData) {
+      return {
+        ...data,
+        ...this.policyDecoData,
+      };
+    }
+    const accessor = await this.vaultApi.getOidcAccessor();
+    this.policyDecoData = {
+      global_oidc_accessor: accessor,
+    };
+    return {
+      ...data,
+      ...this.policyDecoData,
+    };
+  }
+
+  /**
    * Adds a policy to vault
    * @param group The policy group
    * @param templateName The policy template name
@@ -167,11 +192,13 @@ export default class VaultPolicyController {
    */
   public async addPolicy(group: string, templateName: string, data?: ejs.Data | undefined) {
     const name = this.hclUtil.renderName('/', group, templateName, data);
+    this.logger.debug(`Add policy: ${name}`);
     if (!await this.policyRegistrationService.hasRegisteredPolicy(name)) {
       this.policyRegistrationService.registerPolicy(name);
-      return this.vault.addPolicy({
+      // Using vault.write because vault.addPolicy is not encoding the name correctly
+      return this.vault.write(`sys/policies/acl/${encodeURIComponent(name)}`, {
         name,
-        rules: this.hclUtil.renderBody('/', group, templateName, data),
+        policy: this.hclUtil.renderBody('/', group, templateName, await this.decoratePolicyData(data)),
       });
     }
   }
@@ -189,7 +216,8 @@ export default class VaultPolicyController {
         partialRegistration);
 
       for (const name of policiesToRemove) {
-        await this.vault.removePolicy({name});
+        // Using vault.delete because vault.removePolicy is not encoding the name correctly
+        await this.vault.delete(`sys/policies/acl/${encodeURIComponent(name)}`);
         this.logger.info(`Removed: ${name}`);
       }
     } catch (error) {
