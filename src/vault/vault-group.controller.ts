@@ -2,9 +2,12 @@ import {inject, injectable} from 'inversify';
 import nv from 'node-vault';
 import winston from 'winston';
 import {TYPES} from '../inversify.types';
+import {AppService} from '../services/app.service';
 import {ConfigService} from '../services/config.service';
-import VaultPolicyController from './vault-policy.controller';
 import VaultApi from './vault.api';
+import HclUtil from '../util/hcl.util';
+import {GroupPolicyService} from './policy-roots/impl/group-policy.service';
+import {AppPolicyService} from './policy-roots/impl/app-policy.service';
 
 @injectable()
 /**
@@ -18,7 +21,10 @@ export default class VaultGroupController {
     @inject(TYPES.Vault) private vault: nv.client,
     @inject(TYPES.VaultApi) private vaultApi: VaultApi,
     @inject(TYPES.ConfigService) private config: ConfigService,
-    @inject(TYPES.VaultPolicyController) private vpcController: VaultPolicyController,
+    @inject(TYPES.AppService) private appService: AppService,
+    @inject(TYPES.HclUtil) private hclUtil: HclUtil,
+    @inject(TYPES.GroupPolicyService) private groupRootService: GroupPolicyService,
+    @inject(TYPES.AppPolicyService) private appRootService: AppPolicyService,
     @inject(TYPES.Logger) private logger: winston.Logger,
   ) {}
 
@@ -26,9 +32,49 @@ export default class VaultGroupController {
    *
    */
   public async sync() {
+    await this.syncAppGroups();
+    await this.syncUserGroups();
+  }
+
+  /**
+   * Sync app groups. This is specifically for developers.
+   */
+  public async syncAppGroups() {
+    const apps = await this.config.getApps();
+    const devAppGroup = (await this.config.getAppGroups()).developer;
+    const projectSet = new Set();
+    for (const app of apps) {
+      try {
+        const appInfo = await this.appService.getApp(app.name);
+        const specs = await this.appRootService.build(appInfo);
+        if (projectSet.has(appInfo.project)) {
+          continue;
+        }
+        projectSet.add(appInfo.project);
+        const names = specs.filter((spec) => {
+          return spec.data && devAppGroup[spec.data.environment] &&
+              devAppGroup[spec.data.environment].indexOf(spec.templateName) != -1;
+        })
+          .map((spec) => this.hclUtil.renderName(spec));
+        await this.syncGroup(`${appInfo.project.toLowerCase()}-developers`, names);
+      } catch (error) {
+
+      }
+    }
+  }
+
+  /**
+   * Sync user groups
+   */
+  public async syncUserGroups() {
     const groups = await this.config.getGroups();
     for (const group of groups) {
-      await this.syncGroup(group.name, this.vpcController.decorateGroupPolicy(group));
+      await this.syncGroup(group.name, [
+        ...(group.policies ? group.policies : []),
+        ...(await this.groupRootService.build(group))
+          .filter((spec) => spec.templateName === 'user')
+          .map((spec) => this.hclUtil.renderName(spec)),
+      ]);
     }
   }
 

@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import * as fs from 'fs';
 import * as ejs from 'ejs';
 import * as path from 'path';
@@ -21,8 +20,8 @@ describe('hcl util', () => {
     mockFs.readFileSync.mockReturnValue('template');
     mockEjs.render.mockReturnValue('rendered!');
 
-    const rVal = hclUtil.renderBody('basedir', 'group', 'cool-temp', {data: 'data'});
-    const filePath = path.join('basedir', 'group', 'cool-temp.hcl.tpl');
+    const rVal = hclUtil.renderBody({group: 'group', templateName: 'cool-temp', data: {data: 'data'}});
+    const filePath = path.join('group', 'cool-temp.hcl.tpl');
 
     expect(rVal).toBe('rendered!');
     expect(mockFs.readFileSync).toBeCalledTimes(1);
@@ -38,8 +37,8 @@ describe('hcl util', () => {
     mockFs.existsSync.mockReturnValue(true);
     mockEjs.render.mockReturnValue('rendered!');
 
-    const rVal = hclUtil.renderName('basedir', 'group', 'cool-temp', {data: 'data'});
-    const filePath = path.join('basedir', 'group', 'cool-temp.name.tpl');
+    const rVal = hclUtil.renderName({group: 'group', templateName: 'cool-temp', data: {data: 'data'}});
+    const filePath = path.join('group', 'cool-temp.name.tpl');
 
     expect(rVal).toBe('group/rendered!');
     expect(mockFs.existsSync).toBeCalledTimes(1);
@@ -55,8 +54,8 @@ describe('hcl util', () => {
     const hclUtil = new HclUtil();
     mockFs.existsSync.mockReturnValue(false);
 
-    const rVal = hclUtil.renderName('basedir', undefined, 'cool-temp', {data: 'data'});
-    const filePath = path.join('basedir', 'cool-temp.name.tpl');
+    const rVal = hclUtil.renderName({group: '', templateName: 'cool-temp', data: {data: 'data'}});
+    const filePath = path.join('cool-temp.name.tpl');
 
     expect(rVal).toBe('cool-temp');
     expect(mockFs.existsSync).toBeCalledTimes(1);

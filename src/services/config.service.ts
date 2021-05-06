@@ -4,7 +4,13 @@ export interface AppConfig {
     readProject: boolean;
   };
   name: string;
-};
+}
+
+export interface AppGroups {
+  'developer': {
+    [key: string]: string[]
+  }
+}
 
 export interface GroupConfig {
   kv?: string;
@@ -15,6 +21,7 @@ export interface GroupConfig {
 export interface VaultConfig {
   kv: string[];
   apps: AppConfig[];
+  appGroups: AppGroups;
   groups: GroupConfig[];
 }
 
@@ -36,6 +43,11 @@ export interface ConfigService {
    * Return all applications in the configuration
    */
   getApp(appName: string): Promise<AppConfig | undefined>;
+
+  /**
+   * Return policies to apply to app groups
+   */
+  getAppGroups(): Promise<AppGroups>;
 
   /**
    * Return all groups in the configuration

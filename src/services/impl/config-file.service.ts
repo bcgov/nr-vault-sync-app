@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import {injectable} from 'inversify';
-import {AppConfig, ConfigService, GroupConfig, VaultConfig} from '../config.service';
+import {AppConfig, AppGroups, ConfigService, GroupConfig, VaultConfig} from '../config.service';
 
 @injectable()
 /**
@@ -32,6 +32,13 @@ export class ConfigFileService implements ConfigService {
    */
   async getApp(appName: string): Promise<AppConfig | undefined> {
     return ConfigFileService.config.apps.find((app) => app.name === appName);
+  }
+
+  /**
+   * Return policies to apply to app groups
+   */
+  async getAppGroups(): Promise<AppGroups> {
+    return ConfigFileService.config.appGroups;
   }
 
   /**

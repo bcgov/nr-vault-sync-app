@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import {PolicyRegistrationMemoryService} from './policy-registration-memory.service';
 import {logger} from '../../logger';
 

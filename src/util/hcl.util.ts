@@ -3,6 +3,12 @@ import * as fs from 'fs';
 import * as path from 'path';
 import {injectable} from 'inversify';
 
+export interface HlcRenderSpec {
+  group: string;
+  templateName: string;
+  data?: ejs.Data | undefined;
+}
+
 @injectable()
 /**
  * Utility class for HCL
@@ -12,43 +18,37 @@ export default class HclUtil {
 
   /**
    * Renders a body from the template
-   * @param baseDir The base directory for the templates
-   * @param group The template logical grouping folder
-   * @param templateName The template name
-   * @param data Additional data to pass to the template
+   * @param spec The information to use to render the body
    */
-  public renderBody(baseDir: string, group: string | undefined, templateName: string, data: ejs.Data | undefined) {
-    const pathArray = [HclUtil.templatesdir, baseDir, group, `${templateName}.hcl.tpl`]
+  public renderBody(spec: HlcRenderSpec) {
+    const pathArray = [HclUtil.templatesdir, spec.group, `${spec.templateName}.hcl.tpl`]
       .filter((s): s is string => s != undefined);
     const filePath = path.join(...pathArray);
     return ejs.render(
       fs.readFileSync(filePath, 'UTF8'),
       {
-        ...data,
+        ...spec.data,
       },
     );
   }
 
   /**
    * Renders a name from the template if it exists or parameters
-   * @param baseDir The base directory for the templates
-   * @param group The template logical grouping folder
-   * @param templateName The template name
-   * @param data Additional data to pass to the template
+   * @param spec The information to use to render the body
    */
-  public renderName(baseDir: string, group: string | undefined, templateName: string, data: ejs.Data | undefined) {
-    const pathArray = [HclUtil.templatesdir, baseDir, group, `${templateName}.name.tpl`]
+  public renderName(spec: HlcRenderSpec) {
+    const pathArray = [HclUtil.templatesdir, spec.group, `${spec.templateName}.name.tpl`]
       .filter((s): s is string => s != undefined);
     const filePath = path.join(...pathArray);
     if (fs.existsSync(filePath)) {
-      return `${group}/${ejs.render(
+      return `${spec.group}/${ejs.render(
         fs.readFileSync(filePath, 'UTF8'),
         {
-          ...data,
+          ...spec.data,
         },
       )}`;
     } else {
-      return group ? `${group}/${templateName}` : templateName;
+      return spec.group ? `${spec.group}/${spec.templateName}` : spec.templateName;
     }
   }
 }

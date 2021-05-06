@@ -1,5 +1,4 @@
 import {Command} from '@oclif/command';
-import 'reflect-metadata';
 import {help, root, vaultAddr, vaultToken} from '../flags';
 import VaultPolicyController from '../vault/vault-policy.controller';
 import {bindVault, vsContainer} from '../inversify.config';

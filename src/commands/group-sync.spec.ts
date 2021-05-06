@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import GroupSync from './group-sync';
 import {mocked} from 'ts-jest/utils';
 import {bindVault, vsContainer} from '../inversify.config';
