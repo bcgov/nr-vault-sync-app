@@ -29,11 +29,12 @@ export default class VaultGroupController {
   ) {}
 
   /**
-   *
+   * Sync external groups to Vault
    */
   public async sync() {
     await this.syncAppGroups();
     await this.syncUserGroups();
+    // TODO: Remove no longer used groups
   }
 
   /**
@@ -51,14 +52,14 @@ export default class VaultGroupController {
           continue;
         }
         projectSet.add(appInfo.project);
-        const names = specs.filter((spec) => {
+        const policyNames = specs.filter((spec) => {
           return spec.data && devAppGroup[spec.data.environment] &&
               devAppGroup[spec.data.environment].indexOf(spec.templateName) != -1;
         })
           .map((spec) => this.hclUtil.renderName(spec));
-        await this.syncGroup(`${appInfo.project.toLowerCase()}-developers`, names);
+        await this.syncGroup(`${appInfo.project.toLowerCase()}-developers`, policyNames);
       } catch (error) {
-
+        this.logger.error(`Error syncing dev app group: ${app.name}`);
       }
     }
   }
@@ -96,7 +97,7 @@ export default class VaultGroupController {
       });
 
     if (!group) {
-      // Does not return data if an update
+      // API does not return data if write was an update
       group = await this.vault.read(`identity/group/name/${groupName}`);
     }
     if (!group.data.alias || (group.data.alias && Object.keys(group.data.alias).length === 0)) {

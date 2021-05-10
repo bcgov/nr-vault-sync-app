@@ -37,39 +37,28 @@ describe('app-policy.service', () => {
     expect(aps.buildApplications).toBeCalledTimes(1);
   });
 
-  /*
+  test('sync: buildApplication', async () => {
+    const aps = new AppPolicyService({} as unknown as AppService, mockLogger);
 
-  test('sync: syncApplicationByName', async () => {
-    const mockAppService = {
-      getApp: jest.fn().mockResolvedValue(true),
+    const spec = aps.buildApplication({
+      env: ['PRODUCTION'],
+      app: 'DEMOapp',
+      project: 'DEmO',
+    });
+
+    const dataEnvProd = {
+      application: 'demoapp',
+      secertKvPath: 'apps',
+      project: 'demo',
+      environment: 'prod',
+      appCanReadProject: undefined,
     };
-    const vp = vpcFactory({appService: mockAppService});
 
-    const rVal = Promise.resolve();
-    jest.spyOn(vp, 'syncApplication').mockReturnValue(rVal);
-    expect(await vp.syncApplicationByName('app1')).toBe(await rVal);
-
-    expect(vp.syncApplication).toBeCalledTimes(1);
-    expect(vp.syncApplication).toBeCalledWith(true);
-    expect(mockAppService.getApp).toBeCalledTimes(1);
-    expect(mockAppService.getApp).toBeCalledWith('app1');
+    expect(spec).toEqual([
+      {group: VAULT_ROOT_APPS, templateName: 'project-kv-read', data: dataEnvProd},
+      {group: VAULT_ROOT_APPS, templateName: 'project-kv-write', data: dataEnvProd},
+      {group: VAULT_ROOT_APPS, templateName: 'app-kv-read', data: dataEnvProd},
+      {group: VAULT_ROOT_APPS, templateName: 'app-kv-write', data: dataEnvProd},
+    ]);
   });
-
-  test('sync: syncApplicationByName (no app)', async () => {
-    const mockAppService = {
-      getApp: jest.fn().mockImplementation(() => {
-        throw new Error();
-      }),
-    };
-    const vp = vpcFactory({appService: mockAppService});
-
-    jest.spyOn(vp, 'syncApplication');
-    expect(await vp.syncApplicationByName('app1')).toBe(undefined);
-
-    expect(vp.syncApplication).toBeCalledTimes(0);
-    expect(mockAppService.getApp).toBeCalledTimes(1);
-    expect(mockAppService.getApp).toBeCalledWith('app1');
-    expect(mockLogger.error).toBeCalledWith('App not found: app1');
-  });
-  */
 });

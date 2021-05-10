@@ -48,6 +48,7 @@ export class GroupPolicyService implements PolicyRootService<GroupConfig> {
    * Syncs policies with vault for groups
    */
   public buildGroup(group: GroupConfig): HlcRenderSpec {
+    this.logger.debug(`Build group: ${group.name}`);
     return {
       group: VAULT_ROOT_GROUPS,
       templateName: 'user',

@@ -39,6 +39,7 @@ export class SystemPolicyService implements PolicyRootService<undefined> {
    * Sync system policies to vault
    */
   public buildSystem(): HlcRenderSpec[] {
+    this.logger.debug(`Build system - global`);
     return [
       {group: VAULT_ROOT_SYSTEM, templateName: 'admin-super'},
       {group: VAULT_ROOT_SYSTEM, templateName: 'admin-general'},
@@ -49,6 +50,7 @@ export class SystemPolicyService implements PolicyRootService<undefined> {
    * Sync kv engine policies to vault
    */
   public async buildKvSecretEngines(): Promise<HlcRenderSpec[]> {
+    this.logger.debug(`Build system - kv`);
     const kvSpecs: HlcRenderSpec[] = [];
     for (const secertKvPath of await this.config.getVaultKvStores()) {
       kvSpecs.push({

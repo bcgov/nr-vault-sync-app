@@ -11,7 +11,7 @@ let oidcDecoData: ejs.Data | undefined;
  * @param propertyName
  * @param descriptor
  */
-export default function oidcData(target: any, propertyName: string, descriptor: any) {
+export default function oidcData(target: any, propertyName: string, descriptor: PropertyDescriptor) {
   const method = descriptor.value!;
 
   descriptor.value = async function(...args: any) {

@@ -8,7 +8,7 @@ import HclUtil, {HlcRenderSpec} from '../../util/hcl.util';
  * @param propertyName
  * @param descriptor
  */
-export default function deduplicate(target: any, propertyName: string, descriptor: any) {
+export default function deduplicate(target: any, propertyName: string, descriptor: PropertyDescriptor) {
   const method = descriptor.value!;
 
   descriptor.value = async function(...args: any) {

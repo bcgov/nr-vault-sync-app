@@ -1,4 +1,3 @@
-import * as ejs from 'ejs';
 import nv from 'node-vault';
 import {inject, injectable, multiInject} from 'inversify';
 import {TYPES} from '../inversify.types';
@@ -7,18 +6,11 @@ import {PolicyRegistrationService} from '../services/policy-registration.service
 import HclUtil, {HlcRenderSpec} from '../util/hcl.util';
 import {PolicyRootService} from './policy-roots/policy-root.service';
 
-export const VAULT_ROOT_SYSTEM = 'system';
-export const VAULT_ROOT_APPS = 'apps';
-export const VAULT_ROOT_GROUPS = 'groups';
-
-
 @injectable()
 /**
  * The policy controller manages the sync of vault policies
  */
 export default class VaultPolicyController {
-  private policyDecoData: ejs.Data | undefined;
-
   /**
    * Construct the policy controller
    * @param vault The vault client to use

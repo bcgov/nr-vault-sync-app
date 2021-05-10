@@ -56,7 +56,7 @@ export class AppPolicyService implements PolicyRootService<Application> {
    * @param Application The application to create the policies for
    */
   public buildApplication(appInfo: Application): HlcRenderSpec[] {
-    this.logger.debug(`Sync app policy: ${appInfo.app}`);
+    this.logger.debug(`Build app policy: ${appInfo.app}`);
     const appSpecs: HlcRenderSpec[] = [];
     for (const environment of appInfo.env) {
       let normEvn;
