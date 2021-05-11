@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import {Command} from '@oclif/command';
 import {help, vaultAddr, vaultToken} from '../flags';
 import VaultGroupController from '../vault/vault-group.controller';

@@ -42,9 +42,7 @@ export default class VaultPolicyController {
 
   /**
    * Adds a policy to vault
-   * @param group The policy group
-   * @param templateName The policy template name
-   * @param data Additional data to pass to the template
+   * @param spec The policy spec to render and add to Vault
    */
   public async addPolicy(spec: HlcRenderSpec) {
     const name = this.hclUtil.renderName(spec);

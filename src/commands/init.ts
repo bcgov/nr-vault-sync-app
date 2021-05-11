@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import {Command} from '@oclif/command';
 import * as fs from 'fs';
 import {vaultFactory} from '../vault/vault.factory';

@@ -94,7 +94,7 @@ describe('vault-group.controller', () => {
     vault.write = jest.fn().mockResolvedValueOnce(undefined);
 
     const vc = vgcFactory({});
-    await vc.syncGroup('existing', []);
+    await vc.syncGroup('existing', 'role', []);
     expect(vault.read).toBeCalledTimes(1);
     expect(vault.write).toBeCalledTimes(1);
     expect(mockLogger.info).toBeCalledTimes(1);
@@ -109,7 +109,7 @@ describe('vault-group.controller', () => {
       .mockResolvedValueOnce('');
 
     const vc = vgcFactory({});
-    await vc.syncGroup('newgroup', []);
+    await vc.syncGroup('newgroup', 'role', []);
     expect(vault.write).toHaveBeenCalledTimes(3);
     expect(mockLogger.info).toHaveBeenCalledTimes(1);
     expect(mockLogger.info).toBeCalledWith(`Vault group: newgroup`);
@@ -120,7 +120,7 @@ describe('vault-group.controller', () => {
     vault.write = jest.fn().mockRejectedValue(createNetworkError(999));
 
     const vc = vgcFactory({});
-    await expect(vc.syncGroup('write-fails', []))
+    await expect(vc.syncGroup('write-fails', 'role', []))
       .rejects.toThrow();
     expect(vault.write).toHaveBeenCalledTimes(1);
     expect(mockLogger.info).toHaveBeenCalledTimes(0);
@@ -136,11 +136,11 @@ describe('vault-group.controller', () => {
     vaultApi.getOidcAccessor = jest.fn().mockResolvedValueOnce('123');
 
     const vc = vgcFactory({});
-    await expect(vc.syncGroup('newgroup-failias', [])).rejects.toThrow();
+    await expect(vc.syncGroup('newgroup-failias', 'role', [])).rejects.toThrow();
     expect(vault.write).toHaveBeenCalledTimes(3);
     expect(mockLogger.info).toHaveBeenCalledTimes(0);
     expect(mockLogger.error).toHaveBeenCalledTimes(1);
     expect(mockLogger.error).toHaveBeenCalledWith(
-      `Failed to create alias 'newgroup-failias' for '11223' on '123' in Vault. Error 777`);
+      `Failed to create alias 'role' for '11223' on '123' in Vault. Error 777`);
   });
 });
