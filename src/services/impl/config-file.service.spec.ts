@@ -1,5 +1,4 @@
 import * as fs from 'fs';
-import 'reflect-metadata';
 import {mocked} from 'ts-jest/utils';
 
 jest.mock('fs');
@@ -9,6 +8,13 @@ const mockConfig = {
   'apps': [
     {'name': 'APP-TUS', 'enabled': true},
   ],
+  'appGroups': {
+    'developer': {
+      'dev': ['project-kv-read', 'project-kv-write'],
+      'int': ['project-kv-read', 'project-kv-write'],
+      'test': ['project-kv-read'],
+    },
+  },
   'groups': [
     {
       'kv': 'groups',
@@ -63,6 +69,14 @@ describe('config-file.service', () => {
     const rVal = await cfs.getApps();
 
     expect(rVal).toEqual(mockConfig.apps);
+  });
+
+  it('getAppGroups', async () => {
+    // Test command
+    const cfs = new ConfigFileService();
+    const rVal = await cfs.getAppGroups();
+
+    expect(rVal).toEqual(mockConfig.appGroups);
   });
 
   it('getGroups', async () => {

@@ -2,10 +2,15 @@ import {inject, injectable} from 'inversify';
 import nv from 'node-vault';
 import winston from 'winston';
 import {TYPES} from '../inversify.types';
+import {AppService} from '../services/app.service';
 import {ConfigService} from '../services/config.service';
-import VaultPolicyController from './vault-policy.controller';
 import VaultApi from './vault.api';
+import HclUtil from '../util/hcl.util';
+import {GroupPolicyService} from './policy-roots/impl/group-policy.service';
+import {AppPolicyService} from './policy-roots/impl/app-policy.service';
 
+export const VAULT_GROUP_KEYCLOAK_DEVELOPERS = 'kc-developer';
+export const VAULT_GROUP_KEYCLOAK_GROUPS = 'kc-group';
 @injectable()
 /**
  * Vault group controller.
@@ -18,47 +23,103 @@ export default class VaultGroupController {
     @inject(TYPES.Vault) private vault: nv.client,
     @inject(TYPES.VaultApi) private vaultApi: VaultApi,
     @inject(TYPES.ConfigService) private config: ConfigService,
-    @inject(TYPES.VaultPolicyController) private vpcController: VaultPolicyController,
+    @inject(TYPES.AppService) private appService: AppService,
+    @inject(TYPES.HclUtil) private hclUtil: HclUtil,
+    @inject(TYPES.GroupPolicyService) private groupRootService: GroupPolicyService,
+    @inject(TYPES.AppPolicyService) private appRootService: AppPolicyService,
     @inject(TYPES.Logger) private logger: winston.Logger,
   ) {}
 
   /**
-   *
+   * Sync external groups to Vault
    */
   public async sync() {
-    const groups = await this.config.getGroups();
-    for (const group of groups) {
-      await this.syncGroup(group.name, this.vpcController.decorateGroupPolicy(group));
+    await this.syncAppGroups();
+    await this.syncUserGroups();
+    // TODO: Remove no longer used groups
+  }
+
+  /**
+   * Sync app groups. This is specifically for developers.
+   */
+  public async syncAppGroups() {
+    const apps = await this.config.getApps();
+    const devAppGroup = (await this.config.getAppGroups()).developer;
+    const projectSet = new Set();
+    for (const app of apps) {
+      try {
+        const appInfo = await this.appService.getApp(app.name);
+        const specs = await this.appRootService.build(appInfo);
+        if (projectSet.has(appInfo.project)) {
+          continue;
+        }
+        projectSet.add(appInfo.project);
+        const policyNames = specs.filter((spec) => {
+          return spec.data && devAppGroup[spec.data.environment] &&
+              devAppGroup[spec.data.environment].indexOf(spec.templateName) != -1;
+        })
+          .map((spec) => this.hclUtil.renderName(spec));
+        await this.syncGroup(`${VAULT_GROUP_KEYCLOAK_DEVELOPERS}/${appInfo.project.toLowerCase()}`,
+          `${appInfo.project.toLowerCase()}-developers`, policyNames);
+      } catch (error) {
+        this.logger.error(`Error syncing dev app group: ${app.name}`);
+      }
     }
   }
 
   /**
-   * Find a user group in Vault; create it if it does not exist.
+   * Sync user groups
    */
-  public async syncGroup(groupName: string, policies: string[], metadata: {[key: string]: string} = {}): Promise<any> {
+  public async syncUserGroups() {
+    const groups = await this.config.getGroups();
+    for (const group of groups) {
+      await this.syncGroup(
+        `${VAULT_GROUP_KEYCLOAK_GROUPS}/${group.name.toLowerCase()}`,
+        group.name.toLowerCase(), [
+          ...(group.policies ? group.policies : []),
+          ...(await this.groupRootService.build(group))
+            .filter((spec) => spec.templateName === 'user')
+            .map((spec) => this.hclUtil.renderName(spec)),
+        ], {root: 'user'});
+    }
+  }
+
+  /**
+   * Sync a user group and its external alias in Vault
+   * @param name The name of the group in Vault
+   * @param role The external role to map to the group
+   * @param policies The policies to attach to the group
+   * @param metadata The group metadata
+   * @returns
+   */
+  public async syncGroup(
+    name: string,
+    role: string,
+    policies: string[],
+    metadata: {[key: string]: string} = {}): Promise<any> {
     const accessor = await this.vaultApi.getOidcAccessor();
 
     let group = await this.vault.write(
-      `identity/group/name/${groupName}`, {
+      `identity/group/name/${encodeURIComponent(name)}`, {
         policies,
         type: 'external',
         metadata,
       })
       .catch((error: any) => {
-        this.logger.error(`Error creating group '${groupName}' in Vault: Error ${error.response.statusCode}`);
+        this.logger.error(`Error creating group '${name}' in Vault: Error ${error.response.statusCode}`);
         throw new Error('Could not create group');
       });
 
     if (!group) {
-      // Does not return data if an update
-      group = await this.vault.read(`identity/group/name/${groupName}`);
+      // API does not return data if write was an update
+      group = await this.vault.read(`identity/group/name/${encodeURIComponent(name)}`);
     }
     if (!group.data.alias || (group.data.alias && Object.keys(group.data.alias).length === 0)) {
-      await this.createGroupAlias(group.data.id, accessor, groupName);
+      await this.createGroupAlias(group.data.id, accessor, role);
     } else {
       this.logger.debug('Skip adding alias');
     }
-    this.logger.info(`Vault group: ${groupName}`);
+    this.logger.info(`Vault group: ${name}`);
     return group;
   }
 

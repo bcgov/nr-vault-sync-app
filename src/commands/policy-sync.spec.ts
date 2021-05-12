@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import PolicySync from './policy-sync';
 import {mocked} from 'ts-jest/utils';
 import {bindVault, vsContainer} from '../inversify.config';

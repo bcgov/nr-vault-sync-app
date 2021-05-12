@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import nv from 'node-vault';
 import winston from 'winston';
 import VaultApi from './vault.api';

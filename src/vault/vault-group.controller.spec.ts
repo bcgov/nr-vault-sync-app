@@ -1,10 +1,12 @@
-import 'reflect-metadata';
 import nv from 'node-vault';
 import winston from 'winston';
 import VaultGroupController from './vault-group.controller';
 import {ConfigService} from '../services/config.service';
-import VaultPolicyController from './vault-policy.controller';
 import VaultApi from './vault.api';
+import {AppPolicyService} from './policy-roots/impl/app-policy.service';
+import {GroupPolicyService} from './policy-roots/impl/group-policy.service';
+import {AppService} from '../services/app.service';
+import HclUtil from '../util/hcl.util';
 
 /**
  * Helper function to create an HTTP error
@@ -29,9 +31,21 @@ describe('vault-group.controller', () => {
     }),
   } as unknown as ConfigService;
 
-  const mockVpcController = {
+  const mockGroupPolicyService = {
     decorateGroupPolicy: jest.fn((policy) => policy),
-  } as unknown as VaultPolicyController;
+  } as unknown as GroupPolicyService;
+
+  const mockAppPolicyService = {
+    decorateGroupPolicy: jest.fn((policy) => policy),
+  } as unknown as AppPolicyService;
+
+  const mockAppService = {
+    getAllApps: jest.fn(() => ['app1', 'app2']),
+  } as unknown as AppService;
+
+  const mockHclUtil = {
+    getAllApps: jest.fn(() => ['app1', 'app2']),
+  } as unknown as HclUtil;
 
   const vault = {
     read: jest.fn(),
@@ -42,6 +56,21 @@ describe('vault-group.controller', () => {
     getOidcAccessor: jest.fn(),
   } as unknown as VaultApi;
 
+  /**
+   * Test harness factory
+   */
+  function vgcFactory(fArgs: any) {
+    return new VaultGroupController(
+      vault,
+      vaultApi,
+      fArgs.mockConfigService ? fArgs.mockConfigService : mockConfigService,
+      mockAppService,
+      mockHclUtil,
+      mockGroupPolicyService,
+      mockAppPolicyService,
+      mockLogger);
+  }
+
   afterEach(() => {
     jest.clearAllMocks();
     mockConfigService.getGroups = jest.fn(async () => {
@@ -49,33 +78,23 @@ describe('vault-group.controller', () => {
     });
   });
 
-  test('sync: multiple groups', async () => {
-    const mockGroupData = [{name: 'bob'}, {name: 'sue'}];
-    mockConfigService.getGroups = jest.fn(async () => {
-      return mockGroupData;
-    });
-    const vc = new VaultGroupController(vault, vaultApi, mockConfigService, mockVpcController, mockLogger);
-    jest.spyOn(vc, 'syncGroup').mockResolvedValue('');
+  test('sync', async () => {
+    const vc = vgcFactory({});
+    jest.spyOn(vc, 'syncUserGroups').mockReturnValue(Promise.resolve());
+    jest.spyOn(vc, 'syncAppGroups').mockReturnValue(Promise.resolve());
     await vc.sync();
 
-    expect(mockConfigService.getGroups).toBeCalledTimes(1);
-    expect(mockVpcController.decorateGroupPolicy).toBeCalledTimes(2);
-    expect(mockVpcController.decorateGroupPolicy).toHaveBeenCalledWith(mockGroupData[0]);
-    expect(mockVpcController.decorateGroupPolicy).toHaveBeenCalledWith(mockGroupData[1]);
-    expect(vc.syncGroup).toBeCalledTimes(2);
-    expect(vc.syncGroup).toHaveBeenCalledWith(mockGroupData[0].name, mockGroupData[0]);
-    expect(vc.syncGroup).toHaveBeenCalledWith(mockGroupData[1].name, mockGroupData[1]);
+    expect(vc.syncUserGroups).toBeCalledTimes(1);
+    expect(vc.syncAppGroups).toBeCalledTimes(1);
   });
 
   test('syncGroup: group exists', async () => {
     vault.read = jest.fn()
       .mockResolvedValueOnce({'data': {'alias': {'something': 'something'}}});
     vault.write = jest.fn().mockResolvedValueOnce(undefined);
-    vaultApi.getOidcAccessor = jest.fn().mockResolvedValueOnce('123');
 
-    const vc = new VaultGroupController(vault, vaultApi, mockConfigService, mockVpcController, mockLogger);
-    await vc.syncGroup('existing', []);
-    expect(vaultApi.getOidcAccessor).toHaveBeenCalledTimes(1);
+    const vc = vgcFactory({});
+    await vc.syncGroup('existing', 'role', []);
     expect(vault.read).toBeCalledTimes(1);
     expect(vault.write).toBeCalledTimes(1);
     expect(mockLogger.info).toBeCalledTimes(1);
@@ -88,12 +107,9 @@ describe('vault-group.controller', () => {
       .mockResolvedValueOnce({name: 'newgroup', data: {id: '11223'}})
       .mockResolvedValueOnce(undefined)
       .mockResolvedValueOnce('');
-    vaultApi.getOidcAccessor = jest.fn().mockResolvedValueOnce('123');
 
-
-    const vc = new VaultGroupController(vault, vaultApi, mockConfigService, mockVpcController, mockLogger);
-    await vc.syncGroup('newgroup', []);
-    expect(vaultApi.getOidcAccessor).toHaveBeenCalledTimes(1);
+    const vc = vgcFactory({});
+    await vc.syncGroup('newgroup', 'role', []);
     expect(vault.write).toHaveBeenCalledTimes(3);
     expect(mockLogger.info).toHaveBeenCalledTimes(1);
     expect(mockLogger.info).toBeCalledWith(`Vault group: newgroup`);
@@ -102,26 +118,14 @@ describe('vault-group.controller', () => {
 
   test('syncGroup: group write fails', async () => {
     vault.write = jest.fn().mockRejectedValue(createNetworkError(999));
-    vaultApi.getOidcAccessor = jest.fn().mockResolvedValueOnce('123');
 
-    const vc = new VaultGroupController(vault, vaultApi, mockConfigService, mockVpcController, mockLogger);
-    await expect(vc.syncGroup('write-fails', []))
+    const vc = vgcFactory({});
+    await expect(vc.syncGroup('write-fails', 'role', []))
       .rejects.toThrow();
-    expect(vaultApi.getOidcAccessor).toHaveBeenCalledTimes(1);
     expect(vault.write).toHaveBeenCalledTimes(1);
     expect(mockLogger.info).toHaveBeenCalledTimes(0);
     expect(mockLogger.error).toHaveBeenCalledTimes(1);
     expect(mockLogger.error).toHaveBeenCalledWith(`Error creating group 'write-fails' in Vault: Error 999`);
-  });
-
-  test('syncGroup: accessor lookup fails', async () => {
-    vaultApi.getOidcAccessor = jest.fn().mockImplementation(() => {
-      throw new Error();
-    });
-
-    const vc = new VaultGroupController(vault, vaultApi, mockConfigService, mockVpcController, mockLogger);
-    await expect(vc.syncGroup('find-fails', [])).rejects.toThrow();
-    expect(vaultApi.getOidcAccessor).toHaveBeenCalledTimes(1);
   });
 
   test('syncGroup: alias creation fails', async () => {
@@ -131,13 +135,12 @@ describe('vault-group.controller', () => {
       .mockRejectedValueOnce(createNetworkError(777));
     vaultApi.getOidcAccessor = jest.fn().mockResolvedValueOnce('123');
 
-    const vc = new VaultGroupController(vault, vaultApi, mockConfigService, mockVpcController, mockLogger);
-    await expect(vc.syncGroup('newgroup-failias', [])).rejects.toThrow();
-    expect(vaultApi.getOidcAccessor).toHaveBeenCalledTimes(1);
+    const vc = vgcFactory({});
+    await expect(vc.syncGroup('newgroup-failias', 'role', [])).rejects.toThrow();
     expect(vault.write).toHaveBeenCalledTimes(3);
     expect(mockLogger.info).toHaveBeenCalledTimes(0);
     expect(mockLogger.error).toHaveBeenCalledTimes(1);
     expect(mockLogger.error).toHaveBeenCalledWith(
-      `Failed to create alias 'newgroup-failias' for '11223' on '123' in Vault. Error 777`);
+      `Failed to create alias 'role' for '11223' on '123' in Vault. Error 777`);
   });
 });

@@ -1,5 +1,4 @@
 import * as fs from 'fs';
-import 'reflect-metadata';
 import {mocked} from 'ts-jest/utils';
 import {ConfigService} from '../config.service';
 
