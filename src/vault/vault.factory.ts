@@ -11,7 +11,7 @@ export function vaultFactory(vaultAddr: string, vaultToken: string): nv.client {
   if (!vault) {
     vault = nv({
       apiVersion: 'v1',
-      endpoint: vaultAddr.replace(/\/$/, ""),
+      endpoint: vaultAddr.replace(/\/$/, ''),
       token: vaultToken,
     });
   }
