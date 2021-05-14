@@ -60,7 +60,7 @@ export default class VaultGroupController {
         })
           .map((spec) => this.hclUtil.renderName(spec));
         await this.syncGroup(`${VAULT_GROUP_KEYCLOAK_DEVELOPERS}/${appInfo.project.toLowerCase()}`,
-          `${appInfo.project.toLowerCase()}-developers`, policyNames);
+          `${appInfo.project.toLowerCase()}-developer`, policyNames);
       } catch (error) {
         this.logger.error(`Error syncing dev app group: ${app.name}`);
       }
