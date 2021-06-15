@@ -63,4 +63,16 @@ describe('hcl util', () => {
 
     expect(mockEjs.render).not.toBeCalled();
   });
+
+  it('renderApproleName - renders approles', () => {
+    const hclUtil = new HclUtil();
+
+    const rVal = hclUtil.renderApproleName({
+      env: [],
+      app: 'BananA',
+      project: 'FARM',
+    }, 'PRODUCTION');
+
+    expect(rVal).toBe('farm_banana_prod');
+  });
 });

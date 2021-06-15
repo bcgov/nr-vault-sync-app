@@ -13,6 +13,7 @@
     "@types/ejs": "^3.0.6",
     "ejs": "^3.1.6",
     "inversify": "^5.1.1",
+    "merge-deep": "^3.0.3",
     "node-vault": "^0.9.21",
     "reflect-metadata": "^0.1.13",
     "tslib": "^2.2.0",
@@ -21,8 +22,10 @@
   "devDependencies": {
     "@oclif/dev-cli": "^1.26.0",
     "@types/jest": "^26.0.23",
+    "@types/merge-deep": "^3.0.0",
     "@types/node": "^12.12.14",
     "@types/node-vault": "^0.9.13",
+    "@types/request": "^2.48.5",
     "@typescript-eslint/eslint-plugin": "^4.22.0",
     "@typescript-eslint/parser": "^4.22.0",
     "eslint": "^7.25.0",

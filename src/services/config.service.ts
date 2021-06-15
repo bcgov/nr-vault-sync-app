@@ -1,10 +1,39 @@
 export interface AppConfig {
   enabled: boolean;
+  approle?: AppConfigApprole;
   kvApps?: {
     readProject: boolean;
   };
   name: string;
 }
+
+/* eslint-disable camelcase */
+export interface AppConfigApprole {
+  // non-standard
+  enabled: boolean;
+  options: {
+    project: boolean;
+    read: boolean;
+    write: boolean;
+  }
+  role_name: string;
+  // standard
+  bind_secret_id: boolean;
+  secret_id_bound_cidrs: string | string[];
+  secret_id_num_uses: number;
+  secret_id_ttl: number | string;
+  enable_local_secret_ids: boolean;
+  token_ttl: number | string;
+  token_max_ttl: number | string;
+  token_policies: string | string[];
+  token_bound_cidrs: string | string[];
+  token_explicit_max_ttl: number | string;
+  token_no_default_policy: boolean;
+  token_num_uses: number;
+  token_period: number | string;
+  token_type: string;
+}
+/* eslint-enable camelcase */
 
 export interface AppGroups {
   'developer': {

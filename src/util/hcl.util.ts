@@ -2,6 +2,8 @@ import * as ejs from 'ejs';
 import * as fs from 'fs';
 import * as path from 'path';
 import {injectable} from 'inversify';
+import {Application} from '../services/app.service';
+import EnvironmentUtil from './environment.util';
 
 export interface HlcRenderSpec {
   group: string;
@@ -50,5 +52,15 @@ export default class HclUtil {
     } else {
       return spec.group ? `${spec.group}/${spec.templateName}` : spec.templateName;
     }
+  }
+
+  /**
+   * Renders the app role from the parameters
+   * @param app The application to generate the role for
+   * @param env The environment of that role
+   * @returns string
+   */
+  renderApproleName(app: Application, env: string) {
+    return `${app.project.toLowerCase()}_${app.app.toLowerCase()}_${EnvironmentUtil.normalize(env)}`;
   }
 }

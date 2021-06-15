@@ -3,7 +3,7 @@ import {mocked} from 'ts-jest/utils';
 
 jest.mock('fs');
 const mockFs = mocked(fs);
-const mockConfig = {
+const mockConfig: any = {
   'kv': ['bob'],
   'apps': [
     {'name': 'APP-TUS', 'enabled': true},
@@ -24,6 +24,8 @@ const mockConfig = {
   ],
 };
 mockFs.readFileSync.mockReturnValue(JSON.stringify(mockConfig));
+// For purposes of testing, we just care that it exists
+mockConfig.apps[0].approle = expect.anything();
 
 import {ConfigFileService} from './config-file.service';
 
