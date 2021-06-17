@@ -71,11 +71,26 @@ $ ./bin/run (-v|--version|version)
 
 # Commands
 <!-- commands -->
+* [`vstool approle-sync`](#vstool-approle-sync)
 * [`vstool group-sync`](#vstool-group-sync)
 * [`vstool health`](#vstool-health)
 * [`vstool help [COMMAND]`](#vstool-help-command)
 * [`vstool init [VAULT-ADDR] [VAULT-TOKEN]`](#vstool-init-vault-addr-vault-token)
 * [`vstool policy-sync`](#vstool-policy-sync)
+
+## `vstool approle-sync`
+
+Syncs approles in Vault
+
+```
+USAGE
+  $ vstool approle-sync
+
+OPTIONS
+  -h, --help                 show CLI help
+  --vault-addr=vault-addr    [default: http://127.0.0.1:8200] The vault address
+  --vault-token=vault-token  [default: myroot] The vault token
+```
 
 ## `vstool group-sync`
 

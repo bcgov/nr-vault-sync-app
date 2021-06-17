@@ -7,6 +7,11 @@ import {Application, AppService} from '../../../services/app.service';
 import EnvironmentUtil from '../../../util/environment.util';
 import deduplicate from '../deduplicate.deco';
 
+export interface AppBuildOptions {
+  project: boolean;
+  read: boolean;
+  write: boolean;
+}
 
 @injectable()
 /**
@@ -53,35 +58,52 @@ export class AppPolicyService implements PolicyRootService<Application> {
 
   /**
    * Builds the hlc render spec for an application
-   * @param Application The application to create the policies for
+   * @param appInfo The application to create the policies for
    */
   public buildApplication(appInfo: Application): HlcRenderSpec[] {
     this.logger.debug(`Build app policy: ${appInfo.app}`);
     const appSpecs: HlcRenderSpec[] = [];
     for (const environment of appInfo.env) {
-      let normEvn;
-      try {
-        normEvn = EnvironmentUtil.normalize(environment);
-      } catch (err) {
-        this.logger.debug(`Unsupported environment: ${environment}`);
-        continue;
-      }
-
-      const policyData = {
-        application: appInfo.app.toLowerCase(),
-        secertKvPath: 'apps',
-        project: appInfo.project.toLowerCase(),
-        environment: normEvn,
-        appCanReadProject: appInfo.config?.kvApps?.readProject,
-      };
-
-      appSpecs.push(...[
-        {group: VAULT_ROOT_APPS, templateName: 'project-kv-read', data: policyData},
-        {group: VAULT_ROOT_APPS, templateName: 'project-kv-write', data: policyData},
-        {group: VAULT_ROOT_APPS, templateName: 'app-kv-read', data: policyData},
-        {group: VAULT_ROOT_APPS, templateName: 'app-kv-write', data: policyData},
-      ]);
+      appSpecs.push(...this.buildApplicationForEnv(appInfo, environment, {project: true, read: true, write: true}));
     }
     return appSpecs;
+  }
+
+  /**
+   * Builds the hlc render spec for an application for a specific environment
+   * @param appInfo The application to create the policies for
+   * @param environment The environment to create for
+   * @param options Additional build options
+   */
+  public buildApplicationForEnv(appInfo: Application, environment: string, options: AppBuildOptions): HlcRenderSpec[] {
+    let normEvn;
+    try {
+      normEvn = EnvironmentUtil.normalize(environment);
+    } catch (err) {
+      this.logger.debug(`Unsupported environment: ${environment}`);
+      return [];
+    }
+
+    const policyData = {
+      application: appInfo.app.toLowerCase(),
+      secertKvPath: 'apps',
+      project: appInfo.project.toLowerCase(),
+      environment: normEvn,
+      appCanReadProject: appInfo.config?.kvApps?.readProject,
+    };
+    const renderSpecs: HlcRenderSpec[] = [];
+    if (options.project && options.read) {
+      renderSpecs.push({group: VAULT_ROOT_APPS, templateName: 'project-kv-read', data: policyData});
+    }
+    if (options.project && options.write) {
+      renderSpecs.push({group: VAULT_ROOT_APPS, templateName: 'project-kv-write', data: policyData});
+    }
+    if (options.read) {
+      renderSpecs.push({group: VAULT_ROOT_APPS, templateName: 'app-kv-read', data: policyData});
+    }
+    if (options.write) {
+      renderSpecs.push({group: VAULT_ROOT_APPS, templateName: 'app-kv-write', data: policyData});
+    }
+    return renderSpecs;
   }
 }

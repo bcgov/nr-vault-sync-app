@@ -13,6 +13,7 @@ const TYPES = {
   SystemPolicyService: Symbol.for('SystemPolicyService'),
   Vault: Symbol.for('Vault'),
   VaultApi: Symbol.for('VaultApi'),
+  VaultApproleController: Symbol.for('VaultApproleController'),
   VaultPolicyController: Symbol.for('VaultPolicyController'),
   VaultGroupController: Symbol.for('VaultGroupController'),
 };

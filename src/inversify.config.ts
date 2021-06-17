@@ -19,6 +19,7 @@ import {PolicyRootService} from './vault/policy-roots/policy-root.service';
 import {SystemPolicyService} from './vault/policy-roots/impl/system-policy.service';
 import {AppPolicyService} from './vault/policy-roots/impl/app-policy.service';
 import {GroupPolicyService} from './vault/policy-roots/impl/group-policy.service';
+import VaultApproleController from './vault/vault-approle.controller';
 
 const vsContainer = new Container();
 // Services
@@ -38,6 +39,7 @@ vsContainer.bind<GroupPolicyService>(TYPES.GroupPolicyService)
   .to(GroupPolicyService);
 
 // Controllers
+vsContainer.bind<VaultApproleController>(TYPES.VaultApproleController).to(VaultApproleController);
 vsContainer.bind<VaultPolicyController>(TYPES.VaultPolicyController).to(VaultPolicyController);
 vsContainer.bind<VaultGroupController>(TYPES.VaultGroupController).to(VaultGroupController);
 
