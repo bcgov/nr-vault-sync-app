@@ -31,6 +31,7 @@ export default class VaultApproleController {
 
   /**
    * Syncs approles
+   * To enable: vault auth enable -path=vs_apps_approle approle
    */
   public async sync() {
     const approleDict = await this.buildApproleDict();

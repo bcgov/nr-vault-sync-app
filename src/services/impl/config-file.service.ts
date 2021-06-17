@@ -48,7 +48,7 @@ export class ConfigFileService implements ConfigService {
           options: {
             project: false,
             read: true,
-            write: true,
+            write: false,
           },
           role_name: '',
         },
