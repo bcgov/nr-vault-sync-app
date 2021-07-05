@@ -4,3 +4,8 @@
 path "*" {
   capabilities = ["create", "read", "update", "delete", "list", "sudo"]
 }
+
+# No access to user secrets except your own!
+path "user/*" {
+  capabilities = []
+}
