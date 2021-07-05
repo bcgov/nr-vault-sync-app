@@ -27,9 +27,9 @@ vsContainer.bind<AppService>(TYPES.AppService).to(AppFileService);
 vsContainer.bind<ConfigService>(TYPES.ConfigService).to(ConfigFileService);
 vsContainer.bind<PolicyRegistrationService>(TYPES.PolicyRegistrationService).to(PolicyRegistrationMemoryService);
 // Bind policy roots for multi-inject
-vsContainer.bind<PolicyRootService<any>>(TYPES.PolicyRootService).to(SystemPolicyService);
-vsContainer.bind<PolicyRootService<any>>(TYPES.PolicyRootService).to(AppPolicyService);
-vsContainer.bind<PolicyRootService<any>>(TYPES.PolicyRootService).to(GroupPolicyService);
+vsContainer.bind<PolicyRootService<unknown>>(TYPES.PolicyRootService).to(SystemPolicyService);
+vsContainer.bind<PolicyRootService<unknown>>(TYPES.PolicyRootService).to(AppPolicyService);
+vsContainer.bind<PolicyRootService<unknown>>(TYPES.PolicyRootService).to(GroupPolicyService);
 // Bind policy roots for individual inject
 vsContainer.bind<SystemPolicyService>(TYPES.SystemPolicyService)
   .to(SystemPolicyService);
@@ -58,7 +58,7 @@ export {vsContainer};
  * @param addr The vault address
  * @param token The vault token
  */
-export function bindVault(addr: string, token: string) {
+export function bindVault(addr: string, token: string): void {
   vsContainer.bind<nv.client>(TYPES.Vault).toConstantValue(
     vaultFactory(addr, token));
 }

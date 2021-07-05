@@ -18,7 +18,7 @@ export default class Health extends Command {
   /**
    * Run the command
    */
-  async run() {
+  async run(): Promise<void> {
     const {flags} = this.parse(Health);
     const vault = vaultFactory(flags['vault-addr'], flags['vault-token']);
 

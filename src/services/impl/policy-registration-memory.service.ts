@@ -23,6 +23,7 @@ export class PolicyRegistrationMemoryService implements PolicyRegistrationServic
    */
   async registerPolicy(policyName: string): Promise<void> {
     this.policyDb[policyName] = true;
+    return Promise.resolve();
   }
 
   /**
@@ -40,7 +41,7 @@ export class PolicyRegistrationMemoryService implements PolicyRegistrationServic
    * @param policyName The name of the policy to check
    */
   async hasRegisteredPolicy(policyName: string): Promise<boolean> {
-    return policyName in this.policyDb;
+    return Promise.resolve(policyName in this.policyDb);
   }
 
   /**
@@ -48,6 +49,7 @@ export class PolicyRegistrationMemoryService implements PolicyRegistrationServic
    */
   async clearPolicies(): Promise<void> {
     this.policyDb = {};
+    return Promise.resolve();
   }
 
   /**
@@ -62,6 +64,6 @@ export class PolicyRegistrationMemoryService implements PolicyRegistrationServic
       throw new Error('Partial not supported');
     }
 
-    return policyNames.filter((policyName: string) => !(policyName in this.policyDb));
+    return Promise.resolve(policyNames.filter((policyName: string) => !(policyName in this.policyDb)));
   }
 }

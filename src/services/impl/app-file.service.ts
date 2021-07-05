@@ -13,7 +13,7 @@ export class AppFileService implements AppService {
   private static readonly applicationPath
     = path.join(__dirname, '../../../config', 'applications.json');
   private static readonly applications
-    = JSON.parse(fs.readFileSync(AppFileService.applicationPath, 'UTF8'));
+    = JSON.parse(fs.readFileSync(AppFileService.applicationPath, 'UTF8')) as Application[];
 
   /**
    * Construct the app service

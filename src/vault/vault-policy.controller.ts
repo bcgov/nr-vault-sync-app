@@ -21,13 +21,13 @@ export default class VaultPolicyController {
     @inject(TYPES.PolicyRegistrationService)
     private policyRegistrationService: PolicyRegistrationService,
     @multiInject(TYPES.PolicyRootService)
-    private policyRootServices: PolicyRootService<undefined>[],
+    private policyRootServices: PolicyRootService<unknown>[],
     @inject(TYPES.Logger) private logger: winston.Logger) {}
 
   /**
    * Syncs policies to vault
    */
-  public async sync(root: string[]) {
+  public async sync(root: string[]): Promise<void> {
     for (const policyRoot of this.policyRootServices) {
       if (root.length === 0 || root[0] === policyRoot.getName()) {
         this.logger.info(`- Sync ${policyRoot.getName()}`);
@@ -44,13 +44,13 @@ export default class VaultPolicyController {
    * Adds a policy to vault
    * @param spec The policy spec to render and add to Vault
    */
-  public async addPolicy(spec: HlcRenderSpec) {
+  public async addPolicy(spec: HlcRenderSpec): Promise<void> {
     const name = this.hclUtil.renderName(spec);
     this.logger.info(`Add policy: ${name}`);
     if (!await this.policyRegistrationService.hasRegisteredPolicy(name)) {
-      this.policyRegistrationService.registerPolicy(name);
+      await this.policyRegistrationService.registerPolicy(name);
       // Using vault.write because vault.addPolicy is not encoding the name correctly
-      return this.vault.write(`sys/policies/acl/${encodeURIComponent(name)}`, {
+      await this.vault.write(`sys/policies/acl/${encodeURIComponent(name)}`, {
         name,
         policy: this.hclUtil.renderBody(spec),
       });
@@ -62,8 +62,9 @@ export default class VaultPolicyController {
    * @param group The policy group
    * @param partialRegistration True if not all policies were registered this run and false otherwise
    */
-  public async removeUnregisteredPolicies(group: string, partialRegistration: boolean) {
-    const policies = (await this.vault.policies()).data.policies;
+  public async removeUnregisteredPolicies(group: string, partialRegistration: boolean): Promise<void> {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- No typing avialable
+    const policies = (await this.vault.policies()).data.policies as string[];
     try {
       const policiesToRemove = await this.policyRegistrationService.filterPoliciesForUnregistered(
         policies.filter((policyName: string) => policyName.startsWith(group)),

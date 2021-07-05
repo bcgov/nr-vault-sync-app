@@ -3,6 +3,12 @@ import nv from 'node-vault';
 import winston from 'winston';
 import {TYPES} from '../inversify.types';
 
+interface VaultAuthData {
+  [key: string]: {
+    type: string;
+    accessor: string;
+  }
+}
 @injectable()
 /**
  * Shared Vault APIs
@@ -22,7 +28,8 @@ export default class VaultApi {
   public async getOidcAccessor(): Promise<string> {
     return this.vault.read(`/sys/auth`)
       .then((response) => {
-        for (const value of Object.values(response.data) as any) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- No typing avialable
+        for (const value of Object.values(response.data as VaultAuthData)) {
           if (value.type === 'oidc') {
             return value.accessor;
           }
@@ -31,9 +38,12 @@ export default class VaultApi {
         throw new Error('No OIDC configured');
       })
       .catch((error) => {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- No typing avialable
         if (error.response) {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- No typing avialable
+          const code = error.response.statusCode as number;
           this.logger.error(
-            `Could not lookup accessor in Vault: Error ${error.response.statusCode}`);
+            `Could not lookup accessor in Vault: Error ${code}`);
           throw new Error('Could not lookup accessor');
         }
         throw error;

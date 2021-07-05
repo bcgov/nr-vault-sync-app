@@ -14,6 +14,7 @@ import HclUtil from '../util/hcl.util';
  */
 function createNetworkError(statusCode: number) {
   const err = new Error();
+  // eslint-disable-next-line -- No typing provided
   (err as any).response = {statusCode};
   return err;
 }
@@ -32,11 +33,9 @@ describe('vault-group.controller', () => {
   } as unknown as ConfigService;
 
   const mockGroupPolicyService = {
-    decorateGroupPolicy: jest.fn((policy) => policy),
   } as unknown as GroupPolicyService;
 
   const mockAppPolicyService = {
-    decorateGroupPolicy: jest.fn((policy) => policy),
   } as unknown as AppPolicyService;
 
   const mockAppService = {
@@ -56,10 +55,14 @@ describe('vault-group.controller', () => {
     getOidcAccessor: jest.fn(),
   } as unknown as VaultApi;
 
+  interface FactoryArgs {
+    mockConfigService?: ConfigService;
+  }
+
   /**
    * Test harness factory
    */
-  function vgcFactory(fArgs: any) {
+  function vgcFactory(fArgs: FactoryArgs) {
     return new VaultGroupController(
       vault,
       vaultApi,
@@ -74,7 +77,7 @@ describe('vault-group.controller', () => {
   afterEach(() => {
     jest.clearAllMocks();
     mockConfigService.getGroups = jest.fn(async () => {
-      return [];
+      return Promise.resolve([]);
     });
   });
 

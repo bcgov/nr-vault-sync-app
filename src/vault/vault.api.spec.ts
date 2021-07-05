@@ -7,8 +7,8 @@ import VaultApi from './vault.api';
  * @param statusCode The http status code
  */
 function createNetworkError(statusCode: number) {
-  const err = new Error();
-  (err as any).response = {statusCode};
+  const err: Error & {response?: {statusCode: number}} = new Error();
+  (err).response = {statusCode};
   return err;
 }
 

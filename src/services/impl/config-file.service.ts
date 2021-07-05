@@ -11,15 +11,15 @@ import merge from 'merge-deep';
 export class ConfigFileService implements ConfigService {
   private static readonly policyFilePath
     = path.join(__dirname, '../../../config', 'config.json');
-  private static readonly config: VaultConfig
-    = JSON.parse(fs.readFileSync(ConfigFileService.policyFilePath, 'UTF8'));
+  private static readonly config
+    = JSON.parse(fs.readFileSync(ConfigFileService.policyFilePath, 'UTF8')) as VaultConfig;
 
   /**
    * Apply configuration defaults to the app
    * @param app The application config to apply defaults to
    */
   private static applyAppConfigDefaults(app: AppConfig): AppConfig {
-    /* eslint-disable camelcase */
+    /* eslint-disable camelcase -- Library code style issue */
     return merge({
       approle: {
         // Vault defaults -- https://www.vaultproject.io/api/auth/approle
@@ -61,14 +61,14 @@ export class ConfigFileService implements ConfigService {
    * Return the paths to the KV secret stores
    */
   async getVaultKvStores(): Promise<string[]> {
-    return ConfigFileService.config.kv;
+    return Promise.resolve(ConfigFileService.config.kv);
   }
 
   /**
    * Return all applications in the configuration
    */
   async getApps(): Promise<AppConfig[]> {
-    return ConfigFileService.config.apps.map(ConfigFileService.applyAppConfigDefaults);
+    return Promise.resolve(ConfigFileService.config.apps.map((app) => ConfigFileService.applyAppConfigDefaults(app)));
   }
 
   /**
@@ -76,20 +76,20 @@ export class ConfigFileService implements ConfigService {
    */
   async getApp(appName: string): Promise<AppConfig | undefined> {
     const app = ConfigFileService.config.apps.find((app) => app.name === appName);
-    return app ? ConfigFileService.applyAppConfigDefaults(app) : app;
+    return Promise.resolve(app ? ConfigFileService.applyAppConfigDefaults(app) : app);
   }
 
   /**
    * Return policies to apply to app groups
    */
   async getAppGroups(): Promise<AppGroups> {
-    return ConfigFileService.config.appGroups;
+    return Promise.resolve(ConfigFileService.config.appGroups);
   }
 
   /**
    * Return all groups in the configuration
    */
   async getGroups(): Promise<GroupConfig[]> {
-    return ConfigFileService.config.groups;
+    return Promise.resolve(ConfigFileService.config.groups);
   }
 }

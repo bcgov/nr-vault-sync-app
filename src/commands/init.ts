@@ -23,10 +23,10 @@ export default class Init extends Command {
   /**
    * Run the command
    */
-  async run() {
+  async run(): Promise<void> {
     const {flags} = this.parse(Init);
     const vault = vaultFactory(flags['vault-addr'], flags['vault-token']);
-    const {initialized, version} = await vault.health();
+    const {initialized, version} = await vault.health() as {initialized: boolean, version: string};
     const secretShares = flags['secret-shares'];
     const secretThreshold = flags['secret-threshold'];
 
@@ -50,11 +50,13 @@ export default class Init extends Command {
         this.exit();
       }
 
+      /* eslint-disable camelcase -- Library code style issue */
       const result = await vault.init({
         secret_shares: secretShares,
         secret_threshold: secretThreshold,
-      });
+      }) as {root_token: string, keys: string[]};
       const token = result.root_token;
+      /* eslint-enable camelcase */
 
       vault.token = token;
       fs.writeFileSync('VAULT_ROOT_TOKEN', token);

@@ -21,7 +21,7 @@ export default class PolicySync extends Command {
   /**
    * Run the command
    */
-  async run() {
+  async run(): Promise<void> {
     const {flags} = this.parse(PolicySync);
     this.log('Vault Policy Sync');
     bindVault(flags['vault-addr'], flags['vault-token']);

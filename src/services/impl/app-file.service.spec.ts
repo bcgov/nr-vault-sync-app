@@ -73,6 +73,7 @@ describe('app-file.service', () => {
   });
 
   it('getAllApps - config error', async () => {
+    // eslint-disable-next-line jest/unbound-method
     mocked(cs.getApps).mockResolvedValue([{
       'enabled': true,
       'name': 'APP-TUS-WRONG',
@@ -97,6 +98,7 @@ describe('app-file.service', () => {
 
   it('getApp - does not exist', async () => {
     const afs = new AppFileService(cs);
+    // eslint-disable-next-line jest/unbound-method
     mocked(cs.getApp).mockResolvedValue(undefined);
 
     await expect(afs.getApp('APP-fff'))

@@ -6,7 +6,7 @@ import {mocked} from 'ts-jest/utils';
 jest.mock('../vault/vault.factory');
 
 describe('health command', () => {
-  let stdoutSpy: any;
+  let stdoutSpy: jest.SpyInstance;
   beforeEach(() => {
     stdoutSpy = jest.spyOn(process.stdout, 'write')
       .mockImplementation(() => true);

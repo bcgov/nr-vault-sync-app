@@ -33,7 +33,7 @@ export default class VaultApproleController {
    * Syncs approles
    * To enable: vault auth enable -path=vs_apps_approle approle
    */
-  public async sync() {
+  public async sync(): Promise<void> {
     const approleDict = await this.buildApproleDict();
 
     // create / update roles
@@ -45,7 +45,7 @@ export default class VaultApproleController {
   /**
    * Build approle dict from configuration
    */
-  public async buildApproleDict() {
+  public async buildApproleDict(): Promise<ApproleDict> {
     const apps = await this.appService.getAllApps();
     const approleDict: ApproleDict = {};
     for (const app of apps) {
@@ -53,8 +53,8 @@ export default class VaultApproleController {
         for (const env of app.env) {
           const approleName = this.hclUtil.renderApproleName(app, env);
 
-          const spec = this.appRootService.buildApplicationForEnv(app, env, app.config.approle.options);
-          const policies = spec.map(this.hclUtil.renderName).join(',');
+          const specs = this.appRootService.buildApplicationForEnv(app, env, app.config.approle.options);
+          const policies = specs.map((spec) => this.hclUtil.renderName(spec)).join(',');
           approleDict[approleName] = {
             ...app.config.approle,
             ...{
@@ -72,7 +72,7 @@ export default class VaultApproleController {
    * Create / update roles based on configuration
    * @param approleDict The app role dict
    */
-  public async createUpdateRoles(approleDict: ApproleDict) {
+  public async createUpdateRoles(approleDict: ApproleDict): Promise<void> {
     for (const role of Object.keys(approleDict)) {
       const ar = approleDict[role];
       this.logger.debug(`Create/update: ${role}`);
@@ -97,8 +97,11 @@ export default class VaultApproleController {
    * Remove roles that no longer exist in configuration
    * @param registeredRoles The approles that have been registered to create/update
    */
-  public async removeUnusedRoles(registeredRoles: Set<string>) {
-    const existingRoles = (await this.vault.approleRoles({mount_point: VAULT_APPROLE_MOUNT_POINT})).data.keys;
+  public async removeUnusedRoles(registeredRoles: Set<string>): Promise<void> {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- No typing available
+    const vaultAppRoles = await this.vault.approleRoles({mount_point: VAULT_APPROLE_MOUNT_POINT});
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- No typing available
+    const existingRoles = vaultAppRoles.data.keys as string[];
     for (const eRole of existingRoles) {
       if (registeredRoles.has(eRole)) {
         continue;

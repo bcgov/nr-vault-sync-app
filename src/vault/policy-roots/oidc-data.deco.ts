@@ -3,6 +3,8 @@ import {TYPES} from '../../inversify.types';
 import {HlcRenderSpec} from '../../util/hcl.util';
 import VaultApi from '../vault.api';
 
+/* eslint-disable @typescript-eslint/no-explicit-any -- Use of any required by decorators */
+
 let oidcDecoData: ejs.Data | undefined;
 
 /**
@@ -11,11 +13,11 @@ let oidcDecoData: ejs.Data | undefined;
  * @param propertyName
  * @param descriptor
  */
-export default function oidcData(target: any, propertyName: string, descriptor: PropertyDescriptor) {
-  const method = descriptor.value!;
+export default function oidcData(target: unknown, propertyName: string, descriptor: PropertyDescriptor): void {
+  const method = descriptor.value as () => Promise<HlcRenderSpec[]>;
 
   descriptor.value = async function(...args: any) {
-    const specArr: HlcRenderSpec[] = await method.apply(this, args);
+    const specArr = await method.apply(this, args);
     // Danger: IoC should not be used this way.
     // Decorators aren't bound to classes so this is the only way.
     const vaultApi = vsContainer.get<VaultApi>(TYPES.VaultApi);

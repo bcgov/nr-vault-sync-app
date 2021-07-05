@@ -7,7 +7,7 @@ jest.mock('node-vault');
 describe('vault.factory', () => {
   afterEach(() => jest.restoreAllMocks());
 
-  it('Returns a nv.client', async () => {
+  it('Returns a nv.client', () => {
     const mockNodeVault = mocked(nv);
     const val = 'return';
     mockNodeVault.mockReturnValue(val as unknown as nv.client);
@@ -24,7 +24,7 @@ describe('vault.factory', () => {
     expect(rVal).toEqual(val);
   });
 
-  it('Returns a nv.client (without ending slash)', async () => {
+  it('Returns a nv.client (without ending slash)', () => {
     const mockNodeVault = mocked(nv);
     const val = 'return';
     mockNodeVault.mockReturnValue(val as unknown as nv.client);
