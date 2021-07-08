@@ -20,7 +20,7 @@ export default class ApproleSync extends Command {
   /**
    * Run the command
    */
-  async run() {
+  async run(): Promise<void> {
     const {flags} = this.parse(ApproleSync);
 
     this.log('Vault Approle Sync');

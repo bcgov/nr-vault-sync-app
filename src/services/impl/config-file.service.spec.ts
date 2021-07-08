@@ -1,9 +1,11 @@
 import * as fs from 'fs';
 import {mocked} from 'ts-jest/utils';
+import {VaultConfig} from '../config.service';
 
 jest.mock('fs');
 const mockFs = mocked(fs);
-const mockConfig: any = {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const mockConfig: VaultConfig = {
   'kv': ['bob'],
   'apps': [
     {'name': 'APP-TUS', 'enabled': true},
@@ -25,6 +27,7 @@ const mockConfig: any = {
 };
 mockFs.readFileSync.mockReturnValue(JSON.stringify(mockConfig));
 // For purposes of testing, we just care that it exists
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 mockConfig.apps[0].approle = expect.anything();
 
 import {ConfigFileService} from './config-file.service';

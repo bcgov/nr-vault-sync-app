@@ -25,6 +25,7 @@ describe('oidc-data.deco', () => {
     oidcData(undefined, '', descriptor);
     expect(descriptor.value).not.toBe(undefined);
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
     const rval = await descriptor.value('myargs');
     expect(value).toBeCalledTimes(1);
     expect(value).toBeCalledWith('myargs');

@@ -7,7 +7,7 @@ export interface AppConfig {
   name: string;
 }
 
-/* eslint-disable camelcase */
+/* eslint-disable camelcase -- Library code style issue */
 export interface AppConfigApprole {
   // non-standard
   enabled: boolean;
@@ -69,7 +69,7 @@ export interface ConfigService {
   getApps(): Promise<AppConfig[]>;
 
   /**
-   * Return all applications in the configuration
+   * Return single applications in the configuration
    */
   getApp(appName: string): Promise<AppConfig | undefined>;
 

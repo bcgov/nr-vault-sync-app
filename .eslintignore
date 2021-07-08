@@ -1,4 +1,6 @@
 /dist/*
 /lib
+/jest.setup.ts
 /jest.config.js
 /jest.e2e.config.js
+/coverage

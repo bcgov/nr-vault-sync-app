@@ -20,7 +20,7 @@ export default class GroupSync extends Command {
   /**
    * Run the command
    */
-  async run() {
+  async run(): Promise<void> {
     const {flags} = this.parse(GroupSync);
 
     this.log('Vault Group Sync');

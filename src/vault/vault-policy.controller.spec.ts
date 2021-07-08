@@ -5,6 +5,12 @@ import {PolicyRegistrationService} from '../services/policy-registration.service
 import HclUtil from '../util/hcl.util';
 import {PolicyRootService} from './policy-roots/policy-root.service';
 
+interface FactoryArgs {
+  hclUtil?: HclUtil;
+  policyRegistrationService?: PolicyRegistrationService;
+  policyRootServices?: PolicyRootService<unknown>[];
+}
+
 describe('vault-policy.controller', () => {
   const vault = {
     read: jest.fn(),
@@ -20,7 +26,7 @@ describe('vault-policy.controller', () => {
   /**
    * Test harness factory
    */
-  function vpcFactory(fArgs: any) {
+  function vpcFactory(fArgs: FactoryArgs) {
     return new VaultPolicyController(
       vault,
       fArgs.hclUtil ? fArgs.hclUtil : {} as HclUtil,

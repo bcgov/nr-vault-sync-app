@@ -37,7 +37,7 @@ describe('app-policy.service', () => {
     expect(aps.buildApplications).toBeCalledTimes(1);
   });
 
-  test('sync: buildApplication', async () => {
+  test('sync: buildApplication', () => {
     const aps = new AppPolicyService({} as unknown as AppService, mockLogger);
 
     const spec = aps.buildApplication({
