@@ -1,0 +1,1 @@
+<%= project %>/<%= application %>/<%= environment %>-<%= secertDbPath %>-<%= dbType %>-<%= dbName %>-readwrite

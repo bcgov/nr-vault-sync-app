@@ -1,21 +1,16 @@
-export interface AppConfig {
-  enabled: boolean;
-  approle?: AppConfigApprole;
-  kvApps?: {
-    readProject: boolean;
-  };
-  name: string;
+export interface AppActorPolicies {
+  'approle': {
+    [key: string]: string[]
+  }
+  'developer': {
+    [key: string]: string[]
+  }
 }
 
 /* eslint-disable camelcase -- Library code style issue */
 export interface AppConfigApprole {
   // non-standard
   enabled: boolean;
-  options: {
-    project: boolean;
-    read: boolean;
-    write: boolean;
-  }
   role_name: string;
   // standard
   bind_secret_id: boolean;
@@ -35,10 +30,27 @@ export interface AppConfigApprole {
 }
 /* eslint-enable camelcase */
 
-export interface AppGroups {
-  'developer': {
-    [key: string]: string[]
-  }
+export interface AppConfig {
+  /** Per-environment overrides of policies for each type of actor */
+  actor?: AppActorPolicies;
+  /** How to configure the approle for this application */
+  approle?: AppConfigApprole;
+  /** Array of databases this application has access to */
+  db?: string[];
+  /** True if this application, policies, groups will be generated. */
+  enabled: boolean;
+  /** The name of the application. This must be unique and match an application in application.json */
+  name: string;
+  /** Options that alter the content of policies. */
+  policyOptions?: {
+    /** True if an application kv policies should be able to read project kv secrets */
+    kvReadProject: boolean;
+  };
+}
+
+export interface DbConfig {
+  name: string;
+  type: string;
 }
 
 export interface GroupConfig {
@@ -48,9 +60,15 @@ export interface GroupConfig {
 }
 
 export interface VaultConfig {
-  kv: string[];
+  /** Application configuration */
   apps: AppConfig[];
-  appGroups: AppGroups;
+  /** Per-environment defaults for policies to grant each type of actor */
+  appActorDefaults: AppActorPolicies;
+  /** Array of database secret engines. */
+  db: DbConfig[];
+  /** Array of key value secret engines. */
+  kv: string[];
+  /** Group configuration */
   groups: GroupConfig[];
 }
 
@@ -58,10 +76,6 @@ export interface VaultConfig {
  * Service for configuration details
  */
 export interface ConfigService {
-  /**
-   * Return the paths to the KV secret stores
-   */
-  getVaultKvStores(): Promise<string[]>;
 
   /**
    * Return all applications in the configuration
@@ -74,9 +88,24 @@ export interface ConfigService {
   getApp(appName: string): Promise<AppConfig | undefined>;
 
   /**
-   * Return policies to apply to app groups
+   * Return default policies to grant each type of actor
    */
-  getAppGroups(): Promise<AppGroups>;
+  getAppActorDefaults(): Promise<AppActorPolicies>;
+
+  /**
+   * Return the configured DB secret engines
+   */
+  getDbStores(): Promise<DbConfig[]>;
+
+  /**
+   * Return a database type from a database name
+   */
+  getDbType(name: string): Promise<string> ;
+
+  /**
+   * Return the paths to the KV secret stores
+   */
+  getKvStores(): Promise<string[]>;
 
   /**
    * Return all groups in the configuration

@@ -1,1 +1,0 @@
-<%= databasePath %>-db-admin

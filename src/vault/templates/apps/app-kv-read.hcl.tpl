@@ -12,9 +12,17 @@ path "<%= secertKvPath %>/data/<%= environment %>/<%= project %>/shared" {
 <% } %>
 
 path "<%= secertKvPath %>/data/<%= environment %>/<%= project %>/<%= application %>" {
-  capabilities = ["read", "list"]
+  capabilities = ["read"]
+}
+
+path "<%= secertKvPath %>/metadata/<%= environment %>/<%= project %>/<%= application %>" {
+  capabilities = ["read"]
 }
 
 path "<%= secertKvPath %>/data/<%= environment %>/<%= project %>/<%= application %>/+" {
-  capabilities = ["read", "list"]
+  capabilities = ["read"]
+}
+
+path "<%= secertKvPath %>/metadata/<%= environment %>/<%= project %>/<%= application %>/+" {
+  capabilities = ["read"]
 }

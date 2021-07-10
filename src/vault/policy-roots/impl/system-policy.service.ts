@@ -43,6 +43,7 @@ export class SystemPolicyService implements PolicyRootService<undefined> {
     return [
       {group: VAULT_ROOT_SYSTEM, templateName: 'admin-super'},
       {group: VAULT_ROOT_SYSTEM, templateName: 'admin-general'},
+      {group: VAULT_ROOT_SYSTEM, templateName: 'db-admin-super', data: {secertDbPath: 'db'}},
       {group: VAULT_ROOT_SYSTEM, templateName: 'user-generic'},
     ];
   }
@@ -52,7 +53,7 @@ export class SystemPolicyService implements PolicyRootService<undefined> {
   public async buildKvSecretEngines(): Promise<HlcRenderSpec[]> {
     this.logger.debug(`Build system - kv`);
     const kvSpecs: HlcRenderSpec[] = [];
-    for (const secertKvPath of await this.config.getVaultKvStores()) {
+    for (const secertKvPath of await this.config.getKvStores()) {
       kvSpecs.push({
         group: VAULT_ROOT_SYSTEM,
         templateName: 'kv-admin',

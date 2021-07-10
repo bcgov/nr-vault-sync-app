@@ -3,9 +3,10 @@ import winston from 'winston';
 import nv from 'node-vault';
 import {TYPES} from '../inversify.types';
 import {AppService} from '../services/app.service';
-import {AppConfigApprole} from '../services/config.service';
+import {AppConfigApprole, ConfigService} from '../services/config.service';
 import {AppPolicyService} from './policy-roots/impl/app-policy.service';
 import HclUtil from '../util/hcl.util';
+import EnvironmentUtil from '../util/environment.util';
 
 interface ApproleDict {
   [key: string]: AppConfigApprole;
@@ -25,6 +26,7 @@ export default class VaultApproleController {
     @inject(TYPES.Vault) private vault: nv.client,
     @inject(TYPES.AppService) private appService: AppService,
     @inject(TYPES.AppPolicyService) private appRootService: AppPolicyService,
+    @inject(TYPES.ConfigService) private config: ConfigService,
     @inject(TYPES.HclUtil) private hclUtil: HclUtil,
     @inject(TYPES.Logger) private logger: winston.Logger,
   ) {}
@@ -47,14 +49,20 @@ export default class VaultApproleController {
    */
   public async buildApproleDict(): Promise<ApproleDict> {
     const apps = await this.appService.getAllApps();
+    const appActorDefaults = await this.config.getAppActorDefaults();
     const approleDict: ApproleDict = {};
     for (const app of apps) {
       if (app.config && app.config?.enabled && app.config.approle?.enabled) {
         for (const env of app.env) {
           const approleName = this.hclUtil.renderApproleName(app, env);
 
-          const specs = this.appRootService.buildApplicationForEnv(app, env, app.config.approle.options);
-          const policies = specs.map((spec) => this.hclUtil.renderName(spec)).join(',');
+          const specs = await this.appRootService.buildApplicationForEnv(app, env);
+          const normEnv = EnvironmentUtil.normalize(env);
+          const templateNames = app.config?.actor?.approle[normEnv] || appActorDefaults.approle[normEnv];
+
+          const policies = specs.filter((spec) => {
+            return templateNames ? templateNames.indexOf( spec.templateName) != -1 : false;
+          }).map((spec) => this.hclUtil.renderName(spec)).join(',');
           approleDict[approleName] = {
             ...app.config.approle,
             ...{

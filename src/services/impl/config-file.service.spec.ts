@@ -6,22 +6,26 @@ jest.mock('fs');
 const mockFs = mocked(fs);
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mockConfig: VaultConfig = {
-  'kv': ['bob'],
-  'apps': [
-    {'name': 'APP-TUS', 'enabled': true},
+  apps: [
+    {name: 'APP-TUS', enabled: true},
   ],
-  'appGroups': {
-    'developer': {
-      'dev': ['project-kv-read', 'project-kv-write'],
-      'int': ['project-kv-read', 'project-kv-write'],
-      'test': ['project-kv-read'],
+  appActorDefaults: {
+    approle: {
+      dev: ['project-kv-read', 'project-kv-write'],
+      test: ['project-kv-read'],
+    },
+    developer: {
+      int: ['project-kv-read', 'project-kv-write'],
+      test: ['project-kv-read'],
     },
   },
-  'groups': [
+  db: [{name: 'jasper', type: 'oracle'}],
+  kv: ['bob'],
+  groups: [
     {
-      'kv': 'groups',
-      'name': 'appdelivery',
-      'policies': [],
+      kv: 'groups',
+      name: 'appdelivery',
+      policies: [],
     },
   ],
 };
@@ -44,13 +48,6 @@ describe('config-file.service', () => {
     expect(mockFs.readFileSync).toBeCalledTimes(1);
   });
 
-  it('getVaultKvStores', async () => {
-    // Test command
-    const cfs = new ConfigFileService();
-    const rVal = await cfs.getVaultKvStores();
-
-    expect(rVal).toEqual(['bob']);
-  });
 
   it('getApp', async () => {
     // Test command
@@ -76,12 +73,36 @@ describe('config-file.service', () => {
     expect(rVal).toEqual(mockConfig.apps);
   });
 
-  it('getAppGroups', async () => {
+  it('getAppActorDefaults', async () => {
     // Test command
     const cfs = new ConfigFileService();
-    const rVal = await cfs.getAppGroups();
+    const rVal = await cfs.getAppActorDefaults();
 
-    expect(rVal).toEqual(mockConfig.appGroups);
+    expect(rVal).toEqual(mockConfig.appActorDefaults);
+  });
+
+  it('getDbStores', async () => {
+    // Test command
+    const cfs = new ConfigFileService();
+    const rVal = await cfs.getDbStores();
+
+    expect(rVal).toEqual(mockConfig.db);
+  });
+
+  it('getDbType', async () => {
+    // Test command
+    const cfs = new ConfigFileService();
+    const rVal = await cfs.getDbType('jasper');
+
+    expect(rVal).toEqual('oracle');
+  });
+
+  it('getKvStores', async () => {
+    // Test command
+    const cfs = new ConfigFileService();
+    const rVal = await cfs.getKvStores();
+
+    expect(rVal).toEqual(mockConfig.kv);
   });
 
   it('getGroups', async () => {
