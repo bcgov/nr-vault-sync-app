@@ -6,12 +6,7 @@ import {TYPES} from '../../../inversify.types';
 import {Application, AppService} from '../../../services/app.service';
 import EnvironmentUtil from '../../../util/environment.util';
 import deduplicate from '../deduplicate.deco';
-
-export interface AppBuildOptions {
-  project: boolean;
-  read: boolean;
-  write: boolean;
-}
+import {ConfigService} from '../../../services/config.service';
 
 @injectable()
 /**
@@ -23,6 +18,7 @@ export class AppPolicyService implements PolicyRootService<Application> {
    */
   constructor(
     @inject(TYPES.AppService) private appService: AppService,
+    @inject(TYPES.ConfigService) private config: ConfigService,
     @inject(TYPES.Logger) private logger: winston.Logger) { }
 
   /**
@@ -51,7 +47,7 @@ export class AppPolicyService implements PolicyRootService<Application> {
   public async buildApplications(): Promise<HlcRenderSpec[]> {
     const appSpecs: HlcRenderSpec[] = [];
     for (const application of await this.appService.getAllApps()) {
-      appSpecs.push(...this.buildApplication(application));
+      appSpecs.push(...(await this.buildApplication(application)));
     }
     return appSpecs;
   }
@@ -60,11 +56,13 @@ export class AppPolicyService implements PolicyRootService<Application> {
    * Builds the hlc render spec for an application
    * @param appInfo The application to create the policies for
    */
-  public buildApplication(appInfo: Application): HlcRenderSpec[] {
+  public async buildApplication(appInfo: Application): Promise<HlcRenderSpec[]> {
     this.logger.debug(`Build app policy: ${appInfo.app}`);
     const appSpecs: HlcRenderSpec[] = [];
     for (const environment of appInfo.env) {
-      appSpecs.push(...this.buildApplicationForEnv(appInfo, environment, {project: true, read: true, write: true}));
+      appSpecs.push(...(
+        await this.buildApplicationForEnv(appInfo, environment)
+      ));
     }
     return appSpecs;
   }
@@ -75,7 +73,10 @@ export class AppPolicyService implements PolicyRootService<Application> {
    * @param environment The environment to create for
    * @param options Additional build options
    */
-  public buildApplicationForEnv(appInfo: Application, environment: string, options: AppBuildOptions): HlcRenderSpec[] {
+  public async buildApplicationForEnv(
+    appInfo: Application,
+    environment: string,
+  ): Promise<HlcRenderSpec[]> {
     let normEvn;
     try {
       normEvn = EnvironmentUtil.normalize(environment);
@@ -87,22 +88,33 @@ export class AppPolicyService implements PolicyRootService<Application> {
     const policyData = {
       application: appInfo.app.toLowerCase(),
       secertKvPath: 'apps',
+      secertDbPath: 'db',
       project: appInfo.project.toLowerCase(),
       environment: normEvn,
-      appCanReadProject: appInfo.config?.kvApps?.readProject,
+      appCanReadProject: appInfo.config?.policyOptions?.kvReadProject,
     };
     const renderSpecs: HlcRenderSpec[] = [];
-    if (options.project && options.read) {
-      renderSpecs.push({group: VAULT_ROOT_APPS, templateName: 'project-kv-read', data: policyData});
-    }
-    if (options.project && options.write) {
-      renderSpecs.push({group: VAULT_ROOT_APPS, templateName: 'project-kv-write', data: policyData});
-    }
-    if (options.read) {
-      renderSpecs.push({group: VAULT_ROOT_APPS, templateName: 'app-kv-read', data: policyData});
-    }
-    if (options.write) {
-      renderSpecs.push({group: VAULT_ROOT_APPS, templateName: 'app-kv-write', data: policyData});
+    renderSpecs.push({group: VAULT_ROOT_APPS, templateName: 'project-kv-read', data: policyData});
+    renderSpecs.push({group: VAULT_ROOT_APPS, templateName: 'project-kv-write', data: policyData});
+    renderSpecs.push({group: VAULT_ROOT_APPS, templateName: 'app-kv-read', data: policyData});
+    renderSpecs.push({group: VAULT_ROOT_APPS, templateName: 'app-kv-write', data: policyData});
+    if (appInfo.config?.db) {
+      for (const db of appInfo.config?.db) {
+        try {
+          const dbType = await this.config.getDbType(db);
+          const dbPolicyData = {
+            dbName: db,
+            dbType,
+            ...policyData,
+          };
+          renderSpecs.push({group: VAULT_ROOT_APPS, templateName: 'app-db-read', data: dbPolicyData});
+          renderSpecs.push({group: VAULT_ROOT_APPS, templateName: 'app-db-readwrite', data: dbPolicyData});
+          renderSpecs.push({group: VAULT_ROOT_APPS, templateName: 'app-db-full', data: dbPolicyData});
+        } catch (err) {
+          this.logger.debug(`Database type not found for: ${db}`);
+          continue;
+        }
+      }
     }
     return renderSpecs;
   }

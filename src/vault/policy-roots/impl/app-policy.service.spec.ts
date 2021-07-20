@@ -1,5 +1,6 @@
 import winston from 'winston';
 import {AppService} from '../../../services/app.service';
+import {ConfigService} from '../../../services/config.service';
 import {VAULT_ROOT_APPS} from '../policy-root.service';
 
 jest.mock('../deduplicate.deco', () => jest.fn());
@@ -18,7 +19,10 @@ describe('app-policy.service', () => {
   });
 
   test('getName', () => {
-    const aps = new AppPolicyService({} as unknown as AppService, mockLogger);
+    const aps = new AppPolicyService(
+      {} as unknown as AppService,
+      {} as unknown as ConfigService,
+      mockLogger);
 
     expect(aps.getName()).toBe(VAULT_ROOT_APPS);
   });
@@ -27,9 +31,12 @@ describe('app-policy.service', () => {
     const mockAppService = {
       getAllApps: jest.fn(() => ['app1', 'app2']),
     } as unknown as AppService;
-    const aps = new AppPolicyService(mockAppService, mockLogger);
+    const aps = new AppPolicyService(
+      mockAppService,
+      {} as unknown as ConfigService,
+      mockLogger);
 
-    jest.spyOn(aps, 'buildApplication').mockReturnValue([]);
+    jest.spyOn(aps, 'buildApplication').mockReturnValue(Promise.resolve([]));
     jest.spyOn(aps, 'buildApplications').mockReturnValue(Promise.resolve([]));
     await aps.build();
 
@@ -37,21 +44,31 @@ describe('app-policy.service', () => {
     expect(aps.buildApplications).toBeCalledTimes(1);
   });
 
-  test('sync: buildApplication', () => {
-    const aps = new AppPolicyService({} as unknown as AppService, mockLogger);
+  test('sync: buildApplication', async () => {
+    const aps = new AppPolicyService(
+      {} as unknown as AppService,
+      {getDbType: jest.fn().mockReturnValue('type')} as unknown as ConfigService,
+      mockLogger);
 
-    const spec = aps.buildApplication({
+    const spec = await aps.buildApplication({
       env: ['PRODUCTION'],
       app: 'DEMOapp',
       project: 'DEmO',
+      config: {enabled: true, name: 'DEMOapp', db: ['db']},
     });
 
     const dataEnvProd = {
       application: 'demoapp',
       secertKvPath: 'apps',
+      secertDbPath: 'db',
       project: 'demo',
       environment: 'prod',
       appCanReadProject: undefined,
+    };
+    const dataDbEnvProd = {
+      dbName: 'db',
+      dbType: 'type',
+      ...dataEnvProd,
     };
 
     expect(spec).toEqual([
@@ -59,6 +76,9 @@ describe('app-policy.service', () => {
       {group: VAULT_ROOT_APPS, templateName: 'project-kv-write', data: dataEnvProd},
       {group: VAULT_ROOT_APPS, templateName: 'app-kv-read', data: dataEnvProd},
       {group: VAULT_ROOT_APPS, templateName: 'app-kv-write', data: dataEnvProd},
+      {group: VAULT_ROOT_APPS, templateName: 'app-db-read', data: dataDbEnvProd},
+      {group: VAULT_ROOT_APPS, templateName: 'app-db-readwrite', data: dataDbEnvProd},
+      {group: VAULT_ROOT_APPS, templateName: 'app-db-full', data: dataDbEnvProd},
     ]);
   });
 });

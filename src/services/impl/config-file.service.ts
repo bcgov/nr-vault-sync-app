@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import {injectable} from 'inversify';
-import {AppConfig, AppGroups, ConfigService, GroupConfig, VaultConfig} from '../config.service';
+import {AppActorPolicies, AppConfig, ConfigService, DbConfig, GroupConfig, VaultConfig} from '../config.service';
 import merge from 'merge-deep';
 
 @injectable()
@@ -42,8 +42,8 @@ export class ConfigFileService implements ConfigService {
         },
         // VS defaults
         ...{
-          token_max_ttl: 2764800, // '768h'
-          token_period: 172800, // '48h'
+          secret_id_ttl: 3600, // '1h'
+          token_period: 3600, // '1h'
           secret_id_num_uses: 1,
           options: {
             project: false,
@@ -58,38 +58,56 @@ export class ConfigFileService implements ConfigService {
   }
 
   /**
-   * Return the paths to the KV secret stores
-   */
-  async getVaultKvStores(): Promise<string[]> {
-    return Promise.resolve(ConfigFileService.config.kv);
-  }
-
-  /**
    * Return all applications in the configuration
    */
-  async getApps(): Promise<AppConfig[]> {
+  getApps(): Promise<AppConfig[]> {
     return Promise.resolve(ConfigFileService.config.apps.map((app) => ConfigFileService.applyAppConfigDefaults(app)));
   }
 
   /**
    * Return single applications in the configuration
    */
-  async getApp(appName: string): Promise<AppConfig | undefined> {
+  getApp(appName: string): Promise<AppConfig | undefined> {
     const app = ConfigFileService.config.apps.find((app) => app.name === appName);
     return Promise.resolve(app ? ConfigFileService.applyAppConfigDefaults(app) : app);
   }
 
   /**
-   * Return policies to apply to app groups
+   * Return default policies to grant each type of actor
    */
-  async getAppGroups(): Promise<AppGroups> {
-    return Promise.resolve(ConfigFileService.config.appGroups);
+  getAppActorDefaults(): Promise<AppActorPolicies> {
+    return Promise.resolve(ConfigFileService.config.appActorDefaults);
+  }
+
+  /**
+   * Return the configured DB secret engines
+   */
+  getDbStores(): Promise<DbConfig[]> {
+    return Promise.resolve(ConfigFileService.config.db);
+  }
+
+  /**
+   * Return a database type from a database name
+   */
+  getDbType(name: string): Promise<string> {
+    const dbConfig = ConfigFileService.config.db.find((dbConfig) => dbConfig.name === name);
+    if (dbConfig) {
+      return Promise.resolve(dbConfig.type);
+    }
+    throw new Error(`DB named '${name}' not found`);
+  }
+
+  /**
+   * Return the paths to the KV secret stores
+   */
+  getKvStores(): Promise<string[]> {
+    return Promise.resolve(ConfigFileService.config.kv);
   }
 
   /**
    * Return all groups in the configuration
    */
-  async getGroups(): Promise<GroupConfig[]> {
+  getGroups(): Promise<GroupConfig[]> {
     return Promise.resolve(ConfigFileService.config.groups);
   }
 }

@@ -4,6 +4,7 @@ import {AppService} from '../services/app.service';
 import VaultApproleController, {VAULT_APPROLE_MOUNT_POINT} from './vault-approle.controller';
 import HclUtil from '../util/hcl.util';
 import {AppPolicyService} from './policy-roots/impl/app-policy.service';
+import {ConfigService} from '../services/config.service';
 
 describe('vault-approle.controller', () => {
   const mockHclUtil = {
@@ -24,18 +25,36 @@ describe('vault-approle.controller', () => {
       enabled: true,
       approle: {
         enabled: true,
-        options: {},
       },
     },
     env: ['PRODUCTION'],
   }];
+
+  const mockActorDefaults = {
+    approle: {
+      dev: ['project-kv-read', 'project-kv-write'],
+      prod: ['project-kv-read'],
+    },
+    developer: {
+      int: ['project-kv-read', 'project-kv-write'],
+      test: ['project-kv-read'],
+    },
+  };
+
   const mockAppService = {
     getAllApps: jest.fn(() => mockApps),
   } as unknown as AppService;
 
   const mockAppRootService = {
-    buildApplicationForEnv: jest.fn(() => [{}]),
+    buildApplicationForEnv: jest.fn(() => [{
+      group: 'b',
+      templateName: 'project-kv-read',
+    }]),
   } as unknown as AppPolicyService;
+
+  const mockConfigService = {
+    getAppActorDefaults: jest.fn(() => mockActorDefaults),
+  } as unknown as ConfigService;
 
   const mockLogger = {
     info: jest.fn(() => { }),
@@ -51,6 +70,7 @@ describe('vault-approle.controller', () => {
       vault,
       mockAppService,
       mockAppRootService,
+      mockConfigService,
       mockHclUtil,
       mockLogger);
   }
@@ -85,15 +105,13 @@ describe('vault-approle.controller', () => {
     expect(mockHclUtil.renderApproleName).toBeCalledWith(mockApps[0], 'PRODUCTION');
 
     expect(mockAppRootService.buildApplicationForEnv).toBeCalledTimes(1);
-    expect(mockAppRootService.buildApplicationForEnv).toBeCalledWith(
-      mockApps[0], 'PRODUCTION', mockApps[0].config.approle.options);
+    expect(mockAppRootService.buildApplicationForEnv).toBeCalledWith(mockApps[0], 'PRODUCTION');
 
     expect(mockHclUtil.renderName).toBeCalledTimes(1);
 
     expect(rval).toEqual({
       name: {
         enabled: true,
-        options: {},
         role_name: 'name',
         token_policies: 'policyname',
       },
@@ -105,11 +123,6 @@ describe('vault-approle.controller', () => {
     await va.createUpdateRoles({
       name: {
         enabled: true,
-        options: {
-          project: true,
-          read: true,
-          write: true,
-        },
         role_name: 'name',
         bind_secret_id: true,
         secret_id_bound_cidrs: 'secret_id_bound_cidrs',

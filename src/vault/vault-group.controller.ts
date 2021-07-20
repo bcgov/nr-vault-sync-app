@@ -44,7 +44,7 @@ export default class VaultGroupController {
    */
   public async syncAppGroups(): Promise<void> {
     const apps = await this.config.getApps();
-    const devAppGroup = (await this.config.getAppGroups()).developer;
+    const devAppGroup = (await this.config.getAppActorDefaults()).developer;
     const projectSet = new Set();
     for (const app of apps) {
       try {
