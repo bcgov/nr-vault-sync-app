@@ -55,6 +55,7 @@
     ]
   },
   "scripts": {
+    "build": "rm -rf lib && tsc",
     "lint": "eslint \"**/*.{js,ts}\" --fix --config .eslintrc.json",
     "postpack": "rimraf oclif.manifest.json",
     "posttest": "eslint \"**/*.{js,ts}\" --fix --config .eslintrc.json",

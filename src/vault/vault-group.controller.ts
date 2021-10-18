@@ -17,7 +17,7 @@ export const VAULT_GROUP_KEYCLOAK_GROUPS = 'kc-group';
  */
 export default class VaultGroupController {
   /**
-   * Constructor. Accepts a vault client, and logger.
+   * Constructor.
    */
   constructor(
     @inject(TYPES.Vault) private vault: nv.client,
