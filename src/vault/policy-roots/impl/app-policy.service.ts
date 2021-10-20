@@ -41,7 +41,7 @@ export class AppPolicyService implements PolicyRootService<Application> {
   }
 
   /**
-   * Builds the hlc render spec for all applications
+   * Builds the hlc render spec for all applications. Duplicates are removed by decorator.
    */
   @deduplicate
   public async buildApplications(): Promise<HlcRenderSpec[]> {
