@@ -45,6 +45,7 @@ export class SystemPolicyService implements PolicyRootService<undefined> {
       {group: VAULT_ROOT_SYSTEM, templateName: 'admin-general'},
       {group: VAULT_ROOT_SYSTEM, templateName: 'db-admin-super', data: {secertDbPath: 'db'}},
       {group: VAULT_ROOT_SYSTEM, templateName: 'user-generic'},
+      {group: VAULT_ROOT_SYSTEM, templateName: 'vault-sync'},
     ];
   }
   /**
