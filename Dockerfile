@@ -1,4 +1,5 @@
-FROM node:14
+ARG REPO_LOCATION=docker-remote.artifacts.developer.gov.bc.ca/
+FROM ${REPO_LOCATION}node:14
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -11,6 +12,5 @@ COPY src ./src
 COPY tsconfig.json ./
 
 RUN npm ci
-RUN npm run build
 
 ENTRYPOINT ["./bin/run"]

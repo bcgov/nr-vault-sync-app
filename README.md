@@ -10,6 +10,12 @@ See: [Confluence Documentation](https://apps.nrs.gov.bc.ca/int/confluence/x/m4Fv
 * [Commands](#commands)
 <!-- tocstop -->
 
+## Building the Docker image locally
+
+The dockerfile can be built locally by setting the REPO_LOCATION.
+
+`docker build . -t vsync --build-arg REPO_LOCATION=''`
+
 ## Environment Variables
 
 The tool can use the following environment variables in place of command arguments. The default is in the brackets. The defaults are for testing with a local Vault instance.
