@@ -36,3 +36,9 @@ path "sys/auth"
 {
   capabilities = ["sudo", "read"]
 }
+
+# Take raft snapshot
+path "sys/storage/raft/snapshot"
+{
+  capabilities = ["read"]
+}
