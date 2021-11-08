@@ -8,21 +8,21 @@ path "apps/metadata/<%= environment %>" {
 }
 
 path "apps/metadata/<%= environment %>/<%= project %>" {
-  capabilities = ["list", "read"]
+  capabilities = ["read", "list"]
 }
 
 path "apps/metadata/<%= environment %>/<%= project %>/+" {
-  capabilities = ["list", "read"]
+  capabilities = ["read", "list"]
 }
 
 path "<%= secertKvPath %>/data/<%= environment %>/<%= project %>/+" {
-  capabilities = ["read", "list"]
+  capabilities = ["read"]
 }
 
 path "apps/metadata/<%= environment %>/<%= project %>/+/+" {
-  capabilities = ["list", "read"]
+  capabilities = ["read", "list"]
 }
 
 path "<%= secertKvPath %>/data/<%= environment %>/<%= project %>/+/+" {
-  capabilities = ["read", "list"]
+  capabilities = ["read"]
 }

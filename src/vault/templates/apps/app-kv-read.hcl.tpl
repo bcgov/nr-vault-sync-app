@@ -3,7 +3,7 @@
 
 <% if (appCanReadProject) { %>
 path "apps/metadata/<%= environment %>/<%= project %>/shared" {
-  capabilities = ["list", "read"]
+  capabilities = ["read", "list"]
 }
 
 path "<%= secertKvPath %>/data/<%= environment %>/<%= project %>/shared" {
@@ -16,7 +16,7 @@ path "<%= secertKvPath %>/data/<%= environment %>/<%= project %>/<%= application
 }
 
 path "<%= secertKvPath %>/metadata/<%= environment %>/<%= project %>/<%= application %>" {
-  capabilities = ["read"]
+  capabilities = ["read", "list"]
 }
 
 path "<%= secertKvPath %>/data/<%= environment %>/<%= project %>/<%= application %>/+" {
@@ -24,5 +24,5 @@ path "<%= secertKvPath %>/data/<%= environment %>/<%= project %>/<%= application
 }
 
 path "<%= secertKvPath %>/metadata/<%= environment %>/<%= project %>/<%= application %>/+" {
-  capabilities = ["read"]
+  capabilities = ["read", "list"]
 }
