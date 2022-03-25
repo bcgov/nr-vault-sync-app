@@ -68,7 +68,7 @@ export default class VaultApproleController {
             ...app.config.approle,
             ...{
               role_name: approleName,
-              token_policies: [policies, prerenderedPolicies].join(','),
+              token_policies: prerenderedPolicies.length > 0 ? [policies, prerenderedPolicies].join(',') : policies,
             },
           };
         }
