@@ -27,7 +27,7 @@ export default class HclUtil {
       .filter((s): s is string => s != undefined);
     const filePath = path.join(...pathArray);
     return ejs.render(
-      fs.readFileSync(filePath, 'UTF8'),
+      fs.readFileSync(filePath, {encoding: 'utf8'}),
       {
         ...spec.data,
       },
@@ -44,7 +44,7 @@ export default class HclUtil {
     const filePath = path.join(...pathArray);
     if (fs.existsSync(filePath)) {
       return `${spec.group}/${ejs.render(
-        fs.readFileSync(filePath, 'UTF8'),
+        fs.readFileSync(filePath, {encoding: 'utf8'}),
         {
           ...spec.data,
         },

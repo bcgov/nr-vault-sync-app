@@ -2,12 +2,11 @@ import * as fs from 'fs';
 import * as ejs from 'ejs';
 import * as path from 'path';
 import HclUtil from './hcl.util';
-import {mocked} from 'ts-jest/utils';
 
 jest.mock('fs');
 jest.mock('ejs');
-const mockFs = mocked(fs);
-const mockEjs = mocked(ejs);
+const mockFs = jest.mocked(fs);
+const mockEjs = jest.mocked(ejs);
 
 describe('hcl util', () => {
   afterEach(() => {
@@ -25,7 +24,7 @@ describe('hcl util', () => {
 
     expect(rVal).toBe('rendered!');
     expect(mockFs.readFileSync).toBeCalledTimes(1);
-    expect(mockFs.readFileSync).toBeCalledWith(expect.stringContaining(filePath), 'UTF8');
+    expect(mockFs.readFileSync).toBeCalledWith(expect.stringContaining(filePath), {encoding: 'utf8'});
 
     expect(mockEjs.render).toBeCalledTimes(1);
     expect(mockEjs.render).toBeCalledWith('template', {data: 'data'});
@@ -44,7 +43,7 @@ describe('hcl util', () => {
     expect(mockFs.existsSync).toBeCalledTimes(1);
     expect(mockFs.existsSync).toBeCalledWith(expect.stringContaining(filePath));
     expect(mockFs.readFileSync).toBeCalledTimes(1);
-    expect(mockFs.readFileSync).toBeCalledWith(expect.stringContaining(filePath), 'UTF8');
+    expect(mockFs.readFileSync).toBeCalledWith(expect.stringContaining(filePath), {encoding: 'utf8'});
 
     expect(mockEjs.render).toBeCalledTimes(1);
     expect(mockEjs.render).toBeCalledWith('template', {data: 'data'});

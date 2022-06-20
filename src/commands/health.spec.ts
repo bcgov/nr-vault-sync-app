@@ -1,7 +1,6 @@
 import nv from 'node-vault';
 import Health from './health';
 import {vaultFactory} from '../vault/vault.factory';
-import {mocked} from 'ts-jest/utils';
 
 jest.mock('../vault/vault.factory');
 
@@ -15,7 +14,7 @@ describe('health command', () => {
   afterEach(() => jest.restoreAllMocks());
 
   it('run', async () => {
-    const mockVaultFactory = mocked(vaultFactory);
+    const mockVaultFactory = jest.mocked(vaultFactory);
     mockVaultFactory.mockImplementation(() => ({
       endpoint: 'endpoint',
       health: jest.fn().mockReturnValue({}),

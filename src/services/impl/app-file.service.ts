@@ -10,10 +10,10 @@ import {AppConfig, ConfigService} from '../config.service';
  * A file based app service implementation
  */
 export class AppFileService implements AppService {
-  private static readonly applicationPath
-    = path.join(__dirname, '../../../config', 'applications.json');
-  private static readonly applications
-    = JSON.parse(fs.readFileSync(AppFileService.applicationPath, 'UTF8')) as Application[];
+  private static readonly applicationPath =
+    path.join(__dirname, '../../../config', 'applications.json');
+  private static readonly applications =
+    JSON.parse(fs.readFileSync(AppFileService.applicationPath, {encoding: 'utf8'})) as Application[];
 
   /**
    * Construct the app service

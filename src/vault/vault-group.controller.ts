@@ -118,6 +118,7 @@ export default class VaultGroupController {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- Library does not provide typing
       group = await this.vault.read(`identity/group/name/${encodeURIComponent(name)}`);
     }
+    /* eslint-disable @typescript-eslint/no-unsafe-argument */
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- No typing avialable
     if (!group.data.alias || (group.data.alias && Object.keys(group.data.alias).length === 0)) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- No typing avialable
@@ -125,7 +126,8 @@ export default class VaultGroupController {
     } else {
       this.logger.debug('Skip adding alias');
     }
-    this.logger.info(`Vault group: ${name}`);
+    /* eslint-enable @typescript-eslint/no-unsafe-argument */
+    this.logger.info(`Vault group: ${name} [${policies.join(',')}]`);
   }
 
   /**

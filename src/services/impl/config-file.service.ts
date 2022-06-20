@@ -9,10 +9,10 @@ import merge from 'merge-deep';
  * Service for configuration details
  */
 export class ConfigFileService implements ConfigService {
-  private static readonly policyFilePath
-    = path.join(__dirname, '../../../config', 'config.json');
-  private static readonly config
-    = JSON.parse(fs.readFileSync(ConfigFileService.policyFilePath, 'UTF8')) as VaultConfig;
+  private static readonly policyFilePath =
+    path.join(__dirname, '../../../config', 'config.json');
+  private static readonly config =
+    JSON.parse(fs.readFileSync(ConfigFileService.policyFilePath, {encoding: 'utf8'})) as VaultConfig;
 
   /**
    * Apply configuration defaults to the app

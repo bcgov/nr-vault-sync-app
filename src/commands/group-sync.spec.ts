@@ -1,5 +1,4 @@
 import GroupSync from './group-sync';
-import {mocked} from 'ts-jest/utils';
 import {bindVault, vsContainer} from '../inversify.config';
 
 jest.mock('../inversify.config');
@@ -17,8 +16,8 @@ describe('group sync command', () => {
     const mockVgcInstance = {
       sync: jest.fn(),
     };
-    const mockBindVault = mocked(bindVault);
-    const mockVsContainer = mocked(vsContainer);
+    const mockBindVault = jest.mocked(bindVault);
+    const mockVsContainer = jest.mocked(vsContainer);
     mockBindVault.mockReturnValue();
     mockVsContainer.get.mockReturnValue(mockVgcInstance);
 

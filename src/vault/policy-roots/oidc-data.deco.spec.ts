@@ -1,4 +1,3 @@
-import {mocked} from 'ts-jest/utils';
 import {vsContainer} from '../../inversify.config';
 import oidcData from './oidc-data.deco';
 
@@ -14,7 +13,7 @@ describe('oidc-data.deco', () => {
       // Simple test for now. Only the first value should go through
       getOidcAccessor: jest.fn().mockResolvedValue('accessorId'),
     };
-    const mockVsContainer = mocked(vsContainer);
+    const mockVsContainer = jest.mocked(vsContainer);
     mockVsContainer.get.mockReturnValue(mockVaultApi);
 
     const value = jest.fn().mockResolvedValue([

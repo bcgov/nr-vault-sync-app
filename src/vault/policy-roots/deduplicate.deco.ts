@@ -15,6 +15,7 @@ export default function deduplicate(target: unknown, propertyName: string, descr
 
   descriptor.value = async function(...args: any) {
     const set = new Set<string>();
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     const specArr = await method.apply(this, args);
     // Danger: IoC should not be used this way.
     // Decorators aren't bound to classes so this is the only way.

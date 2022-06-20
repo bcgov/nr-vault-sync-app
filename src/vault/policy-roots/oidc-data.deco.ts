@@ -17,6 +17,7 @@ export default function oidcData(target: unknown, propertyName: string, descript
   const method = descriptor.value as () => Promise<HlcRenderSpec[]>;
 
   descriptor.value = async function(...args: any) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     const specArr = await method.apply(this, args);
     // Danger: IoC should not be used this way.
     // Decorators aren't bound to classes so this is the only way.

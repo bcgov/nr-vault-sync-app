@@ -101,7 +101,7 @@ describe('vault-group.controller', () => {
     expect(vault.read).toBeCalledTimes(1);
     expect(vault.write).toBeCalledTimes(1);
     expect(mockLogger.info).toBeCalledTimes(1);
-    expect(mockLogger.info).toBeCalledWith(`Vault group: existing`);
+    expect(mockLogger.info).toBeCalledWith(`Vault group: existing []`);
     expect(mockLogger.error).toBeCalledTimes(0);
   });
 
@@ -115,7 +115,7 @@ describe('vault-group.controller', () => {
     await vc.syncGroup('newgroup', 'role', []);
     expect(vault.write).toHaveBeenCalledTimes(3);
     expect(mockLogger.info).toHaveBeenCalledTimes(1);
-    expect(mockLogger.info).toBeCalledWith(`Vault group: newgroup`);
+    expect(mockLogger.info).toBeCalledWith(`Vault group: newgroup []`);
     expect(mockLogger.error).toHaveBeenCalledTimes(0);
   });
 

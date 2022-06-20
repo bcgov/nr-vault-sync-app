@@ -1,9 +1,8 @@
 import * as fs from 'fs';
-import {mocked} from 'ts-jest/utils';
 import {VaultConfig} from '../config.service';
 
 jest.mock('fs');
-const mockFs = mocked(fs);
+const mockFs = jest.mocked(fs);
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mockConfig: VaultConfig = {
   apps: [
@@ -44,7 +43,7 @@ describe('config-file.service', () => {
     new ConfigFileService();
     new ConfigFileService();
     expect(mockFs.readFileSync).toBeCalledWith(
-      expect.stringContaining('config.json'), 'UTF8');
+      expect.stringContaining('config.json'), {encoding: 'utf8'});
     expect(mockFs.readFileSync).toBeCalledTimes(1);
   });
 

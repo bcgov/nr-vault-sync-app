@@ -1,5 +1,4 @@
 import nv from 'node-vault';
-import {mocked} from 'ts-jest/utils';
 import {vaultFactory} from './vault.factory';
 
 jest.mock('node-vault');
@@ -8,7 +7,7 @@ describe('vault.factory', () => {
   afterEach(() => jest.restoreAllMocks());
 
   it('Returns a nv.client', () => {
-    const mockNodeVault = mocked(nv);
+    const mockNodeVault = jest.mocked(nv);
     const val = 'return';
     mockNodeVault.mockReturnValue(val as unknown as nv.client);
 
@@ -25,7 +24,7 @@ describe('vault.factory', () => {
   });
 
   it('Returns a nv.client (without ending slash)', () => {
-    const mockNodeVault = mocked(nv);
+    const mockNodeVault = jest.mocked(nv);
     const val = 'return';
     mockNodeVault.mockReturnValue(val as unknown as nv.client);
 

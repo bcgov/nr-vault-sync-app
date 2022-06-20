@@ -1,9 +1,8 @@
 import * as fs from 'fs';
-import {mocked} from 'ts-jest/utils';
 import {ConfigService} from '../config.service';
 
 jest.mock('fs');
-const mockFs = mocked(fs);
+const mockFs = jest.mocked(fs);
 const mockData = [
   {
     'env': [
@@ -55,7 +54,7 @@ describe('app-file.service', () => {
     new AppFileService(cs);
     new AppFileService(cs);
     expect(mockFs.readFileSync).toBeCalledWith(
-      expect.stringContaining('applications.json'), 'UTF8');
+      expect.stringContaining('applications.json'), {encoding: 'utf8'});
     expect(mockFs.readFileSync).toBeCalledTimes(1);
   });
 
@@ -74,7 +73,7 @@ describe('app-file.service', () => {
 
   it('getAllApps - config error', async () => {
     // eslint-disable-next-line jest/unbound-method
-    mocked(cs.getApps).mockResolvedValue([{
+    jest.mocked(cs.getApps).mockResolvedValue([{
       'enabled': true,
       'name': 'APP-TUS-WRONG',
     }]);
@@ -99,7 +98,7 @@ describe('app-file.service', () => {
   it('getApp - does not exist', async () => {
     const afs = new AppFileService(cs);
     // eslint-disable-next-line jest/unbound-method
-    mocked(cs.getApp).mockResolvedValue(undefined);
+    jest.mocked(cs.getApp).mockResolvedValue(undefined);
 
     await expect(afs.getApp('APP-fff'))
       .rejects

@@ -1,4 +1,3 @@
-import {mocked} from 'ts-jest/utils';
 import {vsContainer} from '../../inversify.config';
 import deduplicate from './deduplicate.deco';
 
@@ -14,7 +13,7 @@ describe('deduplicate.deco', () => {
       // Simple test for now. Only the first value should go through
       renderName: jest.fn().mockReturnValue('policyname'),
     };
-    const mockVsContainer = mocked(vsContainer);
+    const mockVsContainer = jest.mocked(vsContainer);
     mockVsContainer.get.mockReturnValue(mockHclUtilInstance);
 
     const value = jest.fn().mockResolvedValue([
