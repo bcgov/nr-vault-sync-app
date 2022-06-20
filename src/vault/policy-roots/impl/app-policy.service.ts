@@ -7,6 +7,7 @@ import {Application, AppService} from '../../../services/app.service';
 import EnvironmentUtil from '../../../util/environment.util';
 import deduplicate from '../deduplicate.deco';
 import {ConfigService} from '../../../services/config.service';
+import {VAULT_APPROLE_MOUNT_POINT} from '../../vault-approle.controller';
 
 @injectable()
 /**
@@ -87,6 +88,7 @@ export class AppPolicyService implements PolicyRootService<Application> {
 
     const policyData = {
       application: appInfo.app.toLowerCase(),
+      authMount: VAULT_APPROLE_MOUNT_POINT,
       secertKvPath: 'apps',
       secertDbPath: 'db',
       project: appInfo.project.toLowerCase(),
@@ -97,6 +99,10 @@ export class AppPolicyService implements PolicyRootService<Application> {
     renderSpecs.push({group: VAULT_ROOT_APPS, templateName: 'project-kv-read', data: policyData});
     renderSpecs.push({group: VAULT_ROOT_APPS, templateName: 'project-kv-write', data: policyData});
     renderSpecs.push({group: VAULT_ROOT_APPS, templateName: 'app-kv-read', data: policyData});
+    renderSpecs.push({group: VAULT_ROOT_APPS, templateName: 'app-kv-write', data: policyData});
+    if (appInfo.config?.approle?.enabled) {
+      renderSpecs.push({group: VAULT_ROOT_APPS, templateName: 'app-auth', data: policyData});
+    }
     renderSpecs.push({group: VAULT_ROOT_APPS, templateName: 'app-kv-write', data: policyData});
     if (appInfo.config?.db) {
       for (const db of appInfo.config?.db) {

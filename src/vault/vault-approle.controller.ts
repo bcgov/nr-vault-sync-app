@@ -59,6 +59,26 @@ export default class VaultApproleController {
           const specs = await this.appRootService.buildApplicationForEnv(app, env);
           const normEnv = EnvironmentUtil.normalize(env);
           const templateNames = app.config?.actor?.approle[normEnv] || appActorDefaults.approle[normEnv];
+          // Add global policies
+          if (app.config.policyOptions?.systemPolicies) {
+            for (const policy of app.config.policyOptions?.systemPolicies) {
+              templateNames.push(policy);
+            }
+          }
+          // Add broker policies
+          if (app.config.brokerFor) {
+            for (const brokerApp of app.config.brokerFor) {
+              templateNames.push(this.hclUtil.renderName({
+                group: 'apps',
+                templateName: 'app-auth',
+                data: {
+                  project: (await this.appService.getApp(brokerApp)).project,
+                  application: brokerApp,
+                  environment: normEnv,
+                },
+              }));
+            }
+          }
 
           const policies = specs.filter((spec) => {
             return templateNames ? templateNames.indexOf(spec.templateName) != -1 : false;

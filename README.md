@@ -14,7 +14,7 @@ See: [Confluence Documentation](https://apps.nrs.gov.bc.ca/int/confluence/x/m4Fv
 
 The dockerfile can be built locally by setting the REPO_LOCATION.
 
-`docker build . -t vsync --build-arg REPO_LOCATION=''`
+`podman build . -t vsync --build-arg REPO_LOCATION=`
 
 ## Environment Variables
 
@@ -48,8 +48,11 @@ The following will start up vault in docker. The Vault Sync Tool defaults for th
 
 You will need to add an OIDC authentication method to do local testing of group syncs.
 
-`vault auth enable oidc`
-`vault auth enable approle`
+```
+vault auth enable oidc
+vault auth enable -path=vs_apps_approle approle
+vault secrets enable -path=apps -version=2 kv
+```
 
 # Usage
 <!-- usage -->
@@ -58,7 +61,7 @@ $ npm install -g vstool
 $ vstool COMMAND
 running command...
 $ vstool (-v|--version|version)
-vstool/1.0.0 win32-x64 node-v12.16.2
+vstool/1.0.0 darwin-x64 node-v17.8.0
 $ vstool --help [COMMAND]
 USAGE
   $ vstool COMMAND
@@ -66,12 +69,12 @@ USAGE
 ```
 <!-- usagestop -->
 
-The script in /bin/run can also run the code without installing it.
+The script /bin/dev can run the code without installing it.
 
 ```sh-session
-$ ./bin/run COMMAND
+$ ./bin/dev COMMAND
 running command...
-$ ./bin/run (-v|--version|version)
+$ ./bin/dev (-v|--version|version)
 ...
 ```
 
@@ -141,7 +144,7 @@ OPTIONS
   --all  see all commands in CLI
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.2/src/commands/help.ts)_
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.18/src/commands/help.ts)_
 
 ## `vstool init [VAULT-ADDR] [VAULT-TOKEN]`
 

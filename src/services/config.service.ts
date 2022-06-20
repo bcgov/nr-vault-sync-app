@@ -35,6 +35,8 @@ export interface AppConfig {
   actor?: AppActorPolicies;
   /** How to configure the approle for this application */
   approle?: AppConfigApprole;
+  /** Array of applications this application may login for */
+  brokerFor?: string[];
   /** Array of databases this application has access to */
   db?: string[];
   /** True if this application, policies, groups will be generated. */
@@ -44,7 +46,9 @@ export interface AppConfig {
   /** Options that alter the content of policies. */
   policyOptions?: {
     /** True if an application kv policies should be able to read project kv secrets */
-    kvReadProject: boolean;
+    kvReadProject?: boolean;
+    /** Global policies to add to every environment */
+    systemPolicies?: string[]
   };
 }
 
