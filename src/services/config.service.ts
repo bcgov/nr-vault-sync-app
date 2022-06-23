@@ -1,9 +1,9 @@
 export interface AppActorPolicies {
   'approle': {
-    [key: string]: string[]
+    [key: string]: ReadonlyArray<string>
   }
   'developer': {
-    [key: string]: string[]
+    [key: string]: ReadonlyArray<string>
   }
 }
 

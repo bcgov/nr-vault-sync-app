@@ -103,7 +103,6 @@ export class AppPolicyService implements PolicyRootService<Application> {
     if (appInfo.config?.approle?.enabled) {
       renderSpecs.push({group: VAULT_ROOT_APPS, templateName: 'app-auth', data: policyData});
     }
-    renderSpecs.push({group: VAULT_ROOT_APPS, templateName: 'app-kv-write', data: policyData});
     if (appInfo.config?.db) {
       for (const db of appInfo.config?.db) {
         try {

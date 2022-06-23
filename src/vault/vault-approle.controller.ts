@@ -58,7 +58,7 @@ export default class VaultApproleController {
 
           const specs = await this.appRootService.buildApplicationForEnv(app, env);
           const normEnv = EnvironmentUtil.normalize(env);
-          const templateNames = app.config?.actor?.approle[normEnv] || appActorDefaults.approle[normEnv];
+          const templateNames = [...(app.config?.actor?.approle[normEnv] || appActorDefaults.approle[normEnv])];
           // Add global policies
           if (app.config.policyOptions?.systemPolicies) {
             for (const policy of app.config.policyOptions?.systemPolicies) {

@@ -34,8 +34,4 @@ describe.skip('Vault', () => {
       await appVault.write('secret/data/foo/bob', {test: 'true'});
     }).rejects.toThrow();
   });
-
-  test.skip('Expect no error reading secret/data/foo/bob', async () => {
-    await vault.read('secret/data/foo/bob');
-  });
 });

@@ -1,6 +1,7 @@
 import winston from 'winston';
 import {AppService} from '../../../services/app.service';
 import {ConfigService} from '../../../services/config.service';
+import {VAULT_APPROLE_MOUNT_POINT} from '../../vault-approle.controller';
 import {VAULT_ROOT_APPS} from '../policy-root.service';
 
 jest.mock('../deduplicate.deco', () => jest.fn());
@@ -58,12 +59,13 @@ describe('app-policy.service', () => {
     });
 
     const dataEnvProd = {
+      appCanReadProject: undefined,
       application: 'demoapp',
+      authMount: VAULT_APPROLE_MOUNT_POINT,
       secertKvPath: 'apps',
       secertDbPath: 'db',
       project: 'demo',
       environment: 'prod',
-      appCanReadProject: undefined,
     };
     const dataDbEnvProd = {
       dbName: 'db',
