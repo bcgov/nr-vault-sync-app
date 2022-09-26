@@ -20,7 +20,7 @@ describe('environment util', () => {
 
   it('normalize - INTEGRATION', () => {
     const rVal = EnvironmentUtil.normalize('INTEGRATION');
-    expect(rVal).toBe('int');
+    expect(rVal).toBe('dev');
   });
 
   it('normalize - WFPRD', () => {
@@ -40,7 +40,7 @@ describe('environment util', () => {
 
   it('normalize - WFINT', () => {
     const rVal = EnvironmentUtil.normalize('WFINT');
-    expect(rVal).toBe('int');
+    expect(rVal).toBe('dev');
   });
 
   it('normalize - SMTPRODUCTION', () => {
