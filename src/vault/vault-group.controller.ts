@@ -11,6 +11,7 @@ import {AppPolicyService} from './policy-roots/impl/app-policy.service';
 
 export const VAULT_GROUP_KEYCLOAK_DEVELOPERS = 'kc-developer';
 export const VAULT_GROUP_KEYCLOAK_GROUPS = 'kc-group';
+
 @injectable()
 /**
  * Vault group controller.
@@ -44,19 +45,26 @@ export default class VaultGroupController {
    */
   public async syncAppGroups(): Promise<void> {
     const apps = await this.config.getApps();
-    const devAppGroup = (await this.config.getAppActorDefaults()).developer;
+    const defaultDevAppGroup = (await this.config.getAppActorDefaults()).developer;
+
     const projectSet = new Set();
     for (const app of apps) {
       try {
         const appInfo = await this.appService.getApp(app.name);
         const specs = await this.appRootService.build(appInfo);
+
         if (projectSet.has(appInfo.project)) {
           continue;
         }
         projectSet.add(appInfo.project);
         const policyNames = specs.filter((spec) => {
-          return spec.data && devAppGroup[spec.data.environment as string] &&
-              devAppGroup[spec.data.environment as string].indexOf(spec.templateName) != -1;
+          if (!spec.data) {
+            return false;
+          }
+          const env = spec.data.environment as string;
+          const templateNames = app.actor?.developer[env] ? app.actor?.developer[env]: defaultDevAppGroup[env];
+          return spec.data && templateNames &&
+            templateNames.indexOf(spec.templateName) != -1;
         })
           .map((spec) => this.hclUtil.renderName(spec));
         await this.syncGroup(`${VAULT_GROUP_KEYCLOAK_DEVELOPERS}/${appInfo.project.toLowerCase()}`,
