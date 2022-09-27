@@ -47,6 +47,7 @@ export class SystemPolicyService implements PolicyRootService<undefined> {
       {group: VAULT_ROOT_SYSTEM, templateName: 'db-admin-super', data: {secertDbPath: 'db'}},
       {group: VAULT_ROOT_SYSTEM, templateName: 'isss-cdua-read'},
       {group: VAULT_ROOT_SYSTEM, templateName: 'isss-ci-read'},
+      {group: VAULT_ROOT_SYSTEM, templateName: 'oraapp-imborapp-read'},
       {group: VAULT_ROOT_SYSTEM, templateName: 'user-generic'},
       {group: VAULT_ROOT_SYSTEM, templateName: 'vault-sync'},
     ];
