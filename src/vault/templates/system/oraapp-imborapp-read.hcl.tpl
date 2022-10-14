@@ -5,6 +5,6 @@ path "groups/appdelivery/oraapp_imborapp" {
   capabilities = ["read"]
 }
 
-path "groups/appdelivery/oraapp_imborapp" {
+path "groups/data/appdelivery/oraapp_imborapp" {
   capabilities = ["read"]
 }
