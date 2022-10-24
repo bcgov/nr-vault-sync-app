@@ -68,15 +68,27 @@ export default class VaultApproleController {
           // Add broker policies
           if (app.config.brokerFor) {
             for (const brokerApp of app.config.brokerFor) {
-              templateNames.push(this.hclUtil.renderName({
-                group: 'apps',
-                templateName: 'app-auth',
-                data: {
-                  project: (await this.appService.getApp(brokerApp)).project,
-                  application: brokerApp,
-                  environment: normEnv,
-                },
-              }));
+              const app = (await this.appService.getApp(brokerApp));
+              const appEnvironments = app.env;
+              for (const appEnvironment of appEnvironments) {
+                let normAppEnvironment = '';
+                try {
+                  normAppEnvironment = EnvironmentUtil.normalize(appEnvironment);
+                } catch (err) {
+                  this.logger.debug(`Unsupported environment for ${brokerApp}: ${appEnvironment}`);
+                  continue;
+                }
+
+                templateNames.push(this.hclUtil.renderName({
+                  group: 'apps',
+                  templateName: 'app-auth',
+                  data: {
+                    project: app.project,
+                    application: brokerApp,
+                    environment: normAppEnvironment,
+                  },
+                }));
+              }
             }
           }
 
