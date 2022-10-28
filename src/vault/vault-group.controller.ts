@@ -62,7 +62,8 @@ export default class VaultGroupController {
             return false;
           }
           const env = spec.data.environment as string;
-          const templateNames = app.actor?.developer[env] ? app.actor?.developer[env]: defaultDevAppGroup[env];
+          const templateNames = app.actor?.developer && app.actor?.developer[env] ?
+            app.actor?.developer[env]: defaultDevAppGroup[env];
           return spec.data && templateNames &&
             templateNames.indexOf(spec.templateName) != -1;
         })
