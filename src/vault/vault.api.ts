@@ -29,9 +29,9 @@ export default class VaultApi {
     return this.vault.read(`/sys/auth`)
       .then((response) => {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- No typing avialable
-        const accessors = Object.values(response.data as VaultAuthData)
-          .filter((value) => value.type === 'oidc')
-          .map((value) => value.accessor);
+        const accessors = Object.entries(response.data as VaultAuthData)
+          .filter(([key, value]) => key === 'oidc-gold/' && value.type === 'oidc')
+          .map(([key, value]) => value.accessor);
         if (accessors.length > 0) {
           return accessors;
         }

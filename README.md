@@ -44,11 +44,12 @@ See: [Confluence Documentation](https://apps.nrs.gov.bc.ca/int/confluence/x/m4Fv
 
 The following will start up vault in docker. The Vault Sync Tool defaults for the address and token should work with it.
 
-`docker run --rm --cap-add=IPC_LOCK -e 'VAULT_DEV_ROOT_TOKEN_ID=myroot' -e 'VAULT_DEV_LISTEN_ADDRESS=0.0.0.0:8200' --name=dev-vault -p 8200:8200 vault`
+`podman run --rm -e 'VAULT_DEV_ROOT_TOKEN_ID=myroot' -e 'VAULT_DEV_LISTEN_ADDRESS=0.0.0.0:8200' --name=dev-vault -p 8200:8200 vault`
 
 You will need to add an OIDC authentication method to do local testing of group syncs.
 
 ```
+source setenv-local.sh
 vault auth enable oidc
 vault auth enable -path=vs_apps_approle approle
 vault secrets enable -path=apps -version=2 kv

@@ -24,7 +24,7 @@ export default function oidcData(target: unknown, propertyName: string, descript
     const vaultApi = vsContainer.get<VaultApi>(TYPES.VaultApi);
 
     if (!oidcDecoData) {
-      const accessor = await vaultApi.getOidcAccessors();
+      const accessor = (await vaultApi.getOidcAccessors())[0];
       oidcDecoData = {
         global_oidc_accessor: accessor,
       };
