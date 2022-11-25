@@ -52,7 +52,7 @@ describe('vault-group.controller', () => {
   } as unknown as nv.client;
 
   const vaultApi = {
-    getOidcAccessor: jest.fn(),
+    getOidcAccessors: jest.fn(),
   } as unknown as VaultApi;
 
   interface FactoryArgs {
@@ -87,8 +87,8 @@ describe('vault-group.controller', () => {
     jest.spyOn(vc, 'syncAppGroups').mockReturnValue(Promise.resolve());
     await vc.sync();
 
-    expect(vc.syncUserGroups).toBeCalledTimes(1);
-    expect(vc.syncAppGroups).toBeCalledTimes(1);
+    expect(vc.syncUserGroups).toHaveBeenCalledTimes(1);
+    expect(vc.syncAppGroups).toHaveBeenCalledTimes(1);
   });
 
   test('syncGroup: group exists', async () => {
@@ -98,11 +98,11 @@ describe('vault-group.controller', () => {
 
     const vc = vgcFactory({});
     await vc.syncGroup('existing', 'role', []);
-    expect(vault.read).toBeCalledTimes(1);
-    expect(vault.write).toBeCalledTimes(1);
-    expect(mockLogger.info).toBeCalledTimes(1);
-    expect(mockLogger.info).toBeCalledWith(`Vault group: existing []`);
-    expect(mockLogger.error).toBeCalledTimes(0);
+    expect(vault.read).toHaveBeenCalledTimes(1);
+    expect(vault.write).toHaveBeenCalledTimes(1);
+    expect(mockLogger.info).toHaveBeenCalledTimes(1);
+    expect(mockLogger.info).toHaveBeenCalledWith(`Vault group: existing []`);
+    expect(mockLogger.error).toHaveBeenCalledTimes(0);
   });
 
   test('syncGroup: group does not exist', async () => {
@@ -110,12 +110,13 @@ describe('vault-group.controller', () => {
       .mockResolvedValueOnce({name: 'newgroup', data: {id: '11223'}})
       .mockResolvedValueOnce(undefined)
       .mockResolvedValueOnce('');
+    vaultApi.getOidcAccessors = jest.fn().mockResolvedValueOnce(['123']);
 
     const vc = vgcFactory({});
     await vc.syncGroup('newgroup', 'role', []);
     expect(vault.write).toHaveBeenCalledTimes(3);
     expect(mockLogger.info).toHaveBeenCalledTimes(1);
-    expect(mockLogger.info).toBeCalledWith(`Vault group: newgroup []`);
+    expect(mockLogger.info).toHaveBeenCalledWith(`Vault group: newgroup []`);
     expect(mockLogger.error).toHaveBeenCalledTimes(0);
   });
 
@@ -136,7 +137,7 @@ describe('vault-group.controller', () => {
       .mockResolvedValueOnce({name: 'newgroup', data: {id: '11223'}})
       .mockResolvedValueOnce(undefined)
       .mockRejectedValueOnce(createNetworkError(777));
-    vaultApi.getOidcAccessor = jest.fn().mockResolvedValueOnce('123');
+    vaultApi.getOidcAccessors = jest.fn().mockResolvedValueOnce(['123']);
 
     const vc = vgcFactory({});
     await expect(vc.syncGroup('newgroup-failias', 'role', [])).rejects.toThrow();

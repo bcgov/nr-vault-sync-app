@@ -88,11 +88,11 @@ describe('vault-approle.controller', () => {
 
     await va.sync();
 
-    expect(va.buildApproleDict).toBeCalledTimes(1);
-    expect(va.createUpdateRoles).toBeCalledTimes(1);
-    expect(va.createUpdateRoles).toBeCalledWith(mockDict);
-    expect(va.removeUnusedRoles).toBeCalledTimes(1);
-    expect(va.removeUnusedRoles).toBeCalledWith(expect.any(Set));
+    expect(va.buildApproleDict).toHaveBeenCalledTimes(1);
+    expect(va.createUpdateRoles).toHaveBeenCalledTimes(1);
+    expect(va.createUpdateRoles).toHaveBeenCalledWith(mockDict);
+    expect(va.removeUnusedRoles).toHaveBeenCalledTimes(1);
+    expect(va.removeUnusedRoles).toHaveBeenCalledWith(expect.any(Set));
   });
 
   test('buildApproleDict', async () => {
@@ -100,14 +100,14 @@ describe('vault-approle.controller', () => {
 
     const rval = await va.buildApproleDict();
 
-    expect(mockAppService.getAllApps).toBeCalledTimes(1);
-    expect(mockHclUtil.renderApproleName).toBeCalledTimes(1);
-    expect(mockHclUtil.renderApproleName).toBeCalledWith(mockApps[0], 'PRODUCTION');
+    expect(mockAppService.getAllApps).toHaveBeenCalledTimes(1);
+    expect(mockHclUtil.renderApproleName).toHaveBeenCalledTimes(1);
+    expect(mockHclUtil.renderApproleName).toHaveBeenCalledWith(mockApps[0], 'PRODUCTION');
 
-    expect(mockAppRootService.buildApplicationForEnv).toBeCalledTimes(1);
-    expect(mockAppRootService.buildApplicationForEnv).toBeCalledWith(mockApps[0], 'PRODUCTION');
+    expect(mockAppRootService.buildApplicationForEnv).toHaveBeenCalledTimes(1);
+    expect(mockAppRootService.buildApplicationForEnv).toHaveBeenCalledWith(mockApps[0], 'PRODUCTION');
 
-    expect(mockHclUtil.renderName).toBeCalledTimes(1);
+    expect(mockHclUtil.renderName).toHaveBeenCalledTimes(1);
 
     expect(rval).toEqual({
       name: {
@@ -141,8 +141,8 @@ describe('vault-approle.controller', () => {
       },
     });
 
-    expect(vault.addApproleRole).toBeCalledTimes(1);
-    expect(vault.addApproleRole).toBeCalledWith({
+    expect(vault.addApproleRole).toHaveBeenCalledTimes(1);
+    expect(vault.addApproleRole).toHaveBeenCalledWith({
       'bind_secret_id': true,
       'bound_cidr_list': '',
       'mount_point': 'vs_apps_approle',
@@ -163,11 +163,11 @@ describe('vault-approle.controller', () => {
 
     await va.removeUnusedRoles(regSet);
 
-    expect(vault.approleRoles).toBeCalledTimes(1);
-    expect(vault.approleRoles).toBeCalledWith({mount_point: VAULT_APPROLE_MOUNT_POINT});
+    expect(vault.approleRoles).toHaveBeenCalledTimes(1);
+    expect(vault.approleRoles).toHaveBeenCalledWith({mount_point: VAULT_APPROLE_MOUNT_POINT});
 
-    expect(vault.deleteApproleRole).toBeCalledTimes(2);
-    expect(vault.deleteApproleRole).toBeCalledWith({mount_point: VAULT_APPROLE_MOUNT_POINT, role_name: 'c'});
-    expect(vault.deleteApproleRole).toBeCalledWith({mount_point: VAULT_APPROLE_MOUNT_POINT, role_name: 'd'});
+    expect(vault.deleteApproleRole).toHaveBeenCalledTimes(2);
+    expect(vault.deleteApproleRole).toHaveBeenCalledWith({mount_point: VAULT_APPROLE_MOUNT_POINT, role_name: 'c'});
+    expect(vault.deleteApproleRole).toHaveBeenCalledWith({mount_point: VAULT_APPROLE_MOUNT_POINT, role_name: 'd'});
   });
 });

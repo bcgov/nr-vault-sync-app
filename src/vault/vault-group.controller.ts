@@ -69,7 +69,7 @@ export default class VaultGroupController {
         })
           .map((spec) => this.hclUtil.renderName(spec));
         await this.syncGroup(`${VAULT_GROUP_KEYCLOAK_DEVELOPERS}/${appInfo.project.toLowerCase()}`,
-          `${appInfo.project.toLowerCase()}-developer`, policyNames);
+          `developer_${appInfo.project.toLowerCase()}`, policyNames);
       } catch (error) {
         this.logger.error(`Error syncing dev app group: ${app.name}`);
       }
@@ -84,7 +84,7 @@ export default class VaultGroupController {
     for (const group of groups) {
       await this.syncGroup(
         `${VAULT_GROUP_KEYCLOAK_GROUPS}/${group.name.toLowerCase()}`,
-        group.name.toLowerCase(), [
+        `group_${group.name.toLowerCase()}`, [
           ...(group.policies ? group.policies : []),
           ...(await this.groupRootService.build(group))
             .filter((spec) => spec.templateName === 'user')
@@ -106,7 +106,7 @@ export default class VaultGroupController {
     role: string,
     policies: string[],
     metadata: {[key: string]: string} = {}): Promise<void> {
-    const accessor = await this.vaultApi.getOidcAccessor();
+    const accessors: string[] = await this.vaultApi.getOidcAccessors();
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- Library does not provide typing
     let group = await this.vault.write(
@@ -130,8 +130,11 @@ export default class VaultGroupController {
     /* eslint-disable @typescript-eslint/no-unsafe-argument */
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- No typing avialable
     if (!group.data.alias || (group.data.alias && Object.keys(group.data.alias).length === 0)) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- No typing avialable
-      await this.createGroupAlias(group.data.id, accessor, role);
+      const promises = accessors.map((accessor) => {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- No typing avialable
+        return this.createGroupAlias(group.data.id, accessor, role);
+      });
+      await Promise.all(promises);
     } else {
       this.logger.debug('Skip adding alias');
     }

@@ -53,9 +53,9 @@ describe('app-file.service', () => {
   it('reads file once', () => {
     new AppFileService(cs);
     new AppFileService(cs);
-    expect(mockFs.readFileSync).toBeCalledWith(
+    expect(mockFs.readFileSync).toHaveBeenCalledWith(
       expect.stringContaining('applications.json'), {encoding: 'utf8'});
-    expect(mockFs.readFileSync).toBeCalledTimes(1);
+    expect(mockFs.readFileSync).toHaveBeenCalledTimes(1);
   });
 
   it('getAllApps', async () => {
@@ -68,7 +68,7 @@ describe('app-file.service', () => {
         'name': 'APP-TUS',
       }},
     ]);
-    expect(cs.getApps).toBeCalled();
+    expect(cs.getApps).toHaveBeenCalled();
   });
 
   it('getAllApps - config error', async () => {
@@ -82,7 +82,7 @@ describe('app-file.service', () => {
       .rejects
       .toThrow();
 
-    expect(cs.getApps).toBeCalled();
+    expect(cs.getApps).toHaveBeenCalled();
   });
 
   it('getApp - exists', async () => {

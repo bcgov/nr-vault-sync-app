@@ -24,8 +24,8 @@ describe('policy sync command', () => {
     // Test command
     await PolicySync.run(['--vault-addr', 'addr', '--vault-token', 'token']);
 
-    expect(mockBindVault).toBeCalledTimes(1);
-    expect(mockBindVault).toBeCalledWith('addr', 'token');
+    expect(mockBindVault).toHaveBeenCalledTimes(1);
+    expect(mockBindVault).toHaveBeenCalledWith('addr', 'token');
     expect(mockVpcInstance.sync).toHaveBeenCalled();
     expect(mockVpcInstance.sync).toHaveBeenCalledWith([]);
     expect(stdoutSpy).toHaveBeenCalledWith('Vault Policy Sync\n');

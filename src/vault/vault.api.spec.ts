@@ -28,7 +28,7 @@ describe('vault.api', () => {
     jest.clearAllMocks();
   });
 
-  test('getOidcAccessor: Found!', async () => {
+  test('getOidcAccessors: Found!', async () => {
     vault.read = jest.fn()
       .mockResolvedValue({
         'data': {
@@ -40,13 +40,13 @@ describe('vault.api', () => {
       });
 
     const va = new VaultApi(vault, mockLogger);
-    const accessor = await va.getOidcAccessor();
+    const accessor = await va.getOidcAccessors();
     expect(vault.read).toHaveBeenCalledTimes(1);
     expect(vault.read).toHaveBeenCalledWith('/sys/auth');
-    expect(accessor).toBe('auth_oidc_c3e3ffc');
+    expect(accessor).toStrictEqual(['auth_oidc_c3e3ffc']);
   });
 
-  test('getOidcAccessor: Not found', async () => {
+  test('getOidcAccessors: Not found', async () => {
     vault.read = jest.fn()
       .mockResolvedValue({
         'data': {
@@ -58,19 +58,19 @@ describe('vault.api', () => {
       });
 
     const va = new VaultApi(vault, mockLogger);
-    await expect(va.getOidcAccessor()).rejects.toThrow();
+    await expect(va.getOidcAccessors()).rejects.toThrow();
     expect(vault.read).toHaveBeenCalledTimes(1);
     expect(vault.read).toHaveBeenCalledWith('/sys/auth');
     expect(mockLogger.info).toHaveBeenCalledTimes(0);
     expect(mockLogger.error).toHaveBeenCalledTimes(1);
   });
 
-  test('getOidcAccessor: network fail', async () => {
+  test('getOidcAccessors: network fail', async () => {
     vault.read = jest.fn()
       .mockRejectedValueOnce(createNetworkError(876));
 
     const va = new VaultApi(vault, mockLogger);
-    await expect(va.getOidcAccessor()).rejects.toThrow();
+    await expect(va.getOidcAccessors()).rejects.toThrow();
     expect(vault.read).toHaveBeenCalledTimes(1);
     expect(vault.read).toHaveBeenCalledWith('/sys/auth');
     expect(mockLogger.info).toHaveBeenCalledTimes(0);

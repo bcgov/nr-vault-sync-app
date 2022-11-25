@@ -49,16 +49,16 @@ describe('vault-policy.controller', () => {
 
     await vp.sync([]);
 
-    expect(pRootServices[0].getName).toBeCalledTimes(2);
-    expect(pRootServices[0].build).toBeCalledTimes(1);
+    expect(pRootServices[0].getName).toHaveBeenCalledTimes(2);
+    expect(pRootServices[0].build).toHaveBeenCalledTimes(1);
 
-    expect(vp.addPolicy).toBeCalledTimes(2);
-    expect(vp.addPolicy).toBeCalledWith(1);
-    expect(vp.addPolicy).toBeCalledWith(2);
-    expect(vp.removeUnregisteredPolicies).toBeCalledTimes(1);
-    expect(vp.addPolicy).toBeCalledTimes(2);
+    expect(vp.addPolicy).toHaveBeenCalledTimes(2);
+    expect(vp.addPolicy).toHaveBeenCalledWith(1);
+    expect(vp.addPolicy).toHaveBeenCalledWith(2);
+    expect(vp.removeUnregisteredPolicies).toHaveBeenCalledTimes(1);
+    expect(vp.addPolicy).toHaveBeenCalledTimes(2);
 
-    expect(mockLogger.info).toBeCalledWith('- Sync bob');
+    expect(mockLogger.info).toHaveBeenCalledWith('- Sync bob');
   });
 
   test('addPolicy', async () => {
@@ -76,20 +76,20 @@ describe('vault-policy.controller', () => {
     });
     await vp.addPolicy({} as HlcRenderSpec);
 
-    expect(mockHclUtil.renderName).toBeCalledTimes(1);
-    expect(mockHclUtil.renderName).toBeCalledWith({});
-    expect(mockLogger.info).toBeCalledTimes(1);
-    expect(mockLogger.info).toBeCalledWith('Add policy: name');
-    expect(mockPolicyRegistrationService.hasRegisteredPolicy).toBeCalledTimes(1);
-    expect(mockPolicyRegistrationService.hasRegisteredPolicy).toBeCalledWith('name');
-    expect(mockPolicyRegistrationService.registerPolicy).toBeCalledTimes(1);
-    expect(mockPolicyRegistrationService.registerPolicy).toBeCalledWith('name');
+    expect(mockHclUtil.renderName).toHaveBeenCalledTimes(1);
+    expect(mockHclUtil.renderName).toHaveBeenCalledWith({});
+    expect(mockLogger.info).toHaveBeenCalledTimes(1);
+    expect(mockLogger.info).toHaveBeenCalledWith('Add policy: name');
+    expect(mockPolicyRegistrationService.hasRegisteredPolicy).toHaveBeenCalledTimes(1);
+    expect(mockPolicyRegistrationService.hasRegisteredPolicy).toHaveBeenCalledWith('name');
+    expect(mockPolicyRegistrationService.registerPolicy).toHaveBeenCalledTimes(1);
+    expect(mockPolicyRegistrationService.registerPolicy).toHaveBeenCalledWith('name');
 
-    expect(mockHclUtil.renderBody).toBeCalledTimes(1);
-    expect(mockHclUtil.renderBody).toBeCalledWith({});
+    expect(mockHclUtil.renderBody).toHaveBeenCalledTimes(1);
+    expect(mockHclUtil.renderBody).toHaveBeenCalledWith({});
 
-    expect(vault.write).toBeCalledTimes(1);
-    expect(vault.write).toBeCalledWith('sys/policies/acl/name', {name: 'name', policy: 'body'});
+    expect(vault.write).toHaveBeenCalledTimes(1);
+    expect(vault.write).toHaveBeenCalledWith('sys/policies/acl/name', {name: 'name', policy: 'body'});
   });
 
   test('addPolicy: Already registered', async () => {
@@ -107,14 +107,14 @@ describe('vault-policy.controller', () => {
     });
     await vp.addPolicy({} as HlcRenderSpec);
 
-    expect(mockHclUtil.renderName).toBeCalledTimes(1);
-    expect(mockHclUtil.renderName).toBeCalledWith({});
-    expect(mockLogger.info).toBeCalledTimes(1);
-    expect(mockLogger.info).toBeCalledWith('Add policy: name');
-    expect(mockPolicyRegistrationService.hasRegisteredPolicy).toBeCalledTimes(1);
-    expect(mockPolicyRegistrationService.hasRegisteredPolicy).toBeCalledWith('name');
-    expect(mockPolicyRegistrationService.registerPolicy).toBeCalledTimes(0);
-    expect(mockHclUtil.renderBody).toBeCalledTimes(0);
-    expect(vault.write).toBeCalledTimes(0);
+    expect(mockHclUtil.renderName).toHaveBeenCalledTimes(1);
+    expect(mockHclUtil.renderName).toHaveBeenCalledWith({});
+    expect(mockLogger.info).toHaveBeenCalledTimes(1);
+    expect(mockLogger.info).toHaveBeenCalledWith('Add policy: name');
+    expect(mockPolicyRegistrationService.hasRegisteredPolicy).toHaveBeenCalledTimes(1);
+    expect(mockPolicyRegistrationService.hasRegisteredPolicy).toHaveBeenCalledWith('name');
+    expect(mockPolicyRegistrationService.registerPolicy).toHaveBeenCalledTimes(0);
+    expect(mockHclUtil.renderBody).toHaveBeenCalledTimes(0);
+    expect(vault.write).toHaveBeenCalledTimes(0);
   });
 });

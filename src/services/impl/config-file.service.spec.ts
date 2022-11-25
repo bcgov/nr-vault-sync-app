@@ -42,9 +42,9 @@ describe('config-file.service', () => {
   it('reads file once', () => {
     new ConfigFileService();
     new ConfigFileService();
-    expect(mockFs.readFileSync).toBeCalledWith(
+    expect(mockFs.readFileSync).toHaveBeenCalledWith(
       expect.stringContaining('config.json'), {encoding: 'utf8'});
-    expect(mockFs.readFileSync).toBeCalledTimes(1);
+    expect(mockFs.readFileSync).toHaveBeenCalledTimes(1);
   });
 
 
