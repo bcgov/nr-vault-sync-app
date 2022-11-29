@@ -9,8 +9,8 @@ import HclUtil from '../util/hcl.util';
 import {GroupPolicyService} from './policy-roots/impl/group-policy.service';
 import {AppPolicyService} from './policy-roots/impl/app-policy.service';
 
-export const VAULT_GROUP_KEYCLOAK_DEVELOPERS = 'kc-developer';
-export const VAULT_GROUP_KEYCLOAK_GROUPS = 'kc-group';
+export const VAULT_GROUP_KEYCLOAK_DEVELOPERS = 'oidc-css-developer';
+export const VAULT_GROUP_KEYCLOAK_GROUPS = 'oidc-css-group';
 
 @injectable()
 /**
@@ -139,7 +139,7 @@ export default class VaultGroupController {
       this.logger.debug('Skip adding alias');
     }
     /* eslint-enable @typescript-eslint/no-unsafe-argument */
-    this.logger.info(`Vault group: ${name} [${policies.join(',')}]`);
+    this.logger.info(`Role: ${role} -> Group: ${name} [${policies.join(',')}]`);
   }
 
   /**
