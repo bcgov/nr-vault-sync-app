@@ -96,7 +96,8 @@ export default class VaultApproleController {
           const policies = specs.filter((spec) => {
             return templateNames ? templateNames.indexOf(spec.templateName) != -1 : false;
           }).map((spec) => this.hclUtil.renderName(spec)).join(',');
-          const prerenderedPolicies = templateNames.filter((name) => (name.indexOf('/') != -1)).join(',');
+          const prerenderedPolicies = templateNames.filter(
+            (name) => (name === 'default' || name.indexOf('/') != -1)).join(',');
           approleDict[approleName] = {
             ...app.config.approle,
             ...{
