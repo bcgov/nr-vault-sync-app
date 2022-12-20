@@ -48,6 +48,6 @@ describe('policy-registration-memory.service', () => {
     await expect(prms.filterPoliciesForUnregistered([], true))
       .rejects
       .toThrow();
-    expect(logger.error).toBeCalled();
+    expect(logger.error).toHaveBeenCalled();
   });
 });

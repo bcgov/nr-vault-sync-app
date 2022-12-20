@@ -23,11 +23,11 @@ describe('hcl util', () => {
     const filePath = path.join('group', 'cool-temp.hcl.tpl');
 
     expect(rVal).toBe('rendered!');
-    expect(mockFs.readFileSync).toBeCalledTimes(1);
-    expect(mockFs.readFileSync).toBeCalledWith(expect.stringContaining(filePath), {encoding: 'utf8'});
+    expect(mockFs.readFileSync).toHaveBeenCalledTimes(1);
+    expect(mockFs.readFileSync).toHaveBeenCalledWith(expect.stringContaining(filePath), {encoding: 'utf8'});
 
-    expect(mockEjs.render).toBeCalledTimes(1);
-    expect(mockEjs.render).toBeCalledWith('template', {data: 'data'});
+    expect(mockEjs.render).toHaveBeenCalledTimes(1);
+    expect(mockEjs.render).toHaveBeenCalledWith('template', {data: 'data'});
   });
 
   it('renderName - renders a name with template', () => {
@@ -40,13 +40,13 @@ describe('hcl util', () => {
     const filePath = path.join('group', 'cool-temp.name.tpl');
 
     expect(rVal).toBe('group/rendered!');
-    expect(mockFs.existsSync).toBeCalledTimes(1);
-    expect(mockFs.existsSync).toBeCalledWith(expect.stringContaining(filePath));
-    expect(mockFs.readFileSync).toBeCalledTimes(1);
-    expect(mockFs.readFileSync).toBeCalledWith(expect.stringContaining(filePath), {encoding: 'utf8'});
+    expect(mockFs.existsSync).toHaveBeenCalledTimes(1);
+    expect(mockFs.existsSync).toHaveBeenCalledWith(expect.stringContaining(filePath));
+    expect(mockFs.readFileSync).toHaveBeenCalledTimes(1);
+    expect(mockFs.readFileSync).toHaveBeenCalledWith(expect.stringContaining(filePath), {encoding: 'utf8'});
 
-    expect(mockEjs.render).toBeCalledTimes(1);
-    expect(mockEjs.render).toBeCalledWith('template', {data: 'data'});
+    expect(mockEjs.render).toHaveBeenCalledTimes(1);
+    expect(mockEjs.render).toHaveBeenCalledWith('template', {data: 'data'});
   });
 
   it('renderName - renders a name without a template', () => {
@@ -57,10 +57,10 @@ describe('hcl util', () => {
     const filePath = path.join('cool-temp.name.tpl');
 
     expect(rVal).toBe('cool-temp');
-    expect(mockFs.existsSync).toBeCalledTimes(1);
-    expect(mockFs.existsSync).toBeCalledWith(expect.stringContaining(filePath));
+    expect(mockFs.existsSync).toHaveBeenCalledTimes(1);
+    expect(mockFs.existsSync).toHaveBeenCalledWith(expect.stringContaining(filePath));
 
-    expect(mockEjs.render).not.toBeCalled();
+    expect(mockEjs.render).not.toHaveBeenCalled();
   });
 
   it('renderApproleName - renders approles', () => {

@@ -11,7 +11,7 @@ describe('oidc-data.deco', () => {
   test('adds OIDC info to the HlcRenderSpec', async () => {
     const mockVaultApi = {
       // Simple test for now. Only the first value should go through
-      getOidcAccessor: jest.fn().mockResolvedValue('accessorId'),
+      getOidcAccessors: jest.fn().mockResolvedValue(['accessorId']),
     };
     const mockVsContainer = jest.mocked(vsContainer);
     mockVsContainer.get.mockReturnValue(mockVaultApi);
@@ -26,8 +26,8 @@ describe('oidc-data.deco', () => {
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
     const rval = await descriptor.value('myargs');
-    expect(value).toBeCalledTimes(1);
-    expect(value).toBeCalledWith('myargs');
+    expect(value).toHaveBeenCalledTimes(1);
+    expect(value).toHaveBeenCalledWith('myargs');
 
     expect(rval).toEqual([
       {foo: 'bar', data: {global_oidc_accessor: 'accessorId'}},

@@ -29,7 +29,7 @@ describe('system-policy.service', () => {
     jest.spyOn(sps, 'buildKvSecretEngines').mockReturnValue(Promise.resolve([]));
     await sps.build();
 
-    expect(sps.buildSystem).toBeCalledTimes(1);
-    expect(sps.buildKvSecretEngines).toBeCalledTimes(1);
+    expect(sps.buildSystem).toHaveBeenCalledTimes(1);
+    expect(sps.buildKvSecretEngines).toHaveBeenCalledTimes(1);
   });
 });

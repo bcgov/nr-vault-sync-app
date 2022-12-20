@@ -28,7 +28,7 @@ describe('group-policy.service', () => {
     jest.spyOn(gps, 'buildGroups').mockReturnValue(Promise.resolve([]));
     await gps.build();
 
-    expect(gps.buildGroup).toBeCalledTimes(0);
-    expect(gps.buildGroups).toBeCalledTimes(1);
+    expect(gps.buildGroup).toHaveBeenCalledTimes(0);
+    expect(gps.buildGroups).toHaveBeenCalledTimes(1);
   });
 });

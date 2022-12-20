@@ -41,8 +41,8 @@ describe('app-policy.service', () => {
     jest.spyOn(aps, 'buildApplications').mockReturnValue(Promise.resolve([]));
     await aps.build();
 
-    expect(aps.buildApplication).toBeCalledTimes(0);
-    expect(aps.buildApplications).toBeCalledTimes(1);
+    expect(aps.buildApplication).toHaveBeenCalledTimes(0);
+    expect(aps.buildApplications).toHaveBeenCalledTimes(1);
   });
 
   test('sync: buildApplication', async () => {

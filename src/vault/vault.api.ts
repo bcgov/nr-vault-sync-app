@@ -25,14 +25,15 @@ export default class VaultApi {
   /**
    * Get the accessor from Vault for the Keycloak (OIDC) instance.
    */
-  public async getOidcAccessor(): Promise<string> {
+  public async getOidcAccessors(): Promise<string[]> {
     return this.vault.read(`/sys/auth`)
       .then((response) => {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- No typing avialable
-        for (const value of Object.values(response.data as VaultAuthData)) {
-          if (value.type === 'oidc') {
-            return value.accessor;
-          }
+        const accessors = Object.entries(response.data as VaultAuthData)
+          .filter(([key, value]) => key === 'oidc/' && value.type === 'oidc')
+          .map(([, value]) => value.accessor);
+        if (accessors.length > 0) {
+          return accessors;
         }
         this.logger.error(`Cannot find an OIDC auth type - is your Vault configured correctly?`);
         throw new Error('No OIDC configured');

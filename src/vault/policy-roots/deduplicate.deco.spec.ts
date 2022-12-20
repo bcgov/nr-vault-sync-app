@@ -27,8 +27,8 @@ describe('deduplicate.deco', () => {
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
     const rval = await descriptor.value('myargs');
-    expect(value).toBeCalledTimes(1);
-    expect(value).toBeCalledWith('myargs');
+    expect(value).toHaveBeenCalledTimes(1);
+    expect(value).toHaveBeenCalledWith('myargs');
 
     expect(rval).toEqual([{foo: 'bar'}]);
   });

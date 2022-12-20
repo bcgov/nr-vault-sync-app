@@ -14,8 +14,8 @@ describe('vault.factory', () => {
     // Test command
     const rVal = vaultFactory('addr', 'token');
 
-    expect(mockNodeVault).toBeCalledTimes(1);
-    expect(mockNodeVault).toBeCalledWith({
+    expect(mockNodeVault).toHaveBeenCalledTimes(1);
+    expect(mockNodeVault).toHaveBeenCalledWith({
       apiVersion: 'v1',
       endpoint: 'addr',
       token: 'token',
@@ -31,8 +31,8 @@ describe('vault.factory', () => {
     // Test command
     const rVal = vaultFactory('addr/', 'token');
 
-    expect(mockNodeVault).toBeCalledTimes(1);
-    expect(mockNodeVault).toBeCalledWith({
+    expect(mockNodeVault).toHaveBeenCalledTimes(1);
+    expect(mockNodeVault).toHaveBeenCalledWith({
       apiVersion: 'v1',
       endpoint: 'addr',
       token: 'token',

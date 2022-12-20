@@ -23,8 +23,8 @@ describe('health command', () => {
     // Test command
     await Health.run(['--vault-addr', 'addr', '--vault-token', 'token']);
 
-    expect(vaultFactory).toBeCalledTimes(1);
-    expect(vaultFactory).toBeCalledWith('addr', 'token');
+    expect(vaultFactory).toHaveBeenCalledTimes(1);
+    expect(vaultFactory).toHaveBeenCalledWith('addr', 'token');
     expect(stdoutSpy).toHaveBeenCalledWith('Vault health - endpoint\n');
     expect(stdoutSpy).toHaveBeenCalledWith('{}\n');
   });

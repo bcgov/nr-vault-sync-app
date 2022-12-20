@@ -7,41 +7,41 @@ path "sys/policy/*" {
 }
 
 # Grant permissions on user specific paths (data, destroy, metadata)
-path "user/data/{{identity.entity.aliases.<%= global_oidc_accessor %>.name}}" {
+path "user/data/{{identity.entity.aliases.<%= global_oidc_accessor %>.email}}" {
     capabilities = [ "create", "update", "read", "delete" ]
 }
-path "user/data/{{identity.entity.aliases.<%= global_oidc_accessor %>.name}}/*" {
+path "user/data/{{identity.entity.aliases.<%= global_oidc_accessor %>.email}}/*" {
     capabilities = [ "create", "update", "read", "delete" ]
 }
-path "user/delete/{{identity.entity.aliases.<%= global_oidc_accessor %>.name}}" {
+path "user/delete/{{identity.entity.aliases.<%= global_oidc_accessor %>.email}}" {
     capabilities = [ "create", "update" ]
 }
-path "user/delete/{{identity.entity.aliases.<%= global_oidc_accessor %>.name}}/*" {
+path "user/delete/{{identity.entity.aliases.<%= global_oidc_accessor %>.email}}/*" {
     capabilities = [ "create", "update" ]
 }
-path "user/undelete/{{identity.entity.aliases.<%= global_oidc_accessor %>.name}}" {
+path "user/undelete/{{identity.entity.aliases.<%= global_oidc_accessor %>.email}}" {
     capabilities = [ "create", "update" ]
 }
-path "user/undelete/{{identity.entity.aliases.<%= global_oidc_accessor %>.name}}/*" {
+path "user/undelete/{{identity.entity.aliases.<%= global_oidc_accessor %>.email}}/*" {
     capabilities = [ "create", "update" ]
 }
-path "user/destroy/{{identity.entity.aliases.<%= global_oidc_accessor %>.name}}" {
+path "user/destroy/{{identity.entity.aliases.<%= global_oidc_accessor %>.email}}" {
     capabilities = [ "create", "update" ]
 }
-path "user/destroy/{{identity.entity.aliases.<%= global_oidc_accessor %>.name}}/*" {
+path "user/destroy/{{identity.entity.aliases.<%= global_oidc_accessor %>.email}}/*" {
     capabilities = [ "create", "update" ]
 }
-path "user/metadata/{{identity.entity.aliases.<%= global_oidc_accessor %>.name}}" {
+path "user/metadata/{{identity.entity.aliases.<%= global_oidc_accessor %>.email}}" {
     capabilities = [ "create", "update", "read", "delete", "list" ]
 }
-path "user/metadata/{{identity.entity.aliases.<%= global_oidc_accessor %>.name}}/*" {
+path "user/metadata/{{identity.entity.aliases.<%= global_oidc_accessor %>.email}}/*" {
     capabilities = [ "create", "update", "read", "delete", "list" ]
 }
 
-// path "user/+/{{identity.entity.aliases.<%= global_oidc_accessor %>.name}}" {
+// path "user/+/{{identity.entity.aliases.<%= global_oidc_accessor %>.email}}" {
 //     capabilities = [ "create", "update", "read", "delete", "list" ]
 // }
-// path "user/+/{{identity.entity.aliases.<%= global_oidc_accessor %>.name}}/*" {
+// path "user/+/{{identity.entity.aliases.<%= global_oidc_accessor %>.email}}/*" {
 //     capabilities = [ "create", "update", "read", "delete", "list" ]
 // }
 

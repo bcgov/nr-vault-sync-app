@@ -24,8 +24,8 @@ describe('approle sync command', () => {
     // Test command
     await ApproleSync.run(['--vault-addr', 'addr', '--vault-token', 'token']);
 
-    expect(mockBindVault).toBeCalledTimes(1);
-    expect(mockBindVault).toBeCalledWith('addr', 'token');
+    expect(mockBindVault).toHaveBeenCalledTimes(1);
+    expect(mockBindVault).toHaveBeenCalledWith('addr', 'token');
     expect(mockVgcInstance.sync).toHaveBeenCalled();
     expect(stdoutSpy).toHaveBeenCalledWith('Vault Approle Sync\n');
   });
