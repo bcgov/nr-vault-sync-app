@@ -1,0 +1,38 @@
+name: Vault Sync App Runner
+# Run this workflow every time a new commit pushed to your repository
+on:
+  workflow_dispatch:
+    branches: [main]
+env:
+  VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.workflow_run.head_branch }}
+
+      - name: Checkout Config
+        uses: actions/checkout@v3
+        repository: "bcgov-nr/vault-sync-config"
+        path: config
+        token: ${{ secrets.GH_PAT }}
+        with:
+          ref: "main"
+
+      - name: Use Node.js 16
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - run: npm ci
+      - run: ./bin/dev policy-sync
+        env:
+          VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
+      - run: ./bin/dev group-sync
+        env:
+          VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
+      - run: ./bin/dev approle-sync
+        env:
+          VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
