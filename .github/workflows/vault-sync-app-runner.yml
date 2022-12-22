@@ -3,6 +3,11 @@ name: Vault Sync App Runner
 on:
   workflow_dispatch:
     branches: [main]
+    inputs:
+      environment:
+        description: 'Environment to run tests against'
+        type: environment
+        required: true
 env:
   VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
 jobs:
