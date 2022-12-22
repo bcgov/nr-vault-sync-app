@@ -5,13 +5,11 @@ on:
     branches: [main]
     inputs:
       environment:
-        description: 'Environment to run tests against'
+        description: 'Environment to run against'
         type: environment
         required: true
-env:
-  VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
 jobs:
-  build:
+  run:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -33,10 +31,13 @@ jobs:
       - run: npm ci
       - run: ./bin/dev policy-sync
         env:
+          VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
           VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
       - run: ./bin/dev group-sync
         env:
+          VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
           VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
       - run: ./bin/dev approle-sync
         env:
+          VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
           VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
