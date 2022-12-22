@@ -16,9 +16,10 @@ jobs:
 
       - name: Checkout Config
         uses: actions/checkout@v3
-        repository: "bcgov-nr/vault-sync-config"
-        path: config
-        token: ${{ secrets.GH_PAT }}
+        with:
+          repository: "bcgov-nr/vault-sync-config"
+          token: ${{ secrets.GH_PAT }}
+          path: config
         with:
           ref: "main"
 
