@@ -20,8 +20,6 @@ jobs:
           repository: "bcgov-nr/vault-sync-config"
           token: ${{ secrets.GH_PAT }}
           path: config
-        with:
-          ref: "main"
 
       - name: Use Node.js 16
         uses: actions/setup-node@v3
