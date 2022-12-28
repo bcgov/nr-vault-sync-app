@@ -182,3 +182,13 @@ OPTIONS
   --vault-token=vault-token  [default: myroot] The vault token
 ```
 <!-- commandsstop -->
+# GitHub Actions
+
+You have to manually run the GitHub Action workflow.
+
+Step 1 - You have to add environment variables i.e. `VAULT_ADDR` & `VAULT_TOKEN`.
+
+Step 2 - Go to - Actions > Vault Sync App Runner > Run workflow
+here you can choose the branch and environment.
+
+Step 3 - Press Run workflow button.
