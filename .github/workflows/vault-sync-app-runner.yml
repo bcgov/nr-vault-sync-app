@@ -18,6 +18,11 @@ jobs:
         with:
           ref: ${{ github.event.workflow_run.head_branch }}
 
+      # Runs script to obtain Vault token
+      - name: Run Vault Script
+        uses: actions/checkout@v3
+        run: sh ./vault-token-script.sh
+
       - name: Checkout Config
         uses: actions/checkout@v3
         with:
