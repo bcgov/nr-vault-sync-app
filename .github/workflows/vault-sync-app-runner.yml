@@ -58,3 +58,10 @@ jobs:
         env:
           VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
           VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
+
+  cleanup-runs:
+      runs-on: ubuntu-latest
+      environment: ${{ inputs.environment }}
+      steps:
+      - name: Cleanup Action
+        run: sh ./token-cleanup-script.sh
