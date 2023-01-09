@@ -26,7 +26,7 @@ jobs:
 
       # Runs script to obtain Vault token
       - name: Run Vault Script
-        run: sh ./vault-token-script.sh
+        run: sh ./.github/workflows/vault-token-script.sh
 
       - name: Checkout Config
         uses: actions/checkout@v3
@@ -55,4 +55,4 @@ jobs:
       environment: ${{ inputs.environment }}
       steps:
       - name: Cleanup Action
-        run: sh ./token-cleanup-script.sh
+        run: sh ./.github/workflows/token-cleanup-script.sh
