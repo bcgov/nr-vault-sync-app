@@ -22,6 +22,12 @@ jobs:
       - name: Run Vault Script
         run: sh ./vault-token-script.sh
 
+      # Set the token value
+      - name: Set the value
+        run: |
+          echo "INTENTION_TOKEN" >> $ENV_INTENTION_TOKEN
+          echo "VAULT_TOKEN" >> $ENV_VAULT_TOKEN
+
       - name: Checkout Config
         uses: actions/checkout@v3
         with:

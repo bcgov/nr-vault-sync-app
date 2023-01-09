@@ -22,7 +22,6 @@ fi
 
 # Save intention token for later
 INTENTION_TOKEN=$(echo $RESPONSE | jq -r '.token')
-echo "INTENTION_TOKEN=$INTENTION_TOKEN" >> $ENV_INTENTION_TOKEN
 echo "===> DB provision"
 
 # Get token for provisioning a db access
@@ -35,5 +34,11 @@ WRAPPED_VAULT_TOKEN=$(echo $VAULT_TOKEN_WRAP | jq -r '.wrap_info.token')
 UNWRAPPED_VAULT_TOKEN=$(curl -s -X POST $VAULT_ADDR/v1/sys/wrapping/unwrap -H 'X-Vault-Token: '"$WRAPPED_VAULT_TOKEN"'')
 
 VAULT_TOKEN=$(echo -n $UNWRAPPED_VAULT_TOKEN | jq -r '.auth.client_token')
-echo "VAULT_TOKEN=$UNWRAPPED_VAULT_TOKEN" >> $ENV_VAULT_TOKEN
 echo "===> Intention close"
+
+# Use saved intention token to close intention
+curl -s -X POST $BROKER_URL/v1/intention/close -H 'X-Broker-Token: '"$INTENTION_TOKEN"''
+curl \
+    --header "X-Vault-Token: ..." \
+    --request POST \
+http://$VAULT_ADDR/v1/auth/token/revoke-self
