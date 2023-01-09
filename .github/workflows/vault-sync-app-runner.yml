@@ -18,6 +18,12 @@ jobs:
         with:
           ref: ${{ github.event.workflow_run.head_branch }}
 
+      # Runs script to install jq cmd
+      - name: Install jq
+        uses: sergeysova/jq-action@v2
+        with:
+          cmd: jq -n env
+
       # Runs script to obtain Vault token
       - name: Run Vault Script
         run: sh ./vault-token-script.sh
