@@ -11,7 +11,8 @@ RESPONSE=$(curl -s -X POST $BROKER_URL/v1/intention/open \
     -H 'Content-Type: application/json' \
     -H "Authorization: Bearer $BROKER_JWT" \
     -d @<(cat vault-config-intention.json | \
-        jq ".event.url=\"http://sample.com/job\" \
+        jq ".event.url=\"$GITHUB_SERVER_URL$GITHUB_ACTION_PATH" | \
+            .user.id=\"$GITHUB_ACTOR@github" \
         " \
     ))
 echo "$BROKER_URL/v1/intention/open:"
