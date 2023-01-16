@@ -7,15 +7,15 @@ INSTALL_VERSION="12.0.3"
 echo "===> Intention open"
 # Open intention
 # -u "$BASIC_HTTP_USER:$BASIC_HTTP_PASSWORD" \
-TEMP_FILE="$(mktemp /tmp/example.XXXXXXXXXX).json"
+TEMP_FILE=$(mktemp)
+cat ./vault-config-intention.json | jq ".event.url=\"$GITHUB_SERVER_URL$GITHUB_ACTION_PATH" | \
+            .user.id=\"$GITHUB_ACTOR@github" \
+        " >> $TEMP_FILE
 RESPONSE=$(curl -s -X POST $BROKER_URL/v1/intention/open \
     -H 'Content-Type: application/json' \
     -H "Authorization: Bearer $BROKER_JWT" \
-    -d @<(cat $TEMP_FILE | \
-        jq ".event.url=\"$GITHUB_SERVER_URL$GITHUB_ACTION_PATH" | \
-            .user.id=\"$GITHUB_ACTOR@github" \
-        " \
-    ))
+    -d @$TEMP_FILE \
+    )
 echo "$BROKER_URL/v1/intention/open:"
 if [ "$(echo $RESPONSE | jq '.error')" != "null" ]; then
     echo "Exit: Error detected"
