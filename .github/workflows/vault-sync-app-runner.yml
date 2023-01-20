@@ -52,3 +52,6 @@ jobs:
           VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
       - name: Cleanup Action
         run: sh ./.github/workflows/token-cleanup-script.sh
+        env:
+          BROKER_ADDR: ${{ secrets.BROKER_ADDR }}
+          VAULT_ADDR: ${{ secrets.VAULT_ADDR }}

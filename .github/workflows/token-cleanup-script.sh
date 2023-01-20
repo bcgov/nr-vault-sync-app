@@ -2,12 +2,16 @@
 
 cd "${0%/*}"
 
-VAULT_TOKEN=$(echo -n $UNWRAPPED_VAULT_TOKEN | jq -r '.auth.client_token')
+echo "===> Revoke token"
+
+curl \
+    --header "X-Vault-Token: " \
+    --request POST \
+    $VAULT_ADDR/v1/auth/token/revoke-self
+
+ACTION_END=$(curl -s -X POST $BROKER_ADDR/v1/intention/action/end -H 'X-Broker-Token: '"$ACTION_TOKEN"'')
+
 echo "===> Intention close"
 
 # Use saved intention token to close intention
-curl -s -X POST $BROKER_URL/v1/intention/close -H 'X-Broker-Token: '"$INTENTION_TOKEN"''
-curl \
-    --header "X-Vault-Token: ..." \
-    --request POST \
-http://$VAULT_ADDR/v1/auth/token/revoke-self
+curl -s -X POST $BROKER_ADDR/v1/intention/close -H 'X-Broker-Token: '"$INTENTION_TOKEN"''

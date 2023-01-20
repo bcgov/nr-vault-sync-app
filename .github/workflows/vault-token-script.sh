@@ -32,9 +32,10 @@ echo "INTENTION_TOKEN=$INTENTION_TOKEN" >> $GITHUB_ENV
 # Get token for provisioning a db access
 ACTION_TOKEN=$(echo $RESPONSE | jq -r '.actions.configure.token')
 echo "::add-mask::$ACTION_TOKEN"
-
+echo "ACTION_TOKEN=$ACTION_TOKEN" >> $GITHUB_ENV
 
 echo "===> Provision token"
+ACTION_START=$(curl -s -X POST $BROKER_ADDR/v1/intention/action/start -H 'X-Broker-Token: '"$ACTION_TOKEN"'')
 # Get wrapped id for db access
 WRAPPED_VAULT_TOKEN_JSON=$(curl -s -X POST $BROKER_ADDR/v1/provision/token/self -H 'X-Broker-Token: '"$ACTION_TOKEN"'' -H 'X-Vault-Role-Id: '"$PROVISION_ROLE_ID"'')
 if [ "$(echo $WRAPPED_VAULT_TOKEN_JSON | jq '.error')" != "null" ]; then
@@ -52,3 +53,9 @@ VAULT_TOKEN_JSON=$(curl -s -X POST $VAULT_ADDR/v1/sys/wrapping/unwrap -H 'X-Vaul
 VAULT_TOKEN=$(echo -n $VAULT_TOKEN_JSON | jq -r '.auth.client_token')
 echo "::add-mask::$VAULT_TOKEN"
 echo "VAULT_TOKEN=$VAULT_TOKEN" >> $GITHUB_ENV
+
+
+def post = new URL(this.BASE_URL + "intention/action/" + type).openConnection()
+post.setRequestMethod("POST")
+post.setRequestProperty("Content-Type", "application/json")
+post.setRequestProperty(HEADER_BROKER_TOKEN, token)
