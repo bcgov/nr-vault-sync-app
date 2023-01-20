@@ -10,7 +10,7 @@
       "id": "configure",
       "provision": ["token/self"],
       "service": {
-        "name": "knox",
+        "name": "vsync",
         "project": "vault",
         "environment": "production"
       }
