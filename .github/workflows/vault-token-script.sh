@@ -19,7 +19,7 @@ RESPONSE=$(curl -s -X POST $BROKER_ADDR/v1/intention/open \
 if [ "$(echo $RESPONSE | jq '.error')" != "null" ]; then
     echo "Exit: Error detected"
     echo $RESPONSE | jq '.'
-    exit -1
+    exit 1
 fi
 
 echo "===> Intention save"
@@ -40,18 +40,14 @@ WRAPPED_VAULT_TOKEN_JSON=$(curl -s -X POST $BROKER_ADDR/v1/provision/token/self 
 if [ "$(echo $WRAPPED_VAULT_TOKEN_JSON | jq '.error')" != "null" ]; then
     echo "Exit: Error detected"
     echo $WRAPPED_VAULT_TOKEN_JSON | jq '.'
-    exit -1
+    exit 1
 fi
 WRAPPED_VAULT_TOKEN=$(echo $WRAPPED_VAULT_TOKEN_JSON | jq -r '.wrap_info.token')
 echo "::add-mask::$WRAPPED_VAULT_TOKEN"
 
 echo "===> Unwrap token"
+echo $VAULT_ADDR/v1/sys/wrapping/unwrap
 VAULT_TOKEN_JSON=$(curl -s -X POST $VAULT_ADDR/v1/sys/wrapping/unwrap -H 'X-Vault-Token: '"$WRAPPED_VAULT_TOKEN"'')
-if [ "$(echo $VAULT_TOKEN_JSON | jq '.error')" != "null" ]; then
-    echo "Exit: Error detected"
-    echo $VAULT_TOKEN_JSON | jq '.'
-    exit -1
-fi
 
 VAULT_TOKEN=$(echo -n $VAULT_TOKEN_JSON | jq -r '.auth.client_token')
 echo "::add-mask::$VAULT_TOKEN"
