@@ -53,9 +53,3 @@ VAULT_TOKEN_JSON=$(curl -s -X POST $VAULT_ADDR/v1/sys/wrapping/unwrap -H 'X-Vaul
 VAULT_TOKEN=$(echo -n $VAULT_TOKEN_JSON | jq -r '.auth.client_token')
 echo "::add-mask::$VAULT_TOKEN"
 echo "VAULT_TOKEN=$VAULT_TOKEN" >> $GITHUB_ENV
-
-
-def post = new URL(this.BASE_URL + "intention/action/" + type).openConnection()
-post.setRequestMethod("POST")
-post.setRequestProperty("Content-Type", "application/json")
-post.setRequestProperty(HEADER_BROKER_TOKEN, token)
