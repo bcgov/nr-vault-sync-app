@@ -57,7 +57,7 @@ jobs:
           BROKER_ADDR: ${{ secrets.BROKER_ADDR }}
           VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
 
-Test:
+  Test:
     runs-on: ubuntu-latest
     environment: Test
     needs: Dev
