@@ -1,4 +1,4 @@
-name: DEV
+name: runner-config
 on:
   workflow_call:
 
