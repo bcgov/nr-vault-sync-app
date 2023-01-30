@@ -8,9 +8,11 @@ jobs:
     uses: bcgov-nr/vault-sync-app/.github/workflows/vault-sync-app-body.yml@feat/testWorkflow
     with:
       name: Dev
+    secrets: inherit
 
   Test:
     uses: bcgov-nr/vault-sync-app/.github/workflows/vault-sync-app-body.yml@feat/testWorkflow
     with:
       name: Test
+    secrets: inherit
     needs: Dev
