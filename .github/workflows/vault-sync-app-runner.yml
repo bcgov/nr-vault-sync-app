@@ -13,3 +13,4 @@ jobs:
     uses: bcgov-nr/vault-sync-app/.github/workflows/vault-sync-app-body.yml@feat/testWorkflow
     with:
       name: Test
+    needs: Dev
