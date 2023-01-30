@@ -7,9 +7,9 @@ jobs:
   Dev:
     uses: bcgov-nr/vault-sync-app/.github/workflows/vault-sync-app-body.yml@feat/testWorkflow
     with:
-      username: Dev
+      name: Dev
 
   Test:
     uses: bcgov-nr/vault-sync-app/.github/workflows/vault-sync-app-body.yml@feat/testWorkflow
     with:
-      username: Test
+      name: Test
