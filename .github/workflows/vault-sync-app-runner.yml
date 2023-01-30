@@ -4,13 +4,12 @@ on:
   workflow_dispatch:
 
 jobs:
-
   Dev:
-    uses: bcgov-nr/vault-sync-app/blob/feat/testWorkflow/.github/workflows/vault-sync-app-body.yml
+    uses: bcgov-nr/vault-sync-app/.github/workflows/vault-sync-app-body.yml@testWorkflow
     with:
       username: Dev
 
   Test:
-    uses: bcgov-nr/vault-sync-app/blob/feat/testWorkflow/.github/workflows/vault-sync-app-body.yml
+    uses: bcgov-nr/vault-sync-app/.github/workflows/vault-sync-app-body.yml@testWorkflow
     with:
       username: Test
