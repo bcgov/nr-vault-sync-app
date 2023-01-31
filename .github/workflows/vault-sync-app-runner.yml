@@ -7,19 +7,19 @@ jobs:
   Test:
     uses: bcgov-nr/vault-sync-app/.github/workflows/vault-sync-app-body.yml@main
     with:
-      environment: Test
+      name: Test
     secrets: inherit
 
   Dev:
     uses: bcgov-nr/vault-sync-app/.github/workflows/vault-sync-app-body.yml@main
     with:
-      environment: Dev
+      name: Dev
     secrets: inherit
     needs: Test
 
   Prod:
     uses: bcgov-nr/vault-sync-app/.github/workflows/vault-sync-app-body.yml@main
     with:
-      environment: Prod
+      name: Prod
     secrets: inherit
     needs: Dev
