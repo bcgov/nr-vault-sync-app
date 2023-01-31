@@ -1,10 +1,12 @@
 name: runner-config
-on: [workflow_dispatch, workflow_call]
-  inputs:
-    environment:
-      description: 'Environment to run against'
-      type: environment
-      required: true
+on:
+  workflow_dispatch:
+  workflow_call:
+    inputs:
+      environment:
+        description: 'Environment to run against'
+        type: environment
+        required: true
 
 jobs:
 
