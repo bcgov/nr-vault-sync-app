@@ -3,15 +3,16 @@ on:
   workflow_dispatch:
   workflow_call:
     inputs:
-      name:
+      environment:
+        description: 'Environment to run against'
+        type: environment
         required: true
-        type: string
 
 jobs:
 
   run:
     runs-on: ubuntu-latest
-    environment: ${{ inputs.name }}
+    environment: ${{ inputs.environment }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
