@@ -5,12 +5,12 @@ cd "${0%/*}"
 echo "===> Intention open"
 echo "$BROKER_ADDR/v1/intention/open:"
 # Open intention
-# -u "$BASIC_HTTP_USER:$BASIC_HTTP_PASSWORD" \
 TEMP_FILE=$(mktemp)
-cat ./vault-config-intention.json | jq ".event.url=\"$GITHUB_SERVER_URL$GITHUB_ACTION_PATH\" | \
-            .user.id=\"$GITHUB_ACTOR@github\" \
-        " >> $TEMP_FILE
-cat $TEMP_FILE
+cat ./vault-config-intention.json | \
+    jq ".event.url=\"$GITHUB_SERVER_URL$GITHUB_ACTION_PATH\" | \
+    .user.id=\"$GITHUB_ACTOR@github\" \
+    " >> $TEMP_FILE
+# cat $TEMP_FILE
 RESPONSE=$(curl -s -X POST $BROKER_ADDR/v1/intention/open \
     -H 'Content-Type: application/json' \
     -H "Authorization: Bearer $BROKER_JWT" \
@@ -22,7 +22,7 @@ if [ "$(echo $RESPONSE | jq '.error')" != "null" ]; then
     exit 1
 fi
 
-echo "===> Intention save"
+echo "===> Save intention tokens"
 # Save intention token for later
 INTENTION_TOKEN=$(echo $RESPONSE | jq -r '.token')
 echo "::add-mask::$INTENTION_TOKEN"
@@ -34,7 +34,7 @@ ACTION_TOKEN=$(echo $RESPONSE | jq -r '.actions.configure.token')
 echo "::add-mask::$ACTION_TOKEN"
 echo "ACTION_TOKEN=$ACTION_TOKEN" >> $GITHUB_ENV
 
-echo "===> Provision token"
+echo "===> Provision Vault token"
 ACTION_START=$(curl -s -X POST $BROKER_ADDR/v1/intention/action/start -H 'X-Broker-Token: '"$ACTION_TOKEN"'')
 # Get wrapped id for db access
 WRAPPED_VAULT_TOKEN_JSON=$(curl -s -X POST $BROKER_ADDR/v1/provision/token/self -H 'X-Broker-Token: '"$ACTION_TOKEN"'' -H 'X-Vault-Role-Id: '"$PROVISION_ROLE_ID"'')

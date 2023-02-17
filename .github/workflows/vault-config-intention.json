@@ -13,6 +13,20 @@
         "name": "vsync",
         "project": "vault",
         "environment": "production"
+      },
+      "cloud": {
+        "target": {
+          "account": {
+            "id": "7e553b-prod"
+          },
+          "project": {
+            "id": "7e553b"
+          },
+          "provider": "ocp",
+          "service": {
+            "name": "silver"
+          }
+        }
       }
     }
   ],
