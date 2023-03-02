@@ -1,7 +1,8 @@
 name: Vault Sync App Continuous Intergation
 
 # Controls when the action will run.
-on: [push, pull_request]
+# on: [push, pull_request]
+on: [workflow_dispatch]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:

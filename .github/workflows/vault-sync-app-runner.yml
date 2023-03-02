@@ -1,16 +1,16 @@
 name: Vault Sync App Runner
 
 on:
-  workflow_dispatch:
-  workflow_call:
-    inputs:
-      name:
-        description: 'Environment to run against'
-        type: string
-        required: true
+  pull_request:
+  # workflow_dispatch:
+  # workflow_call:
+  #   inputs:
+  #     name:
+  #       description: 'Environment to run against'
+  #       type: string
+  #       required: true
 
 jobs:
-
   run:
     runs-on: ubuntu-latest
     environment: ${{ inputs.name }}
