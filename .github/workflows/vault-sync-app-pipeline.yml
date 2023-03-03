@@ -1,25 +1,26 @@
 name: Vault Sync App Pipeline
 # Run this workflow every time a new commit pushed to your repository
 on:
+  pull_request:
   workflow_dispatch:
 
 jobs:
-  Test:
-    uses: bcgov-nr/vault-sync-app/.github/workflows/vault-sync-app-runner.yml@main
-    with:
-      name: Test
-    secrets: inherit
-
   Dev:
     uses: bcgov-nr/vault-sync-app/.github/workflows/vault-sync-app-runner.yml@main
     with:
       name: Dev
     secrets: inherit
-    needs: Test
+
+  Test:
+    uses: bcgov-nr/vault-sync-app/.github/workflows/vault-sync-app-runner.yml@main
+    with:
+      name: Test
+    secrets: inherit
+    needs: Dev
 
   Prod:
     uses: bcgov-nr/vault-sync-app/.github/workflows/vault-sync-app-runner.yml@main
     with:
       name: Prod
     secrets: inherit
-    needs: Dev
+    needs: Test
