@@ -4,6 +4,13 @@ import {injectable} from 'inversify';
 import {AppActorPolicies, AppConfig, ConfigService, DbConfig, GroupConfig, VaultConfig} from '../config.service';
 import merge from 'merge-deep';
 
+const periodLookup = {
+  hourly: 3600,
+  bidaily: 43200,
+  daily: 86400,
+  weekly: 604800,
+};
+
 @injectable()
 /**
  * Service for configuration details
@@ -19,6 +26,9 @@ export class ConfigFileService implements ConfigService {
    * @param app The application config to apply defaults to
    */
   private static applyAppConfigDefaults(app: AppConfig): AppConfig {
+    const tokenPeriodDefault = app.policyOptions?.tokenPeriod && periodLookup[app.policyOptions?.tokenPeriod] ?
+      periodLookup[app.policyOptions?.tokenPeriod] :
+      periodLookup['daily'];
     /* eslint-disable camelcase -- Library code style issue */
     return merge({
       approle: {
@@ -43,7 +53,7 @@ export class ConfigFileService implements ConfigService {
         // VS defaults
         ...{
           secret_id_ttl: 3600, // '1h'
-          token_period: 3600, // '1h'
+          token_period: tokenPeriodDefault, // '1h'
           secret_id_num_uses: 1,
           options: {
             project: false,
