@@ -52,8 +52,8 @@ export class ConfigFileService implements ConfigService {
         },
         // VS defaults
         ...{
-          secret_id_ttl: 3600, // '1h'
-          token_period: tokenPeriodDefault, // '1h'
+          secret_id_ttl: periodLookup['hourly'],
+          token_period: tokenPeriodDefault,
           secret_id_num_uses: 1,
           options: {
             project: false,
