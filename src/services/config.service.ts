@@ -48,7 +48,9 @@ export interface AppConfig {
     /** True if an application kv policies should be able to read project kv secrets */
     kvReadProject?: boolean;
     /** Global policies to add to every environment */
-    systemPolicies?: string[]
+    systemPolicies?: string[];
+    /** Token expiration policy. The default is daily. */
+    tokenPeriod?: 'hourly' | 'bidaily' | 'daily' | 'weekly';
   };
 }
 
