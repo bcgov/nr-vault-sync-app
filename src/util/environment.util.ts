@@ -16,6 +16,7 @@ const envAlias: {[key: string]: string} = {
   'SMTPRODUCTION': 'prod',
   'SMTTEST': 'test',
   'SMTDELIVERY': 'dev',
+  'TOOLS': 'tools',
 };
 
 @injectable()

@@ -25,10 +25,11 @@ jobs:
           repository: "bcgov-nr/vault-sync-config"
           token: ${{ secrets.GH_PAT }}
           path: config
-      - name: Use Node.js 16
+      - name: Use Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18
+          cache: 'npm'
       - run: npm ci
       - name: Install jq tool
         run: |

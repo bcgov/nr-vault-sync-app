@@ -1,6 +1,8 @@
 name: Vault Sync App Pipeline
 # Run this workflow every time a new commit pushed to your repository
 on:
+  schedule:
+  - cron: "45 * * * *"
   push:
     branches:
       - main
