@@ -1,0 +1,1 @@
+<%= authMount %>-broker-auth

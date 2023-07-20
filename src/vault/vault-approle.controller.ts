@@ -7,6 +7,7 @@ import {AppConfigApprole, ConfigService} from '../services/config.service';
 import {AppPolicyService} from './policy-roots/impl/app-policy.service';
 import HclUtil from '../util/hcl.util';
 import EnvironmentUtil from '../util/environment.util';
+import {VAULT_ROOT_SYSTEM} from './policy-roots/policy-root.service';
 
 interface ApproleDict {
   [key: string]: AppConfigApprole;
@@ -65,6 +66,13 @@ export default class VaultApproleController {
             for (const policy of app.config.policyOptions?.systemPolicies) {
               templateNames.push(policy);
             }
+          }
+          if (app.config.brokerGlobal) {
+            templateNames.push(this.hclUtil.renderName({
+              group: VAULT_ROOT_SYSTEM,
+              templateName: 'app-auth',
+              data: {authMount: VAULT_APPROLE_MOUNT_POINT},
+            }));
           }
           // Add broker policies
           if (app.config.brokerFor) {
