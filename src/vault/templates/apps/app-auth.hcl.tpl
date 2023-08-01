@@ -1,4 +1,4 @@
-# Authenication policy for application
+# Authentication policy for application
 # Scope: Approle
 
 path "auth/<%= authMount %>/role/<%= project %>_<%= application %>_<%= environment %>/role-id" {

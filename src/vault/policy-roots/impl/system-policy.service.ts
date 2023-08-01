@@ -5,6 +5,7 @@ import {inject, injectable} from 'inversify';
 import {TYPES} from '../../../inversify.types';
 import {ConfigService} from '../../../services/config.service';
 import oidcData from '../oidc-data.deco';
+import {VAULT_APPROLE_MOUNT_POINT} from '../../vault-approle.controller';
 
 @injectable()
 /**
@@ -45,6 +46,7 @@ export class SystemPolicyService implements PolicyRootService<undefined> {
       {group: VAULT_ROOT_SYSTEM, templateName: 'admin-general'},
       {group: VAULT_ROOT_SYSTEM, templateName: 'admin-token'},
       {group: VAULT_ROOT_SYSTEM, templateName: 'admin-audit-hash'},
+      {group: VAULT_ROOT_SYSTEM, templateName: 'broker-auth', data: {authMount: VAULT_APPROLE_MOUNT_POINT}},
       {group: VAULT_ROOT_SYSTEM, templateName: 'db-admin-super', data: {secertDbPath: 'db'}},
       {group: VAULT_ROOT_SYSTEM, templateName: 'isss-cdua-read'},
       {group: VAULT_ROOT_SYSTEM, templateName: 'isss-ci-read'},

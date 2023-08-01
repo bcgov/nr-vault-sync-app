@@ -35,6 +35,8 @@ export interface AppConfig {
   actor?: AppActorPolicies;
   /** How to configure the approle for this application */
   approle?: AppConfigApprole;
+  /** This application may broker logins for all other applications */
+  brokerGlobal?: boolean;
   /** Array of applications this application may login for */
   brokerFor?: string[];
   /** Array of databases this application has access to */
