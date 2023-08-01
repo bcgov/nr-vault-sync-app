@@ -70,7 +70,7 @@ export default class VaultApproleController {
           if (app.config.brokerGlobal) {
             templateNames.push(this.hclUtil.renderName({
               group: VAULT_ROOT_SYSTEM,
-              templateName: 'app-auth',
+              templateName: 'broker-auth',
               data: {authMount: VAULT_APPROLE_MOUNT_POINT},
             }));
           }
