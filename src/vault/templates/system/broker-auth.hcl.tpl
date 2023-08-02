@@ -10,7 +10,7 @@ path "auth/<%= authMount %>/role/+/secret-id" {
 }
 
 <% restrictedPaths.forEach(function(path){ %>
-path "auth/<%= authMount %>/role/<%= path %>/*" {
+path "auth/<%= authMount %>/role/<%= path %>" {
   capabilities = ["deny"]
 }
 <% }); %>
