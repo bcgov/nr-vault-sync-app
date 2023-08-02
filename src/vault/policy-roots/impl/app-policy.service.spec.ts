@@ -1,18 +1,18 @@
 import winston from 'winston';
-import {AppService} from '../../../services/app.service';
-import {ConfigService} from '../../../services/config.service';
-import {VAULT_APPROLE_MOUNT_POINT} from '../../vault-approle.controller';
-import {VAULT_ROOT_APPS} from '../policy-root.service';
+import { AppService } from '../../../services/app.service';
+import { ConfigService } from '../../../services/config.service';
+import { VAULT_APPROLE_MOUNT_POINT } from '../../vault-approle.controller';
+import { VAULT_ROOT_APPS } from '../policy-root.service';
 
 jest.mock('../deduplicate.deco', () => jest.fn());
 
-import {AppPolicyService} from './app-policy.service';
+import { AppPolicyService } from './app-policy.service';
 
 describe('app-policy.service', () => {
   const mockLogger = {
-    info: jest.fn(() => { }),
-    error: jest.fn(() => { }),
-    debug: jest.fn(() => { }),
+    info: jest.fn(() => {}),
+    error: jest.fn(() => {}),
+    debug: jest.fn(() => {}),
   } as unknown as winston.Logger;
 
   afterEach(() => {
@@ -23,7 +23,8 @@ describe('app-policy.service', () => {
     const aps = new AppPolicyService(
       {} as unknown as AppService,
       {} as unknown as ConfigService,
-      mockLogger);
+      mockLogger,
+    );
 
     expect(aps.getName()).toBe(VAULT_ROOT_APPS);
   });
@@ -35,7 +36,8 @@ describe('app-policy.service', () => {
     const aps = new AppPolicyService(
       mockAppService,
       {} as unknown as ConfigService,
-      mockLogger);
+      mockLogger,
+    );
 
     jest.spyOn(aps, 'buildApplication').mockReturnValue(Promise.resolve([]));
     jest.spyOn(aps, 'buildApplications').mockReturnValue(Promise.resolve([]));
@@ -48,14 +50,17 @@ describe('app-policy.service', () => {
   test('sync: buildApplication', async () => {
     const aps = new AppPolicyService(
       {} as unknown as AppService,
-      {getDbType: jest.fn().mockReturnValue('type')} as unknown as ConfigService,
-      mockLogger);
+      {
+        getDbType: jest.fn().mockReturnValue('type'),
+      } as unknown as ConfigService,
+      mockLogger,
+    );
 
     const spec = await aps.buildApplication({
       env: ['PRODUCTION'],
       app: 'DEMOapp',
       project: 'DEmO',
-      config: {enabled: true, name: 'DEMOapp', db: ['db']},
+      config: { enabled: true, name: 'DEMOapp', db: ['db'] },
     });
 
     const dataEnvProd = {
@@ -74,13 +79,41 @@ describe('app-policy.service', () => {
     };
 
     expect(spec).toEqual([
-      {group: VAULT_ROOT_APPS, templateName: 'project-kv-read', data: dataEnvProd},
-      {group: VAULT_ROOT_APPS, templateName: 'project-kv-write', data: dataEnvProd},
-      {group: VAULT_ROOT_APPS, templateName: 'app-kv-read', data: dataEnvProd},
-      {group: VAULT_ROOT_APPS, templateName: 'app-kv-write', data: dataEnvProd},
-      {group: VAULT_ROOT_APPS, templateName: 'app-db-read', data: dataDbEnvProd},
-      {group: VAULT_ROOT_APPS, templateName: 'app-db-readwrite', data: dataDbEnvProd},
-      {group: VAULT_ROOT_APPS, templateName: 'app-db-full', data: dataDbEnvProd},
+      {
+        group: VAULT_ROOT_APPS,
+        templateName: 'project-kv-read',
+        data: dataEnvProd,
+      },
+      {
+        group: VAULT_ROOT_APPS,
+        templateName: 'project-kv-write',
+        data: dataEnvProd,
+      },
+      {
+        group: VAULT_ROOT_APPS,
+        templateName: 'app-kv-read',
+        data: dataEnvProd,
+      },
+      {
+        group: VAULT_ROOT_APPS,
+        templateName: 'app-kv-write',
+        data: dataEnvProd,
+      },
+      {
+        group: VAULT_ROOT_APPS,
+        templateName: 'app-db-read',
+        data: dataDbEnvProd,
+      },
+      {
+        group: VAULT_ROOT_APPS,
+        templateName: 'app-db-readwrite',
+        data: dataDbEnvProd,
+      },
+      {
+        group: VAULT_ROOT_APPS,
+        templateName: 'app-db-full',
+        data: dataDbEnvProd,
+      },
     ]);
   });
 });

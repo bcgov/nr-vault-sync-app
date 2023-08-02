@@ -31,5 +31,8 @@ export interface PolicyRegistrationService {
    * @param policyNames The names of policies to register
    * @param partialRegistration True if the caller did not register all the group's policies
    */
-  filterPoliciesForUnregistered(policyNames: string[], partialRegistration: boolean): Promise<string[]>;
+  filterPoliciesForUnregistered(
+    policyNames: string[],
+    partialRegistration: boolean,
+  ): Promise<string[]>;
 }

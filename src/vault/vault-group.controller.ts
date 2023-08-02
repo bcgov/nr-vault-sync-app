@@ -1,13 +1,13 @@
-import {inject, injectable} from 'inversify';
+import { inject, injectable } from 'inversify';
 import nv from 'node-vault';
 import winston from 'winston';
-import {TYPES} from '../inversify.types';
-import {AppService} from '../services/app.service';
-import {ConfigService} from '../services/config.service';
+import { TYPES } from '../inversify.types';
+import { AppService } from '../services/app.service';
+import { ConfigService } from '../services/config.service';
 import VaultApi from './vault.api';
 import HclUtil from '../util/hcl.util';
-import {GroupPolicyService} from './policy-roots/impl/group-policy.service';
-import {AppPolicyService} from './policy-roots/impl/app-policy.service';
+import { GroupPolicyService } from './policy-roots/impl/group-policy.service';
+import { AppPolicyService } from './policy-roots/impl/app-policy.service';
 
 export const VAULT_GROUP_KEYCLOAK_DEVELOPERS = 'oidc-css-developer';
 export const VAULT_GROUP_KEYCLOAK_GROUPS = 'oidc-css-group';
@@ -26,7 +26,8 @@ export default class VaultGroupController {
     @inject(TYPES.ConfigService) private config: ConfigService,
     @inject(TYPES.AppService) private appService: AppService,
     @inject(TYPES.HclUtil) private hclUtil: HclUtil,
-    @inject(TYPES.GroupPolicyService) private groupRootService: GroupPolicyService,
+    @inject(TYPES.GroupPolicyService)
+    private groupRootService: GroupPolicyService,
     @inject(TYPES.AppPolicyService) private appRootService: AppPolicyService,
     @inject(TYPES.Logger) private logger: winston.Logger,
   ) {}
@@ -45,7 +46,8 @@ export default class VaultGroupController {
    */
   public async syncAppGroups(): Promise<void> {
     const apps = await this.config.getApps();
-    const defaultDevAppGroup = (await this.config.getAppActorDefaults()).developer;
+    const defaultDevAppGroup = (await this.config.getAppActorDefaults())
+      .developer;
 
     const projectSet = new Set();
     for (const app of apps) {
@@ -57,19 +59,28 @@ export default class VaultGroupController {
           continue;
         }
         projectSet.add(appInfo.project);
-        const policyNames = specs.filter((spec) => {
-          if (!spec.data) {
-            return false;
-          }
-          const env = spec.data.environment as string;
-          const templateNames = app.actor?.developer && app.actor?.developer[env] ?
-            app.actor?.developer[env]: defaultDevAppGroup[env];
-          return spec.data && templateNames &&
-            templateNames.indexOf(spec.templateName) != -1;
-        })
+        const policyNames = specs
+          .filter((spec) => {
+            if (!spec.data) {
+              return false;
+            }
+            const env = spec.data.environment as string;
+            const templateNames =
+              app.actor?.developer && app.actor?.developer[env]
+                ? app.actor?.developer[env]
+                : defaultDevAppGroup[env];
+            return (
+              spec.data &&
+              templateNames &&
+              templateNames.indexOf(spec.templateName) != -1
+            );
+          })
           .map((spec) => this.hclUtil.renderName(spec));
-        await this.syncGroup(`${VAULT_GROUP_KEYCLOAK_DEVELOPERS}/${appInfo.project.toLowerCase()}`,
-          `developer_${appInfo.project.toLowerCase()}`, policyNames);
+        await this.syncGroup(
+          `${VAULT_GROUP_KEYCLOAK_DEVELOPERS}/${appInfo.project.toLowerCase()}`,
+          `developer_${appInfo.project.toLowerCase()}`,
+          policyNames,
+        );
       } catch (error) {
         this.logger.error(`Error syncing dev app group: ${app.name}`);
       }
@@ -84,12 +95,15 @@ export default class VaultGroupController {
     for (const group of groups) {
       await this.syncGroup(
         `${VAULT_GROUP_KEYCLOAK_GROUPS}/${group.name.toLowerCase()}`,
-        `group_${group.name.toLowerCase()}`, [
+        `group_${group.name.toLowerCase()}`,
+        [
           ...(group.policies ? group.policies : []),
           ...(await this.groupRootService.build(group))
             .filter((spec) => spec.templateName === 'user')
             .map((spec) => this.hclUtil.renderName(spec)),
-        ], {root: 'user'});
+        ],
+        { root: 'user' },
+      );
     }
   }
 
@@ -105,12 +119,13 @@ export default class VaultGroupController {
     name: string,
     role: string,
     policies: string[],
-    metadata: {[key: string]: string} = {}): Promise<void> {
+    metadata: { [key: string]: string } = {},
+  ): Promise<void> {
     const accessors: string[] = await this.vaultApi.getOidcAccessors();
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- Library does not provide typing
-    let group = await this.vault.write(
-      `identity/group/name/${encodeURIComponent(name)}`, {
+    let group = await this.vault
+      .write(`identity/group/name/${encodeURIComponent(name)}`, {
         policies,
         type: 'external',
         metadata,
@@ -118,18 +133,25 @@ export default class VaultGroupController {
       .catch((error) => {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- No typing avialable
         const code = error.response.statusCode as number;
-        this.logger.error(`Error creating group '${name}' in Vault: Error ${code}`);
+        this.logger.error(
+          `Error creating group '${name}' in Vault: Error ${code}`,
+        );
         throw new Error('Could not create group');
       });
 
     if (!group) {
       // API does not return data if write was an update
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- Library does not provide typing
-      group = await this.vault.read(`identity/group/name/${encodeURIComponent(name)}`);
+      group = await this.vault.read(
+        `identity/group/name/${encodeURIComponent(name)}`,
+      );
     }
     /* eslint-disable @typescript-eslint/no-unsafe-argument */
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- No typing avialable
-    if (!group.data.alias || (group.data.alias && Object.keys(group.data.alias).length === 0)) {
+    if (
+      !group.data.alias ||
+      (group.data.alias && Object.keys(group.data.alias).length === 0)
+    ) {
       const promises = accessors.map((accessor) => {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- No typing avialable
         return this.createGroupAlias(group.data.id, accessor, role);
@@ -148,15 +170,21 @@ export default class VaultGroupController {
    * @param accessor The accessor id
    * @param name The name provided by the accessor for the group
    */
-  public async createGroupAlias(canonicalId: string, mountAccessor: string, name: string): Promise<void> {
+  public async createGroupAlias(
+    canonicalId: string,
+    mountAccessor: string,
+    name: string,
+  ): Promise<void> {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- Library does not provide typing
-    const alias = await this.vault.write(`identity/lookup/group`,
-      {alias_name: name, alias_mount_accessor: mountAccessor});
+    const alias = await this.vault.write(`identity/lookup/group`, {
+      alias_name: name,
+      alias_mount_accessor: mountAccessor,
+    });
 
     if (!alias) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- Library does not provide typing
-      await this.vault.write(
-        `identity/group-alias`, {
+      await this.vault
+        .write(`identity/group-alias`, {
           name,
           mount_accessor: mountAccessor,
           canonical_id: canonicalId,
@@ -165,7 +193,8 @@ export default class VaultGroupController {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- No typing avialable
           const code = error.response.statusCode as number;
           this.logger.error(
-            `Failed to create alias '${name}' for '${canonicalId}' on '${mountAccessor}' in Vault. Error ${code}`);
+            `Failed to create alias '${name}' for '${canonicalId}' on '${mountAccessor}' in Vault. Error ${code}`,
+          );
           throw new Error('Could not create alias');
         });
     }

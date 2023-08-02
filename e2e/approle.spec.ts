@@ -1,4 +1,4 @@
-import {vault} from './vault';
+import { vault } from './vault';
 import nv from 'node-vault';
 
 /* eslint @typescript-eslint/no-unsafe-assignment: "off", jest/no-disabled-tests: "off" */
@@ -6,13 +6,18 @@ describe.skip('Vault', () => {
   let appVault: nv.client;
 
   beforeAll(async () => {
-    const roleResult = await vault.getApproleRoleId({role_name: 'foo-bob'});
-    const secretResult = await vault.getApproleRoleSecret({role_name: 'foo-bob'});
+    const roleResult = await vault.getApproleRoleId({ role_name: 'foo-bob' });
+    const secretResult = await vault.getApproleRoleSecret({
+      role_name: 'foo-bob',
+    });
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- No typing avialable
     const roleId = roleResult.data.role_id;
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- No typing avialable
     const secretId = secretResult.data.secret_id;
-    const login = await vault.approleLogin({role_id: roleId, secret_id: secretId});
+    const login = await vault.approleLogin({
+      role_id: roleId,
+      secret_id: secretId,
+    });
     // console.log(login);
 
     appVault = nv({
@@ -31,7 +36,7 @@ describe.skip('Vault', () => {
 
   test('Expect error writing new secret', async () => {
     await expect(async () => {
-      await appVault.write('secret/data/foo/bob', {test: 'true'});
+      await appVault.write('secret/data/foo/bob', { test: 'true' });
     }).rejects.toThrow();
   });
 });

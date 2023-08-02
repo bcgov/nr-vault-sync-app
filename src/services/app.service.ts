@@ -1,4 +1,4 @@
-import {AppConfig} from './config.service';
+import { AppConfig } from './config.service';
 
 /**
  * Application details
@@ -25,4 +25,3 @@ export interface AppService {
    */
   getApp(appName: string): Promise<Application>;
 }
-

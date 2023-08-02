@@ -1,12 +1,13 @@
 import GroupSync from './group-sync';
-import {bindVault, vsContainer} from '../inversify.config';
+import { bindVault, vsContainer } from '../inversify.config';
 
 jest.mock('../inversify.config');
 
 describe('group sync command', () => {
   let stdoutSpy: jest.SpyInstance;
   beforeEach(() => {
-    stdoutSpy = jest.spyOn(process.stdout, 'write')
+    stdoutSpy = jest
+      .spyOn(process.stdout, 'write')
       .mockImplementation(() => true);
   });
 

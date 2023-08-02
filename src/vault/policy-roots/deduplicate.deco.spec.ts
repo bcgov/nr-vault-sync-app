@@ -1,4 +1,4 @@
-import {vsContainer} from '../../inversify.config';
+import { vsContainer } from '../../inversify.config';
 import deduplicate from './deduplicate.deco';
 
 jest.mock('../../inversify.config');
@@ -16,12 +16,14 @@ describe('deduplicate.deco', () => {
     const mockVsContainer = jest.mocked(vsContainer);
     mockVsContainer.get.mockReturnValue(mockHclUtilInstance);
 
-    const value = jest.fn().mockResolvedValue([
-      {foo: 'bar'},
-      {should: 'beremoved'},
-      {should: 'also be removed'},
-    ]);
-    const descriptor: PropertyDescriptor = {value};
+    const value = jest
+      .fn()
+      .mockResolvedValue([
+        { foo: 'bar' },
+        { should: 'beremoved' },
+        { should: 'also be removed' },
+      ]);
+    const descriptor: PropertyDescriptor = { value };
     deduplicate(undefined, '', descriptor);
     expect(descriptor.value).not.toBe(undefined);
 
@@ -30,6 +32,6 @@ describe('deduplicate.deco', () => {
     expect(value).toHaveBeenCalledTimes(1);
     expect(value).toHaveBeenCalledWith('myargs');
 
-    expect(rval).toEqual([{foo: 'bar'}]);
+    expect(rval).toEqual([{ foo: 'bar' }]);
   });
 });

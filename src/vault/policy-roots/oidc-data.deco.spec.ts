@@ -1,4 +1,4 @@
-import {vsContainer} from '../../inversify.config';
+import { vsContainer } from '../../inversify.config';
 import oidcData from './oidc-data.deco';
 
 jest.mock('../../inversify.config');
@@ -17,10 +17,10 @@ describe('oidc-data.deco', () => {
     mockVsContainer.get.mockReturnValue(mockVaultApi);
 
     const value = jest.fn().mockResolvedValue([
-      {foo: 'bar', data: {}},
-      {hi: 'there', data: {}},
+      { foo: 'bar', data: {} },
+      { hi: 'there', data: {} },
     ]);
-    const descriptor: PropertyDescriptor = {value};
+    const descriptor: PropertyDescriptor = { value };
     oidcData(undefined, '', descriptor);
     expect(descriptor.value).not.toBe(undefined);
 
@@ -30,8 +30,8 @@ describe('oidc-data.deco', () => {
     expect(value).toHaveBeenCalledWith('myargs');
 
     expect(rval).toEqual([
-      {foo: 'bar', data: {global_oidc_accessor: 'accessorId'}},
-      {hi: 'there', data: {global_oidc_accessor: 'accessorId'}},
+      { foo: 'bar', data: { global_oidc_accessor: 'accessorId' } },
+      { hi: 'there', data: { global_oidc_accessor: 'accessorId' } },
     ]);
   });
 });

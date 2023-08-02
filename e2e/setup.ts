@@ -6,5 +6,5 @@ import nv from 'node-vault';
  * @param key The unseal key
  */
 export async function unseal(vault: nv.client, key: string): Promise<void> {
-  await vault.unseal({key});
+  await vault.unseal({ key });
 }

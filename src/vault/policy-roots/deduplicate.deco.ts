@@ -1,6 +1,6 @@
-import {vsContainer} from '../../inversify.config';
-import {TYPES} from '../../inversify.types';
-import HclUtil, {HlcRenderSpec} from '../../util/hcl.util';
+import { vsContainer } from '../../inversify.config';
+import { TYPES } from '../../inversify.types';
+import HclUtil, { HlcRenderSpec } from '../../util/hcl.util';
 
 /* eslint-disable @typescript-eslint/no-explicit-any -- Use of any required by decorators */
 
@@ -10,10 +10,14 @@ import HclUtil, {HlcRenderSpec} from '../../util/hcl.util';
  * @param propertyName
  * @param descriptor
  */
-export default function deduplicate(target: unknown, propertyName: string, descriptor: PropertyDescriptor): void {
+export default function deduplicate(
+  target: unknown,
+  propertyName: string,
+  descriptor: PropertyDescriptor,
+): void {
   const method = descriptor.value as () => Promise<HlcRenderSpec[]>;
 
-  descriptor.value = async function(...args: any) {
+  descriptor.value = async function (...args: any) {
     const set = new Set<string>();
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     const specArr = await method.apply(this, args);

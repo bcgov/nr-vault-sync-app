@@ -1,10 +1,12 @@
 import nv from 'node-vault';
 import winston from 'winston';
-import {AppService} from '../services/app.service';
-import VaultApproleController, {VAULT_APPROLE_MOUNT_POINT} from './vault-approle.controller';
+import { AppService } from '../services/app.service';
+import VaultApproleController, {
+  VAULT_APPROLE_MOUNT_POINT,
+} from './vault-approle.controller';
 import HclUtil from '../util/hcl.util';
-import {AppPolicyService} from './policy-roots/impl/app-policy.service';
-import {ConfigService} from '../services/config.service';
+import { AppPolicyService } from './policy-roots/impl/app-policy.service';
+import { ConfigService } from '../services/config.service';
 
 describe('vault-approle.controller', () => {
   const mockHclUtil = {
@@ -16,19 +18,21 @@ describe('vault-approle.controller', () => {
     read: jest.fn(),
     write: jest.fn(),
     addApproleRole: jest.fn(),
-    approleRoles: jest.fn(() => ({data: {keys: ['a', 'c', 'd']}})),
+    approleRoles: jest.fn(() => ({ data: { keys: ['a', 'c', 'd'] } })),
     deleteApproleRole: jest.fn(),
   } as unknown as nv.client;
 
-  const mockApps = [{
-    config: {
-      enabled: true,
-      approle: {
+  const mockApps = [
+    {
+      config: {
         enabled: true,
+        approle: {
+          enabled: true,
+        },
       },
+      env: ['PRODUCTION'],
     },
-    env: ['PRODUCTION'],
-  }];
+  ];
 
   const mockActorDefaults = {
     approle: {
@@ -46,10 +50,12 @@ describe('vault-approle.controller', () => {
   } as unknown as AppService;
 
   const mockAppRootService = {
-    buildApplicationForEnv: jest.fn(() => [{
-      group: 'b',
-      templateName: 'project-kv-read',
-    }]),
+    buildApplicationForEnv: jest.fn(() => [
+      {
+        group: 'b',
+        templateName: 'project-kv-read',
+      },
+    ]),
   } as unknown as AppPolicyService;
 
   const mockConfigService = {
@@ -57,9 +63,9 @@ describe('vault-approle.controller', () => {
   } as unknown as ConfigService;
 
   const mockLogger = {
-    info: jest.fn(() => { }),
-    error: jest.fn(() => { }),
-    debug: jest.fn(() => { }),
+    info: jest.fn(() => {}),
+    error: jest.fn(() => {}),
+    debug: jest.fn(() => {}),
   } as unknown as winston.Logger;
 
   /**
@@ -72,7 +78,8 @@ describe('vault-approle.controller', () => {
       mockAppRootService,
       mockConfigService,
       mockHclUtil,
-      mockLogger);
+      mockLogger,
+    );
   }
 
   afterEach(() => {
@@ -82,7 +89,9 @@ describe('vault-approle.controller', () => {
   test('sync', async () => {
     const va = vgcFactory();
     const mockDict = {};
-    jest.spyOn(va, 'buildApproleDict').mockReturnValue(Promise.resolve(mockDict));
+    jest
+      .spyOn(va, 'buildApproleDict')
+      .mockReturnValue(Promise.resolve(mockDict));
     jest.spyOn(va, 'createUpdateRoles').mockReturnValue(Promise.resolve());
     jest.spyOn(va, 'removeUnusedRoles').mockReturnValue(Promise.resolve());
 
@@ -102,10 +111,16 @@ describe('vault-approle.controller', () => {
 
     expect(mockAppService.getAllApps).toHaveBeenCalledTimes(1);
     expect(mockHclUtil.renderApproleName).toHaveBeenCalledTimes(1);
-    expect(mockHclUtil.renderApproleName).toHaveBeenCalledWith(mockApps[0], 'PRODUCTION');
+    expect(mockHclUtil.renderApproleName).toHaveBeenCalledWith(
+      mockApps[0],
+      'PRODUCTION',
+    );
 
     expect(mockAppRootService.buildApplicationForEnv).toHaveBeenCalledTimes(1);
-    expect(mockAppRootService.buildApplicationForEnv).toHaveBeenCalledWith(mockApps[0], 'PRODUCTION');
+    expect(mockAppRootService.buildApplicationForEnv).toHaveBeenCalledWith(
+      mockApps[0],
+      'PRODUCTION',
+    );
 
     expect(mockHclUtil.renderName).toHaveBeenCalledTimes(1);
 
@@ -143,17 +158,17 @@ describe('vault-approle.controller', () => {
 
     expect(vault.addApproleRole).toHaveBeenCalledTimes(1);
     expect(vault.addApproleRole).toHaveBeenCalledWith({
-      'bind_secret_id': true,
-      'bound_cidr_list': '',
-      'mount_point': 'vs_apps_approle',
-      'period': 798,
-      'policies': 'policy',
-      'role_name': 'name',
-      'secret_id_num_uses': 2,
-      'secret_id_ttl': 5564,
-      'token_max_ttl': 798897,
-      'token_num_uses': 44,
-      'token_ttl': 546,
+      bind_secret_id: true,
+      bound_cidr_list: '',
+      mount_point: 'vs_apps_approle',
+      period: 798,
+      policies: 'policy',
+      role_name: 'name',
+      secret_id_num_uses: 2,
+      secret_id_ttl: 5564,
+      token_max_ttl: 798897,
+      token_num_uses: 44,
+      token_ttl: 546,
     });
   });
 
@@ -164,10 +179,18 @@ describe('vault-approle.controller', () => {
     await va.removeUnusedRoles(regSet);
 
     expect(vault.approleRoles).toHaveBeenCalledTimes(1);
-    expect(vault.approleRoles).toHaveBeenCalledWith({mount_point: VAULT_APPROLE_MOUNT_POINT});
+    expect(vault.approleRoles).toHaveBeenCalledWith({
+      mount_point: VAULT_APPROLE_MOUNT_POINT,
+    });
 
     expect(vault.deleteApproleRole).toHaveBeenCalledTimes(2);
-    expect(vault.deleteApproleRole).toHaveBeenCalledWith({mount_point: VAULT_APPROLE_MOUNT_POINT, role_name: 'c'});
-    expect(vault.deleteApproleRole).toHaveBeenCalledWith({mount_point: VAULT_APPROLE_MOUNT_POINT, role_name: 'd'});
+    expect(vault.deleteApproleRole).toHaveBeenCalledWith({
+      mount_point: VAULT_APPROLE_MOUNT_POINT,
+      role_name: 'c',
+    });
+    expect(vault.deleteApproleRole).toHaveBeenCalledWith({
+      mount_point: VAULT_APPROLE_MOUNT_POINT,
+      role_name: 'd',
+    });
   });
 });
