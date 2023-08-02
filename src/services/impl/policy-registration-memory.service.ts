@@ -1,21 +1,22 @@
 import winston from 'winston';
-import {TYPES} from '../../inversify.types';
-import {inject, injectable} from 'inversify';
-import {PolicyRegistrationService} from '../policy-registration.service';
+import { TYPES } from '../../inversify.types';
+import { inject, injectable } from 'inversify';
+import { PolicyRegistrationService } from '../policy-registration.service';
 
 @injectable()
 /**
  * Service to determine if unregistred policies exist in the Vault instance
  */
-export class PolicyRegistrationMemoryService implements PolicyRegistrationService {
-  private policyDb: {[key: string]: boolean} = {};
+export class PolicyRegistrationMemoryService
+  implements PolicyRegistrationService
+{
+  private policyDb: { [key: string]: boolean } = {};
 
   /**
    * Construct the policy controller
    * @param vault The vault client to use
    */
-  constructor(
-    @inject(TYPES.Logger) private logger: winston.Logger) {}
+  constructor(@inject(TYPES.Logger) private logger: winston.Logger) {}
 
   /**
    * Register a policy as active
@@ -58,12 +59,19 @@ export class PolicyRegistrationMemoryService implements PolicyRegistrationServic
    * @param policyNames The names of policies to check
    * @param partialRegistration True if the caller did not register all the group's policies
    */
-  async filterPoliciesForUnregistered(policyNames: string[], partialRegistration: boolean): Promise<string[]> {
+  async filterPoliciesForUnregistered(
+    policyNames: string[],
+    partialRegistration: boolean,
+  ): Promise<string[]> {
     if (partialRegistration) {
       this.logger.error('Partial not supported');
       throw new Error('Partial not supported');
     }
 
-    return Promise.resolve(policyNames.filter((policyName: string) => !(policyName in this.policyDb)));
+    return Promise.resolve(
+      policyNames.filter(
+        (policyName: string) => !(policyName in this.policyDb),
+      ),
+    );
   }
 }

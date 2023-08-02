@@ -1,13 +1,13 @@
-import {inject, injectable} from 'inversify';
+import { inject, injectable } from 'inversify';
 import winston from 'winston';
 import nv from 'node-vault';
-import {TYPES} from '../inversify.types';
-import {AppService} from '../services/app.service';
-import {AppConfigApprole, ConfigService} from '../services/config.service';
-import {AppPolicyService} from './policy-roots/impl/app-policy.service';
+import { TYPES } from '../inversify.types';
+import { AppService } from '../services/app.service';
+import { AppConfigApprole, ConfigService } from '../services/config.service';
+import { AppPolicyService } from './policy-roots/impl/app-policy.service';
 import HclUtil from '../util/hcl.util';
 import EnvironmentUtil from '../util/environment.util';
-import {VAULT_ROOT_SYSTEM} from './policy-roots/policy-root.service';
+import { VAULT_ROOT_SYSTEM } from './policy-roots/policy-root.service';
 
 interface ApproleDict {
   [key: string]: AppConfigApprole;
@@ -57,10 +57,17 @@ export default class VaultApproleController {
         for (const env of app.env) {
           const approleName = this.hclUtil.renderApproleName(app, env);
 
-          const specs = await this.appRootService.buildApplicationForEnv(app, env);
+          const specs = await this.appRootService.buildApplicationForEnv(
+            app,
+            env,
+          );
           const normEnv = EnvironmentUtil.normalize(env);
-          const templateNames = [...(app.config?.actor?.approle && app.config?.actor?.approle[normEnv] ?
-            app.config?.actor?.approle[normEnv] : appActorDefaults.approle[normEnv])];
+          const templateNames = [
+            ...(app.config?.actor?.approle &&
+            app.config?.actor?.approle[normEnv]
+              ? app.config?.actor?.approle[normEnv]
+              : appActorDefaults.approle[normEnv]),
+          ];
           // Add global policies
           if (app.config.policyOptions?.systemPolicies) {
             for (const policy of app.config.policyOptions?.systemPolicies) {
@@ -68,49 +75,65 @@ export default class VaultApproleController {
             }
           }
           if (app.config.brokerGlobal) {
-            templateNames.push(this.hclUtil.renderName({
-              group: VAULT_ROOT_SYSTEM,
-              templateName: 'broker-auth',
-              data: {authMount: VAULT_APPROLE_MOUNT_POINT},
-            }));
+            templateNames.push(
+              this.hclUtil.renderName({
+                group: VAULT_ROOT_SYSTEM,
+                templateName: 'broker-auth',
+                data: { authMount: VAULT_APPROLE_MOUNT_POINT },
+              }),
+            );
           }
           // Add broker policies
           if (app.config.brokerFor) {
             for (const brokerApp of app.config.brokerFor) {
-              const app = (await this.appService.getApp(brokerApp));
+              const app = await this.appService.getApp(brokerApp);
               const appEnvironments = app.env;
               for (const appEnvironment of appEnvironments) {
                 let normAppEnvironment = '';
                 try {
-                  normAppEnvironment = EnvironmentUtil.normalize(appEnvironment);
+                  normAppEnvironment =
+                    EnvironmentUtil.normalize(appEnvironment);
                 } catch (err) {
-                  this.logger.debug(`Unsupported environment for ${brokerApp}: ${appEnvironment}`);
+                  this.logger.debug(
+                    `Unsupported environment for ${brokerApp}: ${appEnvironment}`,
+                  );
                   continue;
                 }
 
-                templateNames.push(this.hclUtil.renderName({
-                  group: 'apps',
-                  templateName: 'app-auth',
-                  data: {
-                    project: app.project,
-                    application: brokerApp,
-                    environment: normAppEnvironment,
-                  },
-                }));
+                templateNames.push(
+                  this.hclUtil.renderName({
+                    group: 'apps',
+                    templateName: 'app-auth',
+                    data: {
+                      project: app.project,
+                      application: brokerApp,
+                      environment: normAppEnvironment,
+                    },
+                  }),
+                );
               }
             }
           }
 
-          const policies = specs.filter((spec) => {
-            return templateNames ? templateNames.indexOf(spec.templateName) != -1 : false;
-          }).map((spec) => this.hclUtil.renderName(spec)).join(',');
-          const prerenderedPolicies = templateNames.filter(
-            (name) => (name === 'default' || name.indexOf('/') != -1)).join(',');
+          const policies = specs
+            .filter((spec) => {
+              return templateNames
+                ? templateNames.indexOf(spec.templateName) != -1
+                : false;
+            })
+            .map((spec) => this.hclUtil.renderName(spec))
+            .join(',');
+          const prerenderedPolicies = templateNames
+            .filter((name) => name === 'default' || name.indexOf('/') != -1)
+            .join(',');
           approleDict[approleName] = {
             ...app.config.approle,
             ...{
               role_name: approleName,
-              token_policies: prerenderedPolicies.length > 0 ? [policies, prerenderedPolicies].join(',') : policies,
+              token_policies:
+                prerenderedPolicies.length > 0
+                  ? [policies, prerenderedPolicies].join(',')
+                  : policies,
             },
           };
         }
@@ -150,14 +173,19 @@ export default class VaultApproleController {
    */
   public async removeUnusedRoles(registeredRoles: Set<string>): Promise<void> {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- No typing available
-    const vaultAppRoles = await this.vault.approleRoles({mount_point: VAULT_APPROLE_MOUNT_POINT});
+    const vaultAppRoles = await this.vault.approleRoles({
+      mount_point: VAULT_APPROLE_MOUNT_POINT,
+    });
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- No typing available
     const existingRoles = vaultAppRoles.data.keys as string[];
     for (const eRole of existingRoles) {
       if (registeredRoles.has(eRole)) {
         continue;
       }
-      await this.vault.deleteApproleRole({mount_point: VAULT_APPROLE_MOUNT_POINT, role_name: eRole});
+      await this.vault.deleteApproleRole({
+        mount_point: VAULT_APPROLE_MOUNT_POINT,
+        role_name: eRole,
+      });
     }
   }
 }

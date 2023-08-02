@@ -1,5 +1,5 @@
-import {PolicyRegistrationMemoryService} from './policy-registration-memory.service';
-import {logger} from '../../logger';
+import { PolicyRegistrationMemoryService } from './policy-registration-memory.service';
+import { logger } from '../../logger';
 
 jest.mock('fs');
 jest.mock('node-vault');
@@ -12,7 +12,8 @@ describe('policy-registration-memory.service', () => {
     await prms.registerPolicy('system/admin');
     const unregistered = await prms.filterPoliciesForUnregistered(
       ['system/admin', 'system/bob'],
-      false);
+      false,
+    );
     expect(unregistered).toEqual(['system/bob']);
   });
 
@@ -21,7 +22,8 @@ describe('policy-registration-memory.service', () => {
     await prms.registerPolicies(['system/admin', 'system/bob']);
     const unregistered = await prms.filterPoliciesForUnregistered(
       ['something/something', 'system/admin', 'system/bob'],
-      false);
+      false,
+    );
     expect(unregistered).toEqual(['something/something']);
   });
 
@@ -38,16 +40,21 @@ describe('policy-registration-memory.service', () => {
     await prms.clearPolicies();
     const unregistered = await prms.filterPoliciesForUnregistered(
       ['something/something', 'system/admin', 'system/bob'],
-      false);
-    expect(unregistered).toEqual(['something/something', 'system/admin', 'system/bob']);
+      false,
+    );
+    expect(unregistered).toEqual([
+      'something/something',
+      'system/admin',
+      'system/bob',
+    ]);
   });
 
   it('can not do partial', async () => {
     jest.spyOn(logger, 'error').mockReturnValue(logger);
     const prms = new PolicyRegistrationMemoryService(logger);
-    await expect(prms.filterPoliciesForUnregistered([], true))
-      .rejects
-      .toThrow();
+    await expect(
+      prms.filterPoliciesForUnregistered([], true),
+    ).rejects.toThrow();
     expect(logger.error).toHaveBeenCalled();
   });
 });

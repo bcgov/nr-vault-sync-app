@@ -1,9 +1,9 @@
-import {HlcRenderSpec} from '../../../util/hcl.util';
-import {PolicyRootService, VAULT_ROOT_GROUPS} from '../policy-root.service';
+import { HlcRenderSpec } from '../../../util/hcl.util';
+import { PolicyRootService, VAULT_ROOT_GROUPS } from '../policy-root.service';
 import winston from 'winston';
-import {inject, injectable} from 'inversify';
-import {TYPES} from '../../../inversify.types';
-import {ConfigService, GroupConfig} from '../../../services/config.service';
+import { inject, injectable } from 'inversify';
+import { TYPES } from '../../../inversify.types';
+import { ConfigService, GroupConfig } from '../../../services/config.service';
 
 @injectable()
 /**
@@ -15,7 +15,8 @@ export class GroupPolicyService implements PolicyRootService<GroupConfig> {
    */
   constructor(
     @inject(TYPES.ConfigService) private config: ConfigService,
-    @inject(TYPES.Logger) private logger: winston.Logger) {}
+    @inject(TYPES.Logger) private logger: winston.Logger,
+  ) {}
 
   /**
    * The name of this policy root

@@ -1,10 +1,10 @@
 export interface AppActorPolicies {
-  'approle': {
-    [key: string]: ReadonlyArray<string>
-  }
-  'developer': {
-    [key: string]: ReadonlyArray<string>
-  }
+  approle: {
+    [key: string]: ReadonlyArray<string>;
+  };
+  developer: {
+    [key: string]: ReadonlyArray<string>;
+  };
 }
 
 /* eslint-disable camelcase -- Library code style issue */
@@ -84,7 +84,6 @@ export interface VaultConfig {
  * Service for configuration details
  */
 export interface ConfigService {
-
   /**
    * Return all applications in the configuration
    */
@@ -108,7 +107,7 @@ export interface ConfigService {
   /**
    * Return a database type from a database name
    */
-  getDbType(name: string): Promise<string> ;
+  getDbType(name: string): Promise<string>;
 
   /**
    * Return the paths to the KV secret stores
@@ -120,5 +119,3 @@ export interface ConfigService {
    */
   getGroups(): Promise<GroupConfig[]>;
 }
-
-

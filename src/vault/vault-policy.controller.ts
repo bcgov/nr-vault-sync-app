@@ -1,10 +1,10 @@
 import nv from 'node-vault';
-import {inject, injectable, multiInject} from 'inversify';
-import {TYPES} from '../inversify.types';
+import { inject, injectable, multiInject } from 'inversify';
+import { TYPES } from '../inversify.types';
 import winston from 'winston';
-import {PolicyRegistrationService} from '../services/policy-registration.service';
-import HclUtil, {HlcRenderSpec} from '../util/hcl.util';
-import {PolicyRootService} from './policy-roots/policy-root.service';
+import { PolicyRegistrationService } from '../services/policy-registration.service';
+import HclUtil, { HlcRenderSpec } from '../util/hcl.util';
+import { PolicyRootService } from './policy-roots/policy-root.service';
 
 @injectable()
 /**
@@ -22,7 +22,8 @@ export default class VaultPolicyController {
     private policyRegistrationService: PolicyRegistrationService,
     @multiInject(TYPES.PolicyRootService)
     private policyRootServices: PolicyRootService<unknown>[],
-    @inject(TYPES.Logger) private logger: winston.Logger) {}
+    @inject(TYPES.Logger) private logger: winston.Logger,
+  ) {}
 
   /**
    * Syncs policies to vault
@@ -47,7 +48,7 @@ export default class VaultPolicyController {
   public async addPolicy(spec: HlcRenderSpec): Promise<void> {
     const name = this.hclUtil.renderName(spec);
     this.logger.info(`Add policy: ${name}`);
-    if (!await this.policyRegistrationService.hasRegisteredPolicy(name)) {
+    if (!(await this.policyRegistrationService.hasRegisteredPolicy(name))) {
       await this.policyRegistrationService.registerPolicy(name);
       // Using vault.write because vault.addPolicy is not encoding the name correctly
       await this.vault.write(`sys/policies/acl/${encodeURIComponent(name)}`, {
@@ -62,13 +63,18 @@ export default class VaultPolicyController {
    * @param group The policy group
    * @param partialRegistration True if not all policies were registered this run and false otherwise
    */
-  public async removeUnregisteredPolicies(group: string, partialRegistration: boolean): Promise<void> {
+  public async removeUnregisteredPolicies(
+    group: string,
+    partialRegistration: boolean,
+  ): Promise<void> {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- No typing avialable
     const policies = (await this.vault.policies()).data.policies as string[];
     try {
-      const policiesToRemove = await this.policyRegistrationService.filterPoliciesForUnregistered(
-        policies.filter((policyName: string) => policyName.startsWith(group)),
-        partialRegistration);
+      const policiesToRemove =
+        await this.policyRegistrationService.filterPoliciesForUnregistered(
+          policies.filter((policyName: string) => policyName.startsWith(group)),
+          partialRegistration,
+        );
 
       for (const name of policiesToRemove) {
         // Using vault.delete because vault.removePolicy is not encoding the name correctly

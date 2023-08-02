@@ -1,4 +1,4 @@
-import {HlcRenderSpec} from '../../util/hcl.util';
+import { HlcRenderSpec } from '../../util/hcl.util';
 
 export const VAULT_ROOT_SYSTEM = 'system';
 export const VAULT_ROOT_APPS = 'apps';

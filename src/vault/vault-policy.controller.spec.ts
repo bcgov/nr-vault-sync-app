@@ -1,9 +1,9 @@
 import nv from 'node-vault';
 import winston from 'winston';
 import VaultPolicyController from './vault-policy.controller';
-import {PolicyRegistrationService} from '../services/policy-registration.service';
-import HclUtil, {HlcRenderSpec} from '../util/hcl.util';
-import {PolicyRootService} from './policy-roots/policy-root.service';
+import { PolicyRegistrationService } from '../services/policy-registration.service';
+import HclUtil, { HlcRenderSpec } from '../util/hcl.util';
+import { PolicyRootService } from './policy-roots/policy-root.service';
 
 interface FactoryArgs {
   hclUtil?: HclUtil;
@@ -18,9 +18,9 @@ describe('vault-policy.controller', () => {
   } as unknown as nv.client;
 
   const mockLogger = {
-    info: jest.fn(() => { }),
-    error: jest.fn(() => { }),
-    debug: jest.fn(() => { }),
+    info: jest.fn(() => {}),
+    error: jest.fn(() => {}),
+    debug: jest.fn(() => {}),
   } as unknown as winston.Logger;
 
   /**
@@ -29,10 +29,15 @@ describe('vault-policy.controller', () => {
   function vpcFactory(fArgs: FactoryArgs) {
     return new VaultPolicyController(
       vault,
-      fArgs.hclUtil ? fArgs.hclUtil : {} as HclUtil,
-      fArgs.policyRegistrationService ? fArgs.policyRegistrationService : {} as PolicyRegistrationService,
-      fArgs.policyRootServices ? fArgs.policyRootServices : [] as PolicyRootService<undefined>[],
-      mockLogger);
+      fArgs.hclUtil ? fArgs.hclUtil : ({} as HclUtil),
+      fArgs.policyRegistrationService
+        ? fArgs.policyRegistrationService
+        : ({} as PolicyRegistrationService),
+      fArgs.policyRootServices
+        ? fArgs.policyRootServices
+        : ([] as PolicyRootService<undefined>[]),
+      mockLogger,
+    );
   }
 
   afterEach(() => {
@@ -41,10 +46,15 @@ describe('vault-policy.controller', () => {
 
   test('sync: No root set', async () => {
     const pRootServices = [
-      {getName: jest.fn(() => 'bob'), build: jest.fn().mockResolvedValue([1, 2])},
+      {
+        getName: jest.fn(() => 'bob'),
+        build: jest.fn().mockResolvedValue([1, 2]),
+      },
     ];
-    const vp = vpcFactory({policyRootServices: pRootServices});
-    jest.spyOn(vp, 'removeUnregisteredPolicies').mockReturnValue(Promise.resolve());
+    const vp = vpcFactory({ policyRootServices: pRootServices });
+    jest
+      .spyOn(vp, 'removeUnregisteredPolicies')
+      .mockReturnValue(Promise.resolve());
     jest.spyOn(vp, 'addPolicy').mockReturnValue(Promise.resolve());
 
     await vp.sync([]);
@@ -80,16 +90,27 @@ describe('vault-policy.controller', () => {
     expect(mockHclUtil.renderName).toHaveBeenCalledWith({});
     expect(mockLogger.info).toHaveBeenCalledTimes(1);
     expect(mockLogger.info).toHaveBeenCalledWith('Add policy: name');
-    expect(mockPolicyRegistrationService.hasRegisteredPolicy).toHaveBeenCalledTimes(1);
-    expect(mockPolicyRegistrationService.hasRegisteredPolicy).toHaveBeenCalledWith('name');
-    expect(mockPolicyRegistrationService.registerPolicy).toHaveBeenCalledTimes(1);
-    expect(mockPolicyRegistrationService.registerPolicy).toHaveBeenCalledWith('name');
+    expect(
+      mockPolicyRegistrationService.hasRegisteredPolicy,
+    ).toHaveBeenCalledTimes(1);
+    expect(
+      mockPolicyRegistrationService.hasRegisteredPolicy,
+    ).toHaveBeenCalledWith('name');
+    expect(mockPolicyRegistrationService.registerPolicy).toHaveBeenCalledTimes(
+      1,
+    );
+    expect(mockPolicyRegistrationService.registerPolicy).toHaveBeenCalledWith(
+      'name',
+    );
 
     expect(mockHclUtil.renderBody).toHaveBeenCalledTimes(1);
     expect(mockHclUtil.renderBody).toHaveBeenCalledWith({});
 
     expect(vault.write).toHaveBeenCalledTimes(1);
-    expect(vault.write).toHaveBeenCalledWith('sys/policies/acl/name', {name: 'name', policy: 'body'});
+    expect(vault.write).toHaveBeenCalledWith('sys/policies/acl/name', {
+      name: 'name',
+      policy: 'body',
+    });
   });
 
   test('addPolicy: Already registered', async () => {
@@ -111,9 +132,15 @@ describe('vault-policy.controller', () => {
     expect(mockHclUtil.renderName).toHaveBeenCalledWith({});
     expect(mockLogger.info).toHaveBeenCalledTimes(1);
     expect(mockLogger.info).toHaveBeenCalledWith('Add policy: name');
-    expect(mockPolicyRegistrationService.hasRegisteredPolicy).toHaveBeenCalledTimes(1);
-    expect(mockPolicyRegistrationService.hasRegisteredPolicy).toHaveBeenCalledWith('name');
-    expect(mockPolicyRegistrationService.registerPolicy).toHaveBeenCalledTimes(0);
+    expect(
+      mockPolicyRegistrationService.hasRegisteredPolicy,
+    ).toHaveBeenCalledTimes(1);
+    expect(
+      mockPolicyRegistrationService.hasRegisteredPolicy,
+    ).toHaveBeenCalledWith('name');
+    expect(mockPolicyRegistrationService.registerPolicy).toHaveBeenCalledTimes(
+      0,
+    );
     expect(mockHclUtil.renderBody).toHaveBeenCalledTimes(0);
     expect(vault.write).toHaveBeenCalledTimes(0);
   });

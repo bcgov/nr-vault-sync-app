@@ -1,5 +1,5 @@
 import nv from 'node-vault';
-import {vaultFactory} from './vault.factory';
+import { vaultFactory } from './vault.factory';
 
 jest.mock('node-vault');
 

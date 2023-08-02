@@ -1,15 +1,16 @@
 import 'reflect-metadata';
-import {Command} from '@oclif/command';
-import {help, vaultAddr, vaultToken} from '../flags';
+import { Command } from '@oclif/command';
+import { help, vaultAddr, vaultToken } from '../flags';
 import VaultGroupController from '../vault/vault-group.controller';
-import {bindVault, vsContainer} from '../inversify.config';
-import {TYPES} from '../inversify.types';
+import { bindVault, vsContainer } from '../inversify.config';
+import { TYPES } from '../inversify.types';
 
 /**
  * Group sync command
  */
 export default class GroupSync extends Command {
-  static description = 'Syncs external groups in Vault to connect roles with Vault policies';
+  static description =
+    'Syncs external groups in Vault to connect roles with Vault policies';
 
   static flags = {
     ...help,
@@ -21,11 +22,13 @@ export default class GroupSync extends Command {
    * Run the command
    */
   async run(): Promise<void> {
-    const {flags} = this.parse(GroupSync);
+    const { flags } = this.parse(GroupSync);
 
     this.log('Vault Group Sync');
     bindVault(flags['vault-addr'], flags['vault-token']);
 
-    await vsContainer.get<VaultGroupController>(TYPES.VaultGroupController).sync();
+    await vsContainer
+      .get<VaultGroupController>(TYPES.VaultGroupController)
+      .sync();
   }
 }

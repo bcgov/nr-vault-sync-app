@@ -1,13 +1,11 @@
 import * as fs from 'fs';
-import {VaultConfig} from '../config.service';
+import { VaultConfig } from '../config.service';
 
 jest.mock('fs');
 const mockFs = jest.mocked(fs);
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mockConfig: VaultConfig = {
-  apps: [
-    {name: 'APP-TUS', enabled: true},
-  ],
+  apps: [{ name: 'APP-TUS', enabled: true }],
   appActorDefaults: {
     approle: {
       dev: ['project-kv-read', 'project-kv-write'],
@@ -18,7 +16,7 @@ const mockConfig: VaultConfig = {
       test: ['project-kv-read'],
     },
   },
-  db: [{name: 'jasper', type: 'oracle'}],
+  db: [{ name: 'jasper', type: 'oracle' }],
   kv: ['bob'],
   groups: [
     {
@@ -33,8 +31,7 @@ mockFs.readFileSync.mockReturnValue(JSON.stringify(mockConfig));
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 mockConfig.apps[0].approle = expect.anything();
 
-import {ConfigFileService} from './config-file.service';
-
+import { ConfigFileService } from './config-file.service';
 
 describe('config-file.service', () => {
   afterEach(() => jest.restoreAllMocks());
@@ -43,10 +40,11 @@ describe('config-file.service', () => {
     new ConfigFileService();
     new ConfigFileService();
     expect(mockFs.readFileSync).toHaveBeenCalledWith(
-      expect.stringContaining('config.json'), {encoding: 'utf8'});
+      expect.stringContaining('config.json'),
+      { encoding: 'utf8' },
+    );
     expect(mockFs.readFileSync).toHaveBeenCalledTimes(1);
   });
-
 
   it('getApp', async () => {
     // Test command

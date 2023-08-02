@@ -18,4 +18,4 @@ const TYPES = {
   VaultGroupController: Symbol.for('VaultGroupController'),
 };
 
-export {TYPES};
+export { TYPES };

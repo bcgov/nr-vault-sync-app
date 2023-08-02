@@ -1,4 +1,3 @@
-
 import nv from 'node-vault';
 
 export const vault = nv({
