@@ -4,6 +4,22 @@ export const help = {
   help: flags.help({ char: 'h' }),
 };
 
+export const brokerApiUrl = {
+  'broker-api-url': flags.string({
+    default: 'https://nr-broker.apps.silver.devops.gov.bc.ca/',
+    description: 'The broker api base url',
+    env: 'BROKER_API_URL',
+  }),
+};
+
+export const brokerToken = {
+  'broker-token': flags.string({
+    required: false,
+    description: 'The broker JWT',
+    env: 'BROKER_TOKEN',
+  }),
+};
+
 export const secretShares = {
   'secret-shares': flags.integer({
     description: 'The number of shares to split the master key into',

@@ -8,7 +8,6 @@ import { vaultFactory } from './vault/vault.factory';
 import nv from 'node-vault';
 import { PolicyRegistrationMemoryService } from './services/impl/policy-registration-memory.service';
 import { PolicyRegistrationService } from './services/policy-registration.service';
-import { ConfigFileService } from './services/impl/config-file.service';
 import { ConfigService } from './services/config.service';
 import winston from 'winston';
 import VaultGroupController from './vault/vault-group.controller';
@@ -20,11 +19,16 @@ import { SystemPolicyService } from './vault/policy-roots/impl/system-policy.ser
 import { AppPolicyService } from './vault/policy-roots/impl/app-policy.service';
 import { GroupPolicyService } from './vault/policy-roots/impl/group-policy.service';
 import VaultApproleController from './vault/vault-approle.controller';
+import { ConfigBrokerService } from './services/impl/config-broker.service';
+import { BrokerApi } from './broker/broker.api';
+import { ConfigFileService } from './services/impl/config-file.service';
 
 const vsContainer = new Container();
 // Services
+vsContainer.bind<BrokerApi>(BrokerApi).to(BrokerApi);
 vsContainer.bind<AppService>(TYPES.AppService).to(AppFileService);
-vsContainer.bind<ConfigService>(TYPES.ConfigService).to(ConfigFileService);
+vsContainer.bind<ConfigService>(TYPES.ConfigService).to(ConfigBrokerService);
+vsContainer.bind<ConfigFileService>(ConfigFileService).to(ConfigFileService);
 vsContainer
   .bind<PolicyRegistrationService>(TYPES.PolicyRegistrationService)
   .to(PolicyRegistrationMemoryService);
@@ -67,6 +71,18 @@ vsContainer.bind<VaultApi>(TYPES.VaultApi).to(VaultApi);
 vsContainer.bind<winston.Logger>(TYPES.Logger).toConstantValue(logger);
 
 export { vsContainer };
+
+/**
+ * Bind Broker api to the vs container
+ * @param basePath The base api url
+ * @param token The Jira username
+ */
+export function bindBroker(apiUrl: string, token: string | undefined): void {
+  vsContainer.bind<string>(TYPES.BrokerApiUrl).toConstantValue(apiUrl);
+  if (token) {
+    vsContainer.bind<string>(TYPES.BrokerToken).toConstantValue(token);
+  }
+}
 
 /**
  * Bind vault api to the vs container

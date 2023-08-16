@@ -1,8 +1,14 @@
 import 'reflect-metadata';
 import { Command } from '@oclif/command';
-import { help, vaultAddr, vaultToken } from '../flags';
+import {
+  brokerApiUrl,
+  brokerToken,
+  help,
+  vaultAddr,
+  vaultToken,
+} from '../flags';
 import VaultGroupController from '../vault/vault-group.controller';
-import { bindVault, vsContainer } from '../inversify.config';
+import { bindBroker, bindVault, vsContainer } from '../inversify.config';
 import { TYPES } from '../inversify.types';
 
 /**
@@ -14,6 +20,8 @@ export default class GroupSync extends Command {
 
   static flags = {
     ...help,
+    ...brokerApiUrl,
+    ...brokerToken,
     ...vaultToken,
     ...vaultAddr,
   };
@@ -26,6 +34,7 @@ export default class GroupSync extends Command {
 
     this.log('Vault Group Sync');
     bindVault(flags['vault-addr'], flags['vault-token']);
+    bindBroker(flags['broker-api-url'], flags['broker-token']);
 
     await vsContainer
       .get<VaultGroupController>(TYPES.VaultGroupController)
