@@ -47,12 +47,15 @@ jobs:
       - run: ./bin/dev policy-sync
         env:
           VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
+          BROKER_TOKEN: ${{ secrets.BROKER_TOKEN }}
       - run: ./bin/dev group-sync
         env:
           VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
+          BROKER_TOKEN: ${{ secrets.BROKER_TOKEN }}
       - run: ./bin/dev approle-sync
         env:
           VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
+          BROKER_TOKEN: ${{ secrets.BROKER_TOKEN }}
       - name: Cleanup Action
         run: sh ./.github/workflows/token-cleanup-script.sh
         env:

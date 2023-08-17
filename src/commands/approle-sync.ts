@@ -1,7 +1,13 @@
 import 'reflect-metadata';
 import { Command } from '@oclif/command';
-import { help, vaultAddr, vaultToken } from '../flags';
-import { bindVault, vsContainer } from '../inversify.config';
+import {
+  brokerApiUrl,
+  brokerToken,
+  help,
+  vaultAddr,
+  vaultToken,
+} from '../flags';
+import { bindBroker, bindVault, vsContainer } from '../inversify.config';
 import { TYPES } from '../inversify.types';
 import VaultApproleController from '../vault/vault-approle.controller';
 
@@ -13,6 +19,8 @@ export default class ApproleSync extends Command {
 
   static flags = {
     ...help,
+    ...brokerApiUrl,
+    ...brokerToken,
     ...vaultToken,
     ...vaultAddr,
   };
@@ -25,6 +33,7 @@ export default class ApproleSync extends Command {
 
     this.log('Vault Approle Sync');
     bindVault(flags['vault-addr'], flags['vault-token']);
+    bindBroker(flags['broker-api-url'], flags['broker-token']);
 
     await vsContainer
       .get<VaultApproleController>(TYPES.VaultApproleController)
