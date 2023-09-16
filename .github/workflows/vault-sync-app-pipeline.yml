@@ -18,7 +18,6 @@ jobs:
     with:
       name: Test
     secrets: inherit
-    needs: Dev
 
   Prod:
     uses: bcgov-nr/vault-sync-app/.github/workflows/vault-sync-app-runner.yml@main
