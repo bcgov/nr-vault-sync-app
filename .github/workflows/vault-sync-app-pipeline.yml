@@ -13,11 +13,11 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  Dev:
-    uses: bcgov-nr/vault-sync-app/.github/workflows/vault-sync-app-runner.yml@main
-    with:
-      name: Dev
-    secrets: inherit
+  # Dev:
+  #   uses: bcgov-nr/vault-sync-app/.github/workflows/vault-sync-app-runner.yml@main
+  #   with:
+  #     name: Dev
+  #   secrets: inherit
 
   Test:
     uses: bcgov-nr/vault-sync-app/.github/workflows/vault-sync-app-runner.yml@main
