@@ -7,13 +7,6 @@
   "actions": [
     {
       "action": "package-configure",
-      "id": "configure",
-      "provision": ["token/self"],
-      "service": {
-        "name": "vsync",
-        "project": "vault",
-        "environment": "production"
-      },
       "cloud": {
         "target": {
           "account": {
@@ -27,7 +20,15 @@
             "name": "silver"
           }
         }
-      }
+      },
+      "id": "configure",
+      "provision": ["token/self"],
+      "service": {
+        "name": "vsync",
+        "project": "vault",
+        "environment": "production"
+      },
+      "vaultEnvironment": "production"
     }
   ],
   "user": {
