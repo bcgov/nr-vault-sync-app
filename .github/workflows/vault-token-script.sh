@@ -23,18 +23,18 @@ if [ "$(echo $RESPONSE | jq '.error')" != "null" ]; then
     echo $RESPONSE | jq '.'
     exit 1
 fi
-echo $RESPONSE
+
 echo "===> Save intention tokens"
 # Save intention token for later
 INTENTION_TOKEN=$(echo $RESPONSE | jq -r '.token')
 echo "::add-mask::$INTENTION_TOKEN"
-# echo "INTENTION_TOKEN=$INTENTION_TOKEN" >> $GITHUB_ENV
+echo "INTENTION_TOKEN=$INTENTION_TOKEN" >> $GITHUB_ENV
 
 
 # Get token for provisioning a db access
 ACTION_TOKEN=$(echo $RESPONSE | jq -r '.actions.configure.token')
 echo "::add-mask::$ACTION_TOKEN"
-# echo "ACTION_TOKEN=$ACTION_TOKEN" >> $GITHUB_ENV
+echo "ACTION_TOKEN=$ACTION_TOKEN" >> $GITHUB_ENV
 
 echo "===> Provision Vault token"
 ACTION_START=$(curl -s -X POST $BROKER_ADDR/v1/intention/action/start -H 'X-Broker-Token: '"$ACTION_TOKEN"'')
@@ -53,6 +53,5 @@ echo $VAULT_ADDR/v1/sys/wrapping/unwrap
 VAULT_TOKEN_JSON=$(curl -s -X POST $VAULT_ADDR/v1/sys/wrapping/unwrap -H 'X-Vault-Token: '"$WRAPPED_VAULT_TOKEN"'')
 
 VAULT_TOKEN=$(echo -n $VAULT_TOKEN_JSON | jq -r '.auth.client_token')
-echo $VAULT_TOKEN
-# echo "::add-mask::$VAULT_TOKEN"
-# echo "VAULT_TOKEN=$VAULT_TOKEN" >> $GITHUB_ENV
+echo "::add-mask::$VAULT_TOKEN"
+echo "VAULT_TOKEN=$VAULT_TOKEN" >> $GITHUB_ENV
