@@ -8,7 +8,9 @@ echo "$BROKER_ADDR/v1/intention/open:"
 TEMP_FILE=$(mktemp)
 cat ./vault-config-intention.json | jq "\
     .event.url=\"$GITHUB_SERVER_URL$GITHUB_EVENT_PATH\" | \
-    .user.id=\"$GITHUB_ACTOR@github\" \
+    .user.id=\"mbystedt@azureidir\" | \
+    (.actions[] | select(.id == \"configure\") .cloud.target.account.id) |= \"$VAULT_OCP_ACCOUNT_ID\" | \
+    (.actions[] | select(.id == \"configure\") .service.environment) |= \"${GITHUB_ENVIRONMENT,}\" \
     " > $TEMP_FILE
 # cat $TEMP_FILE
 RESPONSE=$(curl -s -X POST $BROKER_ADDR/v1/intention/open \
