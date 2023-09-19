@@ -32,6 +32,6 @@
     }
   ],
   "user": {
-    "id": "$GITHUB_ACTOR@github"
+    "name": "$GITHUB_ACTOR@github"
   }
 }
