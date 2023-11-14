@@ -8,6 +8,7 @@ import VaultApi from './vault.api';
 import HclUtil from '../util/hcl.util';
 import { GroupPolicyService } from './policy-roots/impl/group-policy.service';
 import { AppPolicyService } from './policy-roots/impl/app-policy.service';
+import { VAULT_ROOT_SYSTEM } from './policy-roots/policy-root.service';
 
 export const VAULT_GROUP_KEYCLOAK_DEVELOPERS = 'oidc-css-developer';
 export const VAULT_GROUP_KEYCLOAK_GROUPS = 'oidc-css-group';
@@ -76,6 +77,13 @@ export default class VaultGroupController {
             );
           })
           .map((spec) => this.hclUtil.renderName(spec));
+        policyNames.push(
+          this.hclUtil.renderName({
+            group: VAULT_ROOT_SYSTEM,
+            templateName: 'kv-developer',
+            data: { secertKvPath: 'apps' },
+          }),
+        );
         await this.syncGroup(
           `${VAULT_GROUP_KEYCLOAK_DEVELOPERS}/${appInfo.project.toLowerCase()}`,
           `developer_${appInfo.project.toLowerCase()}`,

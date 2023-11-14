@@ -3,6 +3,10 @@
 
 <% if (locals.kv) { %>
 
+path "<%= kv %>/config" {
+  capabilities = ["read"]
+}
+
 path "<%= kv %>/metadata/*" {
   capabilities = ["list", "read", "delete"]
 }

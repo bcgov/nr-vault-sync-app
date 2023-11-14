@@ -84,6 +84,11 @@ export class SystemPolicyService implements PolicyRootService<undefined> {
         templateName: 'kv-admin',
         data: { secertKvPath },
       });
+      kvSpecs.push({
+        group: VAULT_ROOT_SYSTEM,
+        templateName: 'kv-developer',
+        data: { secertKvPath },
+      });
     }
     return kvSpecs;
   }
