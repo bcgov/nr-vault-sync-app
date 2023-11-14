@@ -6,7 +6,15 @@ path "sys/policy/*" {
     policy = "read"
 }
 
+# Read sanitized state
+path "/sys/config/state/sanitized" {
+    policy = "read"
+}
+
 # Grant permissions on user specific paths (data, destroy, metadata)
+path "user/config" {
+  capabilities = ["read"]
+}
 path "user/data/{{identity.entity.aliases.<%= global_oidc_accessor %>.metadata.email}}" {
     capabilities = [ "create", "update", "read", "delete" ]
 }
