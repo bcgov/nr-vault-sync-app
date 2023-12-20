@@ -4,3 +4,7 @@
 path "<%= secertKvPath %>/+/*" {
   capabilities = ["create", "read", "update", "delete", "list"]
 }
+
+path "<%= secertKvPath %>/config" {
+  capabilities = ["read", "update"]
+}
