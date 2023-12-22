@@ -63,3 +63,4 @@ jobs:
         uses: bcgov-nr/action-broker-intention-close@main
         with:
           intention_token: ${{ env.INTENTION_TOKEN }}
+          broker_url: ${{ vars.BROKER_ADDR }}
