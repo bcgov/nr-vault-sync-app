@@ -32,7 +32,7 @@ jobs:
           cache: 'npm'
       - run: npm ci
       # Runs script to obtain Vault token
-      - name: Run Intention Script
+      - name: Build Intention
         run: sh ./.github/workflows/broker-intention.sh
         env:
           VAULT_OCP_ACCOUNT_ID: ${{ vars.VAULT_OCP_ACCOUNT_ID }}
@@ -42,6 +42,11 @@ jobs:
         uses: bcgov-nr/action-broker-intention-open@main
         with:
           broker_jwt: ${{ secrets.BROKER_JWT }}
+          broker_url: ${{ vars.BROKER_ADDR }}
+      - name: Start configure action
+        uses: bcgov-nr/action-broker-action-start@main
+        with:
+          action_token: ${{ env.ACTION_TOKEN_CONFIGURE }}
           broker_url: ${{ vars.BROKER_ADDR }}
       - name: Run Vault Script
         run: sh ./.github/workflows/vault-token-script.sh
@@ -66,6 +71,11 @@ jobs:
         env:
           BROKER_ADDR: ${{ vars.BROKER_ADDR }}
           VAULT_ADDR: ${{ vars.VAULT_ADDR }}
+      - name: End configure action
+        uses: bcgov-nr/action-broker-action-end@main
+        with:
+          action_token: ${{ env.ACTION_TOKEN_CONFIGURE }}
+          broker_url: ${{ vars.BROKER_ADDR }}
       - name: Close intention
         uses: bcgov-nr/action-broker-intention-close@main
         with:

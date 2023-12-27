@@ -8,5 +8,3 @@ curl \
     --header "X-Vault-Token: $VAULT_TOKEN" \
     --request POST \
     $VAULT_ADDR/v1/auth/token/revoke-self
-
-ACTION_END=$(curl -s -X POST $BROKER_ADDR/v1/intention/action/end -H 'X-Broker-Token: '"$ACTION_TOKEN"'')

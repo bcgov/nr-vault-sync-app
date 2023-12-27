@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 echo "===> Provision Vault token"
-ACTION_START=$(curl -s -X POST $BROKER_ADDR/v1/intention/action/start -H 'X-Broker-Token: '"$ACTION_TOKEN_CONFIGURE"'')
 # Get wrapped id for db access
 WRAPPED_VAULT_TOKEN_JSON=$(curl -s -X POST $BROKER_ADDR/v1/provision/token/self -H 'X-Broker-Token: '"$ACTION_TOKEN_CONFIGURE"'' -H 'X-Vault-Role-Id: '"$PROVISION_ROLE_ID"'')
 if [ "$(echo $WRAPPED_VAULT_TOKEN_JSON | jq '.error')" != "null" ]; then
