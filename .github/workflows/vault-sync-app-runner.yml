@@ -43,11 +43,8 @@ jobs:
         with:
           broker_jwt: ${{ secrets.BROKER_JWT }}
           broker_url: ${{ vars.BROKER_ADDR }}
-      - name: Start configure action
-        uses: bcgov-nr/action-broker-action-start@main
-        with:
-          action_token: ${{ env.ACTION_TOKEN_CONFIGURE }}
-          broker_url: ${{ vars.BROKER_ADDR }}
+          ttl: 600
+          quickstart: true
       - name: Vault login
         uses: bcgov-nr/action-broker-vault-login@main
         with:
@@ -69,9 +66,9 @@ jobs:
           BROKER_TOKEN: ${{ secrets.BROKER_TOKEN }}
       - name: Revoke Vault Token Action
         uses: bcgov-nr/action-broker-vault-revoke@main
-        env:
-          VAULT_TOKEN: ${{ env.VAULT_TOKEN }}
-          VAULT_URL: ${{ vars.VAULT_ADDR }}
+        with:
+          vault_token: ${{ env.VAULT_TOKEN }}
+          vault_url: ${{ vars.VAULT_ADDR }}
       - name: End configure action
         uses: bcgov-nr/action-broker-action-end@main
         with:
