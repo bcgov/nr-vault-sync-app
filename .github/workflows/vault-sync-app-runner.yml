@@ -32,16 +32,29 @@ jobs:
           cache: 'npm'
       - run: npm ci
       # Runs script to obtain Vault token
-      - name: Run Vault Script
-        run: sh ./.github/workflows/vault-token-script.sh
+      - name: Build Intention
+        run: sh ./.github/workflows/broker-intention.sh
         env:
-          BROKER_ADDR: ${{ vars.BROKER_ADDR }}
-          BROKER_JWT: ${{ secrets.BROKER_JWT }}
-          PROVISION_ROLE_ID: ${{ secrets.PROVISION_ROLE_ID }}
-          VAULT_ADDR: ${{ vars.VAULT_ADDR }}
           VAULT_OCP_ACCOUNT_ID: ${{ vars.VAULT_OCP_ACCOUNT_ID }}
           GITHUB_EVENT_PATH: ${{ github.event_path }}
           GITHUB_ENVIRONMENT: ${{ inputs.name }}
+      - name: Open intention
+        uses: bcgov-nr/action-broker-intention-open@v1
+        with:
+          broker_jwt: ${{ secrets.BROKER_JWT }}
+          broker_url: ${{ vars.BROKER_ADDR }}
+      - name: Start configure action
+        uses: bcgov-nr/action-broker-action-start@v1
+        with:
+          action_token: ${{ env.ACTION_TOKEN_CONFIGURE }}
+          broker_url: ${{ vars.BROKER_ADDR }}
+      - name: Vault login
+        uses: bcgov-nr/action-broker-vault-login@v1
+        with:
+          action_token: ${{ env.ACTION_TOKEN_CONFIGURE }}
+          broker_url: ${{ vars.BROKER_ADDR }}
+          role_id: ${{ secrets.PROVISION_ROLE_ID }}
+          vault_url: ${{ vars.VAULT_ADDR }}
       - run: ./bin/dev policy-sync
         env:
           VAULT_ADDR: ${{ vars.VAULT_ADDR }}
@@ -54,8 +67,18 @@ jobs:
         env:
           VAULT_ADDR: ${{ vars.VAULT_ADDR }}
           BROKER_TOKEN: ${{ secrets.BROKER_TOKEN }}
-      - name: Cleanup Action
-        run: sh ./.github/workflows/token-cleanup-script.sh
-        env:
-          BROKER_ADDR: ${{ vars.BROKER_ADDR }}
-          VAULT_ADDR: ${{ vars.VAULT_ADDR }}
+      - name: Revoke Vault Token Action
+        uses: bcgov-nr/action-broker-vault-revoke@v1
+        with:
+          vault_token: ${{ env.VAULT_TOKEN }}
+          vault_url: ${{ vars.VAULT_ADDR }}
+      - name: End configure action
+        uses: bcgov-nr/action-broker-action-end@v1
+        with:
+          action_token: ${{ env.ACTION_TOKEN_CONFIGURE }}
+          broker_url: ${{ vars.BROKER_ADDR }}
+      - name: Close intention
+        uses: bcgov-nr/action-broker-intention-close@v1
+        with:
+          intention_token: ${{ env.INTENTION_TOKEN }}
+          broker_url: ${{ vars.BROKER_ADDR }}
