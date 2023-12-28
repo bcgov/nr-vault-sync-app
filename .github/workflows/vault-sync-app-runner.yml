@@ -48,12 +48,13 @@ jobs:
         with:
           action_token: ${{ env.ACTION_TOKEN_CONFIGURE }}
           broker_url: ${{ vars.BROKER_ADDR }}
-      - name: Run Vault Script
-        run: sh ./.github/workflows/vault-token-script.sh
-        env:
-          BROKER_ADDR: ${{ vars.BROKER_ADDR }}
-          PROVISION_ROLE_ID: ${{ secrets.PROVISION_ROLE_ID }}
-          VAULT_ADDR: ${{ vars.VAULT_ADDR }}
+      - name: Vault login
+        uses: bcgov-nr/action-broker-vault-login@main
+        with:
+          action_token: ${{ env.ACTION_TOKEN_CONFIGURE }}
+          broker_url: ${{ vars.BROKER_ADDR }}
+          role_id: ${{ secrets.PROVISION_ROLE_ID }}
+          vault_url: ${{ vars.VAULT_ADDR }}
       - run: ./bin/dev policy-sync
         env:
           VAULT_ADDR: ${{ vars.VAULT_ADDR }}
@@ -66,11 +67,11 @@ jobs:
         env:
           VAULT_ADDR: ${{ vars.VAULT_ADDR }}
           BROKER_TOKEN: ${{ secrets.BROKER_TOKEN }}
-      - name: Cleanup Action
-        run: sh ./.github/workflows/token-cleanup-script.sh
+      - name: Revoke Vault Token Action
+        uses: bcgov-nr/action-broker-vault-revoke@main
         env:
-          BROKER_ADDR: ${{ vars.BROKER_ADDR }}
-          VAULT_ADDR: ${{ vars.VAULT_ADDR }}
+          VAULT_TOKEN: ${{ env.VAULT_TOKEN }}
+          VAULT_URL: ${{ vars.VAULT_ADDR }}
       - name: End configure action
         uses: bcgov-nr/action-broker-action-end@main
         with:
