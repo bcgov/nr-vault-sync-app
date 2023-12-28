@@ -43,8 +43,11 @@ jobs:
         with:
           broker_jwt: ${{ secrets.BROKER_JWT }}
           broker_url: ${{ vars.BROKER_ADDR }}
-          ttl: 600
-          quickstart: true
+      - name: Start configure action
+        uses: bcgov-nr/action-broker-action-start@main
+        with:
+          action_token: ${{ env.ACTION_TOKEN_CONFIGURE }}
+          broker_url: ${{ vars.BROKER_ADDR }}
       - name: Vault login
         uses: bcgov-nr/action-broker-vault-login@main
         with:
