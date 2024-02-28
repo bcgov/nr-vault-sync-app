@@ -2,7 +2,6 @@ import { Container } from 'inversify';
 import { logger } from './logger';
 import { TYPES } from './inversify.types';
 import { AppService } from './services/app.service';
-import { AppFileService } from './services/impl/app-file.service';
 import VaultPolicyController from './vault/vault-policy.controller';
 import { vaultFactory } from './vault/vault.factory';
 import nv from 'node-vault';
@@ -22,11 +21,12 @@ import VaultApproleController from './vault/vault-approle.controller';
 import { ConfigBrokerService } from './services/impl/config-broker.service';
 import { BrokerApi } from './broker/broker.api';
 import { ConfigFileService } from './services/impl/config-file.service';
+import { AppBrokerService } from './services/impl/app-broker.service';
 
 const vsContainer = new Container();
 // Services
 vsContainer.bind<BrokerApi>(BrokerApi).to(BrokerApi);
-vsContainer.bind<AppService>(TYPES.AppService).to(AppFileService);
+vsContainer.bind<AppService>(TYPES.AppService).to(AppBrokerService);
 vsContainer.bind<ConfigService>(TYPES.ConfigService).to(ConfigBrokerService);
 vsContainer.bind<ConfigFileService>(ConfigFileService).to(ConfigFileService);
 vsContainer

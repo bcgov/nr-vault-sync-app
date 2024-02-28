@@ -1,29 +1,22 @@
 import { inject, injectable } from 'inversify';
 import { Application, AppService } from '../app.service';
-import * as fs from 'fs';
-import * as path from 'path';
-import { TYPES } from '../../inversify.types';
 import { AppConfig, ConfigService } from '../config.service';
+import { BrokerApi } from '../../broker/broker.api';
+import { TYPES } from '../../inversify.types';
 
 @injectable()
 /**
  * A file based app service implementation
  */
-export class AppFileService implements AppService {
-  private static readonly applicationPath = path.join(
-    __dirname,
-    '../../../config',
-    'applications.json',
-  );
-  private static readonly applications = JSON.parse(
-    fs.readFileSync(AppFileService.applicationPath, { encoding: 'utf8' }),
-  ) as Application[];
-
+export class AppBrokerService implements AppService {
   /**
    * Construct the app service
    * @param config The application config service
    */
-  constructor(@inject(TYPES.ConfigService) private config: ConfigService) {}
+  constructor(
+    private brokerApi: BrokerApi,
+    @inject(TYPES.ConfigService) private config: ConfigService,
+  ) {}
 
   /**
    * Gets all apps
@@ -35,7 +28,8 @@ export class AppFileService implements AppService {
       {},
     );
 
-    const decoratedApps = AppFileService.applications
+    const applications = await this.brokerApi.getProjectServicesAsApps();
+    const decoratedApps = applications
       .filter(
         (app: Application) =>
           app.app in appConfigObj && appConfigObj[app.app].enabled,
@@ -55,9 +49,8 @@ export class AppFileService implements AppService {
    */
   public async getApp(appName: string): Promise<Application> {
     const appConfig = await this.config.getApp(appName);
-    const app = AppFileService.applications.find(
-      (app: Application) => app.app === appName,
-    );
+    const applications = await this.brokerApi.getProjectServicesAsApps();
+    const app = applications.find((app: Application) => app.app === appName);
     if (app && appConfig && appConfig.enabled) {
       return this.decorateApp(app, appConfig);
     }
