@@ -48,7 +48,13 @@ export class SystemPolicyService implements PolicyRootService<undefined> {
   public async buildSystem(): Promise<HlcRenderSpec[]> {
     this.logger.debug(`Build system - global`);
     return [
-      { group: VAULT_ROOT_SYSTEM, templateName: 'admin-super' },
+      {
+        group: VAULT_ROOT_SYSTEM,
+        templateName: 'admin-super',
+        data: {
+          kvPaths: await this.config.getKvStores(),
+        },
+      },
       { group: VAULT_ROOT_SYSTEM, templateName: 'admin-general' },
       { group: VAULT_ROOT_SYSTEM, templateName: 'admin-token' },
       { group: VAULT_ROOT_SYSTEM, templateName: 'admin-audit-hash' },
