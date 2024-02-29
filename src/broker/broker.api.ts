@@ -74,7 +74,7 @@ export class BrokerApi {
           applicationArr.push({
             app: service.name,
             project: project.name,
-            env: service.env,
+            env: service.shortEnv,
           });
         }
       }

@@ -149,7 +149,7 @@ export default class VaultApproleController {
   public async createUpdateRoles(approleDict: ApproleDict): Promise<void> {
     for (const role of Object.keys(approleDict)) {
       const ar = approleDict[role];
-      this.logger.debug(`Create/update: ${role}`);
+      this.logger.info(`Add approle: ${role}`);
       // TODO: Use API directly to send all parameters
       await this.vault.addApproleRole({
         role_name: ar.role_name,
@@ -182,6 +182,7 @@ export default class VaultApproleController {
       if (registeredRoles.has(eRole)) {
         continue;
       }
+      this.logger.info(`Remove approle: ${eRole}`);
       await this.vault.deleteApproleRole({
         mount_point: VAULT_APPROLE_MOUNT_POINT,
         role_name: eRole,
