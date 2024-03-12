@@ -82,30 +82,6 @@ export class ConfigFileService implements ConfigService {
     );
     /* eslint-enable camelcase */
   }
-
-  /**
-   * Return all applications in the configuration
-   */
-  getApps(): Promise<AppConfig[]> {
-    return Promise.resolve(
-      ConfigFileService.config.apps.map((app) =>
-        ConfigFileService.applyAppConfigDefaults(app),
-      ),
-    );
-  }
-
-  /**
-   * Return single applications in the configuration
-   */
-  getApp(appName: string): Promise<AppConfig | undefined> {
-    const app = ConfigFileService.config.apps.find(
-      (app) => app.name === appName,
-    );
-    return Promise.resolve(
-      app ? ConfigFileService.applyAppConfigDefaults(app) : app,
-    );
-  }
-
   /**
    * Return default policies to grant each type of actor
    */

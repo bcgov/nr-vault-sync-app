@@ -85,16 +85,6 @@ export interface VaultConfig {
  */
 export interface ConfigService {
   /**
-   * Return all applications in the configuration
-   */
-  getApps(): Promise<AppConfig[]>;
-
-  /**
-   * Return single applications in the configuration
-   */
-  getApp(appName: string): Promise<AppConfig | undefined>;
-
-  /**
    * Return default policies to grant each type of actor
    */
   getAppActorDefaults(): Promise<AppActorPolicies>;
