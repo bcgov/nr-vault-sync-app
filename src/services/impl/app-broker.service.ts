@@ -3,6 +3,14 @@ import { Application, AppService } from '../app.service';
 import { AppConfig, ConfigService } from '../config.service';
 import { BrokerApi } from '../../broker/broker.api';
 import { TYPES } from '../../inversify.types';
+import merge from 'merge-deep';
+
+const periodLookup = {
+  hourly: 3600,
+  bidaily: 43200,
+  daily: 86400,
+  weekly: 604800,
+};
 
 @injectable()
 /**
@@ -22,25 +30,15 @@ export class AppBrokerService implements AppService {
    * Gets all apps
    */
   public async getAllApps(): Promise<Application[]> {
-    const appConfigArr = await this.config.getApps();
-    const appConfigObj = appConfigArr.reduce<{ [key: string]: AppConfig }>(
-      (o, config) => ({ ...o, [config.name]: config }),
-      {},
-    );
-
     const applications = await this.brokerApi.getProjectServicesAsApps();
     const decoratedApps = applications
-      .filter(
-        (app: Application) =>
-          app.app in appConfigObj && appConfigObj[app.app].enabled,
-      )
-      .map((app: Application) => this.decorateApp(app, appConfigObj[app.app]));
-
-    if (decoratedApps.length !== appConfigArr.length) {
-      throw new Error(
-        `Configured app(s) could not be found. Check config. App names should be lowercase.`,
-      );
-    }
+      .filter((app: Application) => app.config?.enabled)
+      .map((app: Application) => {
+        if (app.config) {
+          app.config = AppBrokerService.applyAppConfigDefaults(app.config);
+        }
+        return app;
+      });
     return decoratedApps;
   }
 
@@ -48,25 +46,63 @@ export class AppBrokerService implements AppService {
    * Gets a specific app
    */
   public async getApp(appName: string): Promise<Application> {
-    const appConfig = await this.config.getApp(appName);
     const applications = await this.brokerApi.getProjectServicesAsApps();
     const app = applications.find((app: Application) => app.app === appName);
-    if (app && appConfig && appConfig.enabled) {
-      return this.decorateApp(app, appConfig);
+    if (app?.config?.enabled) {
+      app.config = AppBrokerService.applyAppConfigDefaults(app.config);
+      return app;
     }
     throw new Error(`App '${appName}' does not exist or is not enabled`);
   }
 
   /**
-   * Decorates the application info with config information.
-   * @param app The application info
-   * @param appConfig The application config
-   * @returns The decorated application info
+   * Apply configuration defaults to the app
+   * @param app The application config to apply defaults to
    */
-  private decorateApp(app: Application, appConfig: AppConfig): Application {
-    return {
-      ...app,
-      config: appConfig,
-    };
+  private static applyAppConfigDefaults(app: AppConfig): AppConfig {
+    const tokenPeriodDefault =
+      app.policyOptions?.tokenPeriod &&
+      periodLookup[app.policyOptions?.tokenPeriod]
+        ? periodLookup[app.policyOptions?.tokenPeriod]
+        : periodLookup['daily'];
+    /* eslint-disable camelcase -- Library code style issue */
+    return merge(
+      {
+        approle: {
+          // Vault defaults -- https://www.vaultproject.io/api/auth/approle
+          ...{
+            enabled: false,
+            bind_secret_id: true,
+            secret_id_bound_cidrs: '',
+            secret_id_num_uses: 0,
+            secret_id_ttl: 0,
+            enable_local_secret_ids: false,
+            token_ttl: 0,
+            token_max_ttl: 0,
+            token_policies: '',
+            token_bound_cidrs: '',
+            token_explicit_max_ttl: 0,
+            token_no_default_policy: false,
+            token_num_uses: 0,
+            token_period: 0,
+            token_type: '',
+          },
+          // VS defaults
+          ...{
+            secret_id_ttl: periodLookup['hourly'],
+            token_period: tokenPeriodDefault,
+            secret_id_num_uses: 1,
+            options: {
+              project: false,
+              read: true,
+              write: false,
+            },
+            role_name: '',
+          },
+        },
+      },
+      app,
+    );
+    /* eslint-enable camelcase */
   }
 }

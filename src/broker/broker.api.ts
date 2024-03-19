@@ -75,6 +75,7 @@ export class BrokerApi {
             app: service.name,
             project: project.name,
             env: service.shortEnv,
+            config: service.vaultConfig,
           });
         }
       }

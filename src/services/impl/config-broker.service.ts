@@ -1,7 +1,6 @@
 import { injectable } from 'inversify';
 import {
   AppActorPolicies,
-  AppConfig,
   ConfigService,
   DbConfig,
   GroupConfig,
@@ -23,12 +22,6 @@ export class ConfigBrokerService implements ConfigService {
     private config: ConfigFileService,
   ) {}
 
-  async getApps(): Promise<AppConfig[]> {
-    return this.config.getApps();
-  }
-  async getApp(appName: string): Promise<AppConfig | undefined> {
-    return this.config.getApp(appName);
-  }
   getAppActorDefaults(): Promise<AppActorPolicies> {
     return this.config.getAppActorDefaults();
   }

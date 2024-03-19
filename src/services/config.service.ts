@@ -68,8 +68,6 @@ export interface GroupConfig {
 }
 
 export interface VaultConfig {
-  /** Application configuration */
-  apps: AppConfig[];
   /** Per-environment defaults for policies to grant each type of actor */
   appActorDefaults: AppActorPolicies;
   /** Array of database secret engines. */
@@ -84,16 +82,6 @@ export interface VaultConfig {
  * Service for configuration details
  */
 export interface ConfigService {
-  /**
-   * Return all applications in the configuration
-   */
-  getApps(): Promise<AppConfig[]>;
-
-  /**
-   * Return single applications in the configuration
-   */
-  getApp(appName: string): Promise<AppConfig | undefined>;
-
   /**
    * Return default policies to grant each type of actor
    */

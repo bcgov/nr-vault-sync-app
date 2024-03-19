@@ -46,20 +46,19 @@ export default class VaultGroupController {
    * Sync app groups. This is specifically for developers.
    */
   public async syncAppGroups(): Promise<void> {
-    const apps = await this.config.getApps();
+    const apps = await this.appService.getAllApps();
     const defaultDevAppGroup = (await this.config.getAppActorDefaults())
       .developer;
 
     const projectSet = new Set();
     for (const app of apps) {
       try {
-        const appInfo = await this.appService.getApp(app.name);
-        const specs = await this.appRootService.build(appInfo);
+        const specs = await this.appRootService.build(app);
 
-        if (projectSet.has(appInfo.project)) {
+        if (projectSet.has(app.project)) {
           continue;
         }
-        projectSet.add(appInfo.project);
+        projectSet.add(app.project);
         const policyNames = specs
           .filter((spec) => {
             if (!spec.data) {
@@ -67,8 +66,8 @@ export default class VaultGroupController {
             }
             const env = spec.data.environment as string;
             const templateNames =
-              app.actor?.developer && app.actor?.developer[env]
-                ? app.actor?.developer[env]
+              app.config?.actor?.developer && app.config?.actor?.developer[env]
+                ? app.config?.actor?.developer[env]
                 : defaultDevAppGroup[env];
             return (
               spec.data &&
@@ -85,12 +84,12 @@ export default class VaultGroupController {
           }),
         );
         await this.syncGroup(
-          `${VAULT_GROUP_KEYCLOAK_DEVELOPERS}/${appInfo.project.toLowerCase()}`,
-          `developer_${appInfo.project.toLowerCase()}`,
+          `${VAULT_GROUP_KEYCLOAK_DEVELOPERS}/${app.project.toLowerCase()}`,
+          `developer_${app.project.toLowerCase()}`,
           policyNames,
         );
       } catch (error) {
-        this.logger.error(`Error syncing dev app group: ${app.name}`);
+        this.logger.error(`Error syncing dev app group: ${app.app}`);
       }
     }
   }
