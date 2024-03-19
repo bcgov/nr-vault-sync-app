@@ -5,7 +5,6 @@ jest.mock('fs');
 const mockFs = jest.mocked(fs);
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mockConfig: VaultConfig = {
-  apps: [{ name: 'APP-TUS', enabled: true }],
   appActorDefaults: {
     approle: {
       dev: ['project-kv-read', 'project-kv-write'],
@@ -27,9 +26,6 @@ const mockConfig: VaultConfig = {
   ],
 };
 mockFs.readFileSync.mockReturnValue(JSON.stringify(mockConfig));
-// For purposes of testing, we just care that it exists
-// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-mockConfig.apps[0].approle = expect.anything();
 
 import { ConfigFileService } from './config-file.service';
 
@@ -44,30 +40,6 @@ describe('config-file.service', () => {
       { encoding: 'utf8' },
     );
     expect(mockFs.readFileSync).toHaveBeenCalledTimes(1);
-  });
-
-  it('getApp', async () => {
-    // Test command
-    const cfs = new ConfigFileService();
-    const rVal = await cfs.getApp('APP-TUS');
-
-    expect(rVal).toEqual(mockConfig.apps[0]);
-  });
-
-  it('getApp - Unknown', async () => {
-    // Test command
-    const cfs = new ConfigFileService();
-    const rVal = await cfs.getApp('APP-UNK');
-
-    expect(rVal).toEqual(undefined);
-  });
-
-  it('getApps', async () => {
-    // Test command
-    const cfs = new ConfigFileService();
-    const rVal = await cfs.getApps();
-
-    expect(rVal).toEqual(mockConfig.apps);
   });
 
   it('getAppActorDefaults', async () => {

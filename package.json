@@ -9,9 +9,10 @@
   "dependencies": {
     "@oclif/command": "^1.8.36",
     "@oclif/config": "^1.18.17",
+    "@oclif/core": "^3.25.3",
     "@oclif/plugin-help": "^6.0.18",
     "@types/ejs": "^3.1.5",
-    "axios": "^1.6.7",
+    "axios": "^1.6.8",
     "ejs": "^3.1.9",
     "inversify": "^6.0.2",
     "merge-deep": "^3.0.3",
@@ -26,8 +27,8 @@
     "@types/merge-deep": "^3.0.3",
     "@types/node": "^20.11.26",
     "@types/request": "^2.48.12",
-    "@typescript-eslint/eslint-plugin": "^7.2.0",
-    "@typescript-eslint/parser": "^7.2.0",
+    "@typescript-eslint/eslint-plugin": "^7.3.1",
+    "@typescript-eslint/parser": "^7.3.1",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-jest": "^27.9.0",
@@ -36,7 +37,7 @@
     "rimraf": "^3.0.2",
     "ts-jest": "^29.1.2",
     "ts-node": "^10.9.2",
-    "typescript": "^5.4.2"
+    "typescript": "^5.3.3"
   },
   "engines": {
     "node": ">=8.0.0"

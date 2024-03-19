@@ -68,8 +68,6 @@ export interface GroupConfig {
 }
 
 export interface VaultConfig {
-  /** Application configuration */
-  apps: AppConfig[];
   /** Per-environment defaults for policies to grant each type of actor */
   appActorDefaults: AppActorPolicies;
   /** Array of database secret engines. */

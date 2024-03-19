@@ -101,16 +101,12 @@ export class SystemPolicyService implements PolicyRootService<undefined> {
   }
 
   private async restrictedBrokerAppPaths(): Promise<string[]> {
-    const brokerApps = (await this.config.getApps())
-      .filter((app) => app.approle)
-      .filter((app) => app.brokerGlobal);
+    const brokerApps = (await this.appService.getAllApps())
+      .filter((app) => app.config?.approle)
+      .filter((app) => app.config?.brokerGlobal);
     const paths: string[] = [];
     for (const app of brokerApps) {
-      paths.push(
-        `${(await this.appService.getApp(app.name)).project.toLowerCase()}_${
-          app.name
-        }_*`,
-      );
+      paths.push(`${app.project.toLowerCase()}_${app.app}_*`);
     }
     return paths;
   }
