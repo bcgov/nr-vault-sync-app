@@ -7,4 +7,4 @@ COPY . ./
 RUN npm ci && \
     npm run build
 
-ENTRYPOINT ["./bin/run"]
+ENTRYPOINT ["./bin/run.js"]
