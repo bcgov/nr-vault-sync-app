@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { Command } from '@oclif/command';
+import { Command } from '@oclif/core';
 import {
   brokerApiUrl,
   brokerToken,
@@ -31,7 +31,7 @@ export default class PolicySync extends Command {
    * Run the command
    */
   async run(): Promise<void> {
-    const { flags } = this.parse(PolicySync);
+    const { flags } = await this.parse(PolicySync);
     this.log('Vault Policy Sync');
     bindVault(flags['vault-addr'], flags['vault-token']);
     bindBroker(flags['broker-api-url'], flags['broker-token']);

@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { Command } from '@oclif/command';
+import { Command } from '@oclif/core';
 import * as fs from 'fs';
 import { vaultFactory } from '../vault/vault.factory';
 import {
@@ -25,13 +25,11 @@ export default class Init extends Command {
     ...vaultAddr,
   };
 
-  static args = [{ name: 'vault-addr' }, { name: 'vault-token' }];
-
   /**
    * Run the command
    */
   async run(): Promise<void> {
-    const { flags } = this.parse(Init);
+    const { flags } = await this.parse(Init);
     const vault = vaultFactory(flags['vault-addr'], flags['vault-token']);
     const { initialized, version } = (await vault.health()) as {
       initialized: boolean;
