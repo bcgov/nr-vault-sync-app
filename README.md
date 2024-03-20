@@ -59,8 +59,8 @@ vault secrets enable -path=apps -version=2 kv
 $ npm install -g vstool
 $ vstool COMMAND
 running command...
-$ vstool (-v|--version|version)
-vstool/1.0.0 darwin-x64 node-v17.8.0
+$ vstool (--version)
+vstool/1.0.0 darwin-x64 node-v20.11.1
 $ vstool --help [COMMAND]
 USAGE
   $ vstool COMMAND
@@ -83,7 +83,7 @@ $ ./bin/dev.js (-v|--version|version)
 * [`vstool group-sync`](#vstool-group-sync)
 * [`vstool health`](#vstool-health)
 * [`vstool help [COMMAND]`](#vstool-help-command)
-* [`vstool init [VAULT-ADDR] [VAULT-TOKEN]`](#vstool-init-vault-addr-vault-token)
+* [`vstool init`](#vstool-init)
 * [`vstool policy-sync`](#vstool-policy-sync)
 
 ## `vstool approle-sync`
@@ -92,12 +92,18 @@ Syncs approles in Vault
 
 ```
 USAGE
-  $ vstool approle-sync
+  $ vstool approle-sync [-h] [--broker-api-url <value>] [--broker-token <value>] [--vault-token <value>]
+    [--vault-addr <value>]
 
-OPTIONS
-  -h, --help                 show CLI help
-  --vault-addr=vault-addr    [default: http://127.0.0.1:8200] The vault address
-  --vault-token=vault-token  [default: myroot] The vault token
+FLAGS
+  -h, --help                    Show CLI help.
+      --broker-api-url=<value>  [default: https://nr-broker.apps.silver.devops.gov.bc.ca/] The broker api base url
+      --broker-token=<value>    The broker JWT
+      --vault-addr=<value>      [default: http://127.0.0.1:8200] The vault address
+      --vault-token=<value>     [default: myroot] The vault token
+
+DESCRIPTION
+  Syncs approles in Vault
 ```
 
 ## `vstool group-sync`
@@ -106,12 +112,18 @@ Syncs external groups in Vault to connect roles with Vault policies
 
 ```
 USAGE
-  $ vstool group-sync
+  $ vstool group-sync [-h] [--broker-api-url <value>] [--broker-token <value>] [--vault-token <value>]
+    [--vault-addr <value>]
 
-OPTIONS
-  -h, --help                 show CLI help
-  --vault-addr=vault-addr    [default: http://127.0.0.1:8200] The vault address
-  --vault-token=vault-token  [default: myroot] The vault token
+FLAGS
+  -h, --help                    Show CLI help.
+      --broker-api-url=<value>  [default: https://nr-broker.apps.silver.devops.gov.bc.ca/] The broker api base url
+      --broker-token=<value>    The broker JWT
+      --vault-addr=<value>      [default: http://127.0.0.1:8200] The vault address
+      --vault-token=<value>     [default: myroot] The vault token
+
+DESCRIPTION
+  Syncs external groups in Vault to connect roles with Vault policies
 ```
 
 ## `vstool health`
@@ -120,45 +132,55 @@ Display Vault health
 
 ```
 USAGE
-  $ vstool health
+  $ vstool health [-h] [--vault-token <value>] [--vault-addr <value>]
 
-OPTIONS
-  -h, --help                 show CLI help
-  --vault-addr=vault-addr    [default: http://127.0.0.1:8200] The vault address
-  --vault-token=vault-token  [default: myroot] The vault token
+FLAGS
+  -h, --help                 Show CLI help.
+      --vault-addr=<value>   [default: http://127.0.0.1:8200] The vault address
+      --vault-token=<value>  [default: myroot] The vault token
+
+DESCRIPTION
+  Display Vault health
 ```
 
 ## `vstool help [COMMAND]`
 
-display help for vstool
+Display help for vstool.
 
 ```
 USAGE
-  $ vstool help [COMMAND]
+  $ vstool help [COMMAND...] [-n]
 
 ARGUMENTS
-  COMMAND  command to show help for
+  COMMAND...  Command to show help for.
 
-OPTIONS
-  --all  see all commands in CLI
+FLAGS
+  -n, --nested-commands  Include all nested commands in the output.
+
+DESCRIPTION
+  Display help for vstool.
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.18/src/commands/help.ts)_
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v6.0.18/src/commands/help.ts)_
 
-## `vstool init [VAULT-ADDR] [VAULT-TOKEN]`
+## `vstool init`
 
 Initialize a Vault instance and save root token and unseal keys.
 
 ```
 USAGE
-  $ vstool init [VAULT-ADDR] [VAULT-TOKEN]
+  $ vstool init [-h] [--secret-shares <value>] [--secret-threshold <value>] [--vault-token <value>]
+    [--vault-addr <value>]
 
-OPTIONS
-  -h, --help                           show CLI help
-  --secret-shares=secret-shares        [default: 1] The number of shares to split the master key into
-  --secret-threshold=secret-threshold  [default: 1] The number of shares required to reconstruct the master key
-  --vault-addr=vault-addr              [default: http://127.0.0.1:8200] The vault address
-  --vault-token=vault-token            [default: myroot] The vault token
+FLAGS
+  -h, --help                      Show CLI help.
+      --secret-shares=<value>     [default: 1] The number of shares to split the master key into
+      --secret-threshold=<value>  [default: 1] The number of shares required to reconstruct the master key
+      --vault-addr=<value>        [default: http://127.0.0.1:8200] The vault address
+      --vault-token=<value>       [default: myroot] The vault token
+
+DESCRIPTION
+  Initialize a Vault instance and save root token and unseal keys.
 ```
 
 ## `vstool policy-sync`
@@ -167,16 +189,19 @@ Syncs policies to Vault
 
 ```
 USAGE
-  $ vstool policy-sync
+  $ vstool policy-sync [-h] [--broker-api-url <value>] [--broker-token <value>] [--vault-token <value>]
+    [--vault-addr <value>] [--root <value>]
 
-OPTIONS
-  -h, --help                 show CLI help
+FLAGS
+  -h, --help                    Show CLI help.
+      --broker-api-url=<value>  [default: https://nr-broker.apps.silver.devops.gov.bc.ca/] The broker api base url
+      --broker-token=<value>    The broker JWT
+      --root=<value>...         [default: ] The root to constrict the policy sync to. Some roots can be further
+                                constricted such as -root=apps -root=cool-app-war
+      --vault-addr=<value>      [default: http://127.0.0.1:8200] The vault address
+      --vault-token=<value>     [default: myroot] The vault token
 
-  --root=root                [default: ] The root to constrict the policy sync to. Some roots can be further constricted
-                             such as -root=apps -root=cool-app-war
-
-  --vault-addr=vault-addr    [default: http://127.0.0.1:8200] The vault address
-
-  --vault-token=vault-token  [default: myroot] The vault token
+DESCRIPTION
+  Syncs policies to Vault
 ```
 <!-- commandsstop -->
