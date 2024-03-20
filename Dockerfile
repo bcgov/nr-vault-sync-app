@@ -1,5 +1,4 @@
-ARG REPO_LOCATION=artifacts.developer.gov.bc.ca/docker-remote/
-FROM ${REPO_LOCATION}node:20-alpine
+FROM node:20-alpine
 
 # Create app directory
 WORKDIR /app
