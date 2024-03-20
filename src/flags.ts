@@ -1,11 +1,11 @@
-import { flags } from '@oclif/command';
+import { Flags } from '@oclif/core';
 
 export const help = {
-  help: flags.help({ char: 'h' }),
+  help: Flags.help({ char: 'h' }),
 };
 
 export const brokerApiUrl = {
-  'broker-api-url': flags.string({
+  'broker-api-url': Flags.string({
     default: 'https://nr-broker.apps.silver.devops.gov.bc.ca/',
     description: 'The broker api base url',
     env: 'BROKER_API_URL',
@@ -13,7 +13,7 @@ export const brokerApiUrl = {
 };
 
 export const brokerToken = {
-  'broker-token': flags.string({
+  'broker-token': Flags.string({
     required: false,
     description: 'The broker JWT',
     env: 'BROKER_TOKEN',
@@ -21,21 +21,21 @@ export const brokerToken = {
 };
 
 export const secretShares = {
-  'secret-shares': flags.integer({
+  'secret-shares': Flags.integer({
     description: 'The number of shares to split the master key into',
     default: 1,
   }),
 };
 
 export const secretThreshold = {
-  'secret-threshold': flags.integer({
+  'secret-threshold': Flags.integer({
     description: 'The number of shares required to reconstruct the master key',
     default: 1,
   }),
 };
 
 export const vaultAddr = {
-  'vault-addr': flags.string({
+  'vault-addr': Flags.string({
     default: 'http://127.0.0.1:8200',
     description: 'The vault address',
     env: 'VAULT_ADDR',
@@ -43,7 +43,7 @@ export const vaultAddr = {
 };
 
 export const vaultToken = {
-  'vault-token': flags.string({
+  'vault-token': Flags.string({
     default: 'myroot',
     description: 'The vault token',
     env: 'VAULT_TOKEN',
@@ -51,7 +51,7 @@ export const vaultToken = {
 };
 
 export const root = {
-  root: flags.string({
+  root: Flags.string({
     multiple: true,
     default: [],
     description:

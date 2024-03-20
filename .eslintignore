@@ -1,5 +1,5 @@
 /dist/*
-/lib
+/bin/*
 /jest.setup.ts
 /jest.config.js
 /jest.e2e.config.js

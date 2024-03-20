@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { Command } from '@oclif/command';
+import { Command } from '@oclif/core';
 import {
   brokerApiUrl,
   brokerToken,
@@ -30,7 +30,7 @@ export default class GroupSync extends Command {
    * Run the command
    */
   async run(): Promise<void> {
-    const { flags } = this.parse(GroupSync);
+    const { flags } = await this.parse(GroupSync);
 
     this.log('Vault Group Sync');
     bindVault(flags['vault-addr'], flags['vault-token']);
