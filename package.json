@@ -16,6 +16,7 @@
     "/dist",
     "/oclif.manifest.json"
   ],
+  "type": "module",
   "scripts": {
     "build": "shx rm -rf dist && tsc -b",
     "lint": "eslint \"**/*.{js,ts}\" --fix --config .eslintrc.json",
