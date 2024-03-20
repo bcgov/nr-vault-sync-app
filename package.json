@@ -22,9 +22,9 @@
     "lint": "eslint \"**/*.{js,ts}\" --fix --config .eslintrc.json",
     "prepack": "npm run build && oclif manifest && oclif readme",
     "postpack": "shx rm -f oclif.manifest.json",
-    "test": "jest",
+    "test": "jest --config=jest.config.cjs",
     "posttest": "eslint \"**/*.{js,ts}\" --fix --config .eslintrc.json",
-    "e2e": "jest --config=jest.e2e.config.js",
+    "e2e": "jest --config=jest.e2e.config.cjs",
     "start": "ts-node src/index.ts",
     "version": "oclif-dev readme && git add README.md"
   },

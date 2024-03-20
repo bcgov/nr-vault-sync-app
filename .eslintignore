@@ -1,6 +1,6 @@
 /dist/*
 /bin/*
 /jest.setup.ts
-/jest.config.js
-/jest.e2e.config.js
+/jest.config.cjs
+/jest.e2e.config.cjs
 /coverage
