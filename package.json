@@ -9,14 +9,13 @@
   "exports": "./lib/index.js",
   "types": "dist/index.d.ts",
   "bin": {
-    "vstool": "./bin/run.js"
+    "vstool": "./bin/run"
   },
   "files": [
     "/bin",
     "/dist",
     "/oclif.manifest.json"
   ],
-  "type": "module",
   "scripts": {
     "build": "shx rm -rf dist && tsc -b",
     "lint": "eslint \"**/*.{js,ts}\" --fix --config .eslintrc.json",
@@ -33,12 +32,14 @@
     "commands": "./dist/commands",
     "dirname": "vstool",
     "plugins": [
-      "@oclif/plugin-help"
+      "@oclif/plugin-help",
+      "@oclif/plugin-plugins"
     ]
   },
   "dependencies": {
     "@oclif/core": "^3.25.3",
     "@oclif/plugin-help": "^6.0.18",
+    "@oclif/plugin-plugins": "^4.3.8",
     "axios": "^1.6.8",
     "ejs": "^3.1.9",
     "inversify": "^6.0.2",

@@ -55,15 +55,15 @@ jobs:
           broker_url: ${{ vars.BROKER_ADDR }}
           role_id: ${{ secrets.PROVISION_ROLE_ID }}
           vault_url: ${{ vars.VAULT_ADDR }}
-      - run: ./bin/dev.js policy-sync
+      - run: ./bin/dev policy-sync
         env:
           VAULT_ADDR: ${{ vars.VAULT_ADDR }}
           BROKER_TOKEN: ${{ secrets.BROKER_TOKEN }}
-      - run: ./bin/dev.js group-sync
+      - run: ./bin/dev group-sync
         env:
           VAULT_ADDR: ${{ vars.VAULT_ADDR }}
           BROKER_TOKEN: ${{ secrets.BROKER_TOKEN }}
-      - run: ./bin/dev.js approle-sync
+      - run: ./bin/dev approle-sync
         env:
           VAULT_ADDR: ${{ vars.VAULT_ADDR }}
           BROKER_TOKEN: ${{ secrets.BROKER_TOKEN }}

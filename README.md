@@ -68,12 +68,12 @@ USAGE
 ```
 <!-- usagestop -->
 
-The script /bin/dev.js can run the code without installing it.
+The script /bin/dev can run the code without installing it.
 
 ```sh-session
-$ ./bin/dev.js COMMAND
+$ ./bin/dev COMMAND
 running command...
-$ ./bin/dev.js (-v|--version|version)
+$ ./bin/dev (-v|--version|version)
 ...
 ```
 
