@@ -80,10 +80,21 @@ $ ./bin/dev (-v|--version|version)
 # Commands
 <!-- commands -->
 * [`vstool approle-sync`](#vstool-approle-sync)
+* [`vstool find`](#vstool-find)
 * [`vstool group-sync`](#vstool-group-sync)
 * [`vstool health`](#vstool-health)
 * [`vstool help [COMMAND]`](#vstool-help-command)
 * [`vstool init`](#vstool-init)
+* [`vstool plugins`](#vstool-plugins)
+* [`vstool plugins:add PLUGIN`](#vstool-pluginsadd-plugin)
+* [`vstool plugins:inspect PLUGIN...`](#vstool-pluginsinspect-plugin)
+* [`vstool plugins:install PLUGIN`](#vstool-pluginsinstall-plugin)
+* [`vstool plugins:link PATH`](#vstool-pluginslink-path)
+* [`vstool plugins:remove [PLUGIN]`](#vstool-pluginsremove-plugin)
+* [`vstool plugins:reset`](#vstool-pluginsreset)
+* [`vstool plugins:uninstall [PLUGIN]`](#vstool-pluginsuninstall-plugin)
+* [`vstool plugins:unlink [PLUGIN]`](#vstool-pluginsunlink-plugin)
+* [`vstool plugins:update`](#vstool-pluginsupdate)
 * [`vstool policy-sync`](#vstool-policy-sync)
 
 ## `vstool approle-sync`
@@ -104,6 +115,23 @@ FLAGS
 
 DESCRIPTION
   Syncs approles in Vault
+```
+
+## `vstool find`
+
+Find Vault creds
+
+```
+USAGE
+  $ vstool find [-h] [--vault-token <value>] [--vault-addr <value>]
+
+FLAGS
+  -h, --help                 Show CLI help.
+      --vault-addr=<value>   [default: http://127.0.0.1:8200] The vault address
+      --vault-token=<value>  [default: myroot] The vault token
+
+DESCRIPTION
+  Find Vault creds
 ```
 
 ## `vstool group-sync`
@@ -161,7 +189,7 @@ DESCRIPTION
   Display help for vstool.
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v6.0.18/src/commands/help.ts)_
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v6.0.20/src/commands/help.ts)_
 
 ## `vstool init`
 
@@ -182,6 +210,295 @@ FLAGS
 DESCRIPTION
   Initialize a Vault instance and save root token and unseal keys.
 ```
+
+## `vstool plugins`
+
+List installed plugins.
+
+```
+USAGE
+  $ vstool plugins [--json] [--core]
+
+FLAGS
+  --core  Show core plugins.
+
+GLOBAL FLAGS
+  --json  Format output as json.
+
+DESCRIPTION
+  List installed plugins.
+
+EXAMPLES
+  $ vstool plugins
+```
+
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.0.7/src/commands/plugins/index.ts)_
+
+## `vstool plugins:add PLUGIN`
+
+Installs a plugin into vstool.
+
+```
+USAGE
+  $ vstool plugins:add PLUGIN... [--json] [-f] [-h] [-s | -v]
+
+ARGUMENTS
+  PLUGIN...  Plugin to install.
+
+FLAGS
+  -f, --force    Force npm to fetch remote resources even if a local copy exists on disk.
+  -h, --help     Show CLI help.
+  -s, --silent   Silences npm output.
+  -v, --verbose  Show verbose npm output.
+
+GLOBAL FLAGS
+  --json  Format output as json.
+
+DESCRIPTION
+  Installs a plugin into vstool.
+
+  Uses bundled npm executable to install plugins into /Users/mbystedt/.local/share/vstool
+
+  Installation of a user-installed plugin will override a core plugin.
+
+  Use the VSTOOL_NPM_LOG_LEVEL environment variable to set the npm loglevel.
+  Use the VSTOOL_NPM_REGISTRY environment variable to set the npm registry.
+
+ALIASES
+  $ vstool plugins:add
+
+EXAMPLES
+  Install a plugin from npm registry.
+
+    $ vstool plugins:add myplugin
+
+  Install a plugin from a github url.
+
+    $ vstool plugins:add https://github.com/someuser/someplugin
+
+  Install a plugin from a github slug.
+
+    $ vstool plugins:add someuser/someplugin
+```
+
+## `vstool plugins:inspect PLUGIN...`
+
+Displays installation properties of a plugin.
+
+```
+USAGE
+  $ vstool plugins:inspect PLUGIN...
+
+ARGUMENTS
+  PLUGIN...  [default: .] Plugin to inspect.
+
+FLAGS
+  -h, --help     Show CLI help.
+  -v, --verbose
+
+GLOBAL FLAGS
+  --json  Format output as json.
+
+DESCRIPTION
+  Displays installation properties of a plugin.
+
+EXAMPLES
+  $ vstool plugins:inspect myplugin
+```
+
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.0.7/src/commands/plugins/inspect.ts)_
+
+## `vstool plugins:install PLUGIN`
+
+Installs a plugin into vstool.
+
+```
+USAGE
+  $ vstool plugins:install PLUGIN... [--json] [-f] [-h] [-s | -v]
+
+ARGUMENTS
+  PLUGIN...  Plugin to install.
+
+FLAGS
+  -f, --force    Force npm to fetch remote resources even if a local copy exists on disk.
+  -h, --help     Show CLI help.
+  -s, --silent   Silences npm output.
+  -v, --verbose  Show verbose npm output.
+
+GLOBAL FLAGS
+  --json  Format output as json.
+
+DESCRIPTION
+  Installs a plugin into vstool.
+
+  Uses bundled npm executable to install plugins into /Users/mbystedt/.local/share/vstool
+
+  Installation of a user-installed plugin will override a core plugin.
+
+  Use the VSTOOL_NPM_LOG_LEVEL environment variable to set the npm loglevel.
+  Use the VSTOOL_NPM_REGISTRY environment variable to set the npm registry.
+
+ALIASES
+  $ vstool plugins:add
+
+EXAMPLES
+  Install a plugin from npm registry.
+
+    $ vstool plugins:install myplugin
+
+  Install a plugin from a github url.
+
+    $ vstool plugins:install https://github.com/someuser/someplugin
+
+  Install a plugin from a github slug.
+
+    $ vstool plugins:install someuser/someplugin
+```
+
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.0.7/src/commands/plugins/install.ts)_
+
+## `vstool plugins:link PATH`
+
+Links a plugin into the CLI for development.
+
+```
+USAGE
+  $ vstool plugins:link PATH [-h] [--install] [-v]
+
+ARGUMENTS
+  PATH  [default: .] path to plugin
+
+FLAGS
+  -h, --help          Show CLI help.
+  -v, --verbose
+      --[no-]install  Install dependencies after linking the plugin.
+
+DESCRIPTION
+  Links a plugin into the CLI for development.
+  Installation of a linked plugin will override a user-installed or core plugin.
+
+  e.g. If you have a user-installed or core plugin that has a 'hello' command, installing a linked plugin with a 'hello'
+  command will override the user-installed or core plugin implementation. This is useful for development work.
+
+
+EXAMPLES
+  $ vstool plugins:link myplugin
+```
+
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.0.7/src/commands/plugins/link.ts)_
+
+## `vstool plugins:remove [PLUGIN]`
+
+Removes a plugin from the CLI.
+
+```
+USAGE
+  $ vstool plugins:remove [PLUGIN...] [-h] [-v]
+
+ARGUMENTS
+  PLUGIN...  plugin to uninstall
+
+FLAGS
+  -h, --help     Show CLI help.
+  -v, --verbose
+
+DESCRIPTION
+  Removes a plugin from the CLI.
+
+ALIASES
+  $ vstool plugins:unlink
+  $ vstool plugins:remove
+
+EXAMPLES
+  $ vstool plugins:remove myplugin
+```
+
+## `vstool plugins:reset`
+
+Remove all user-installed and linked plugins.
+
+```
+USAGE
+  $ vstool plugins:reset [--hard] [--reinstall]
+
+FLAGS
+  --hard       Delete node_modules and package manager related files in addition to uninstalling plugins.
+  --reinstall  Reinstall all plugins after uninstalling.
+```
+
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.0.7/src/commands/plugins/reset.ts)_
+
+## `vstool plugins:uninstall [PLUGIN]`
+
+Removes a plugin from the CLI.
+
+```
+USAGE
+  $ vstool plugins:uninstall [PLUGIN...] [-h] [-v]
+
+ARGUMENTS
+  PLUGIN...  plugin to uninstall
+
+FLAGS
+  -h, --help     Show CLI help.
+  -v, --verbose
+
+DESCRIPTION
+  Removes a plugin from the CLI.
+
+ALIASES
+  $ vstool plugins:unlink
+  $ vstool plugins:remove
+
+EXAMPLES
+  $ vstool plugins:uninstall myplugin
+```
+
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.0.7/src/commands/plugins/uninstall.ts)_
+
+## `vstool plugins:unlink [PLUGIN]`
+
+Removes a plugin from the CLI.
+
+```
+USAGE
+  $ vstool plugins:unlink [PLUGIN...] [-h] [-v]
+
+ARGUMENTS
+  PLUGIN...  plugin to uninstall
+
+FLAGS
+  -h, --help     Show CLI help.
+  -v, --verbose
+
+DESCRIPTION
+  Removes a plugin from the CLI.
+
+ALIASES
+  $ vstool plugins:unlink
+  $ vstool plugins:remove
+
+EXAMPLES
+  $ vstool plugins:unlink myplugin
+```
+
+## `vstool plugins:update`
+
+Update installed plugins.
+
+```
+USAGE
+  $ vstool plugins:update [-h] [-v]
+
+FLAGS
+  -h, --help     Show CLI help.
+  -v, --verbose
+
+DESCRIPTION
+  Update installed plugins.
+```
+
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.0.7/src/commands/plugins/update.ts)_
 
 ## `vstool policy-sync`
 
