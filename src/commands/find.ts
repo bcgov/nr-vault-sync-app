@@ -28,7 +28,7 @@ export default class Find extends Command {
 
     this.log(`Vault find - ${vault.endpoint}`);
 
-    this.findValue('/apps', 'dev');
+    this.findValue('/apps', '');
 
     this.log(JSON.stringify(await vault.health(), undefined, 2));
   }
@@ -45,9 +45,18 @@ export default class Find extends Command {
           // console.log(subpath);
           // console.log(`${path}/${subpath}`);
           if (subpath.endsWith('/')) {
-            await this.findValue(mount, `${path}/${subpath.slice(0, -1)}`);
+            await this.findValue(
+              mount,
+              path.length > 0
+                ? `${path}/${subpath.slice(0, -1)}`
+                : subpath.slice(0, -1),
+            );
           } else {
-            await this.findValue(mount, `${path}/${subpath}`, false);
+            await this.findValue(
+              mount,
+              path.length > 0 ? `${path}/${subpath}` : subpath,
+              false,
+            );
           }
         }
       } catch (e) {
