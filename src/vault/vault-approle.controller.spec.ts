@@ -7,6 +7,7 @@ import VaultApproleController, {
 import HclUtil from '../util/hcl.util';
 import { AppPolicyService } from './policy-roots/impl/app-policy.service';
 import { ConfigService } from '../services/config.service';
+import { RegistrationService } from '../services/registration.service';
 
 describe('vault-approle.controller', () => {
   const mockHclUtil = {
@@ -62,6 +63,15 @@ describe('vault-approle.controller', () => {
     getAppActorDefaults: jest.fn(() => mockActorDefaults),
   } as unknown as ConfigService;
 
+  const mockRegistrationService = {
+    register: jest.fn(() => {}),
+    registerMany: jest.fn(() => {}),
+    isActive: jest.fn(() => false),
+    isSameValue: jest.fn(() => false),
+    clear: jest.fn(() => {}),
+    filterNamesForUnregistered: jest.fn(() => {}),
+  } as unknown as RegistrationService;
+
   const mockLogger = {
     info: jest.fn(() => {}),
     error: jest.fn(() => {}),
@@ -78,6 +88,7 @@ describe('vault-approle.controller', () => {
       mockAppRootService,
       mockConfigService,
       mockHclUtil,
+      mockRegistrationService,
       mockLogger,
     );
   }

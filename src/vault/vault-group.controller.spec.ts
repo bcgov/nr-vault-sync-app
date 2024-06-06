@@ -7,6 +7,7 @@ import { AppPolicyService } from './policy-roots/impl/app-policy.service';
 import { GroupPolicyService } from './policy-roots/impl/group-policy.service';
 import { AppService } from '../services/app.service';
 import HclUtil from '../util/hcl.util';
+import { RegistrationService } from '../services/registration.service';
 
 /**
  * Helper function to create an HTTP error
@@ -44,6 +45,15 @@ describe('vault-group.controller', () => {
     getAllApps: jest.fn(() => ['app1', 'app2']),
   } as unknown as HclUtil;
 
+  const mockRegistrationService = {
+    register: jest.fn(() => {}),
+    registerMany: jest.fn(() => {}),
+    isActive: jest.fn(() => false),
+    isSameValue: jest.fn(() => false),
+    clear: jest.fn(() => {}),
+    filterNamesForUnregistered: jest.fn(() => {}),
+  } as unknown as RegistrationService;
+
   const vault = {
     read: jest.fn(),
     write: jest.fn(),
@@ -67,6 +77,7 @@ describe('vault-group.controller', () => {
       fArgs.mockConfigService ? fArgs.mockConfigService : mockConfigService,
       mockAppService,
       mockHclUtil,
+      mockRegistrationService,
       mockGroupPolicyService,
       mockAppPolicyService,
       mockLogger,
