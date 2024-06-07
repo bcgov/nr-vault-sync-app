@@ -24,7 +24,7 @@ jobs:
         with:
           repository: "bcgov-nr/vault-sync-config"
           token: ${{ secrets.GH_PAT }}
-          path: config
+          path: config-repo
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
@@ -32,6 +32,7 @@ jobs:
           cache: 'npm'
       - run: npm ci
       - run: npm run postpack
+      - run: cp config-repo/config.json config/config.json
       # Runs script to obtain Vault token
       - name: Build Intention
         run: sh ./.github/workflows/broker-intention.sh
