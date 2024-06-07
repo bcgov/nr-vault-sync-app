@@ -9,6 +9,7 @@ import HclUtil from '../util/hcl.util';
 import { GroupPolicyService } from './policy-roots/impl/group-policy.service';
 import { AppPolicyService } from './policy-roots/impl/app-policy.service';
 import { VAULT_ROOT_SYSTEM } from './policy-roots/policy-root.service';
+import { RegistrationService } from '../services/registration.service';
 
 export const VAULT_GROUP_KEYCLOAK_DEVELOPERS = 'oidc-css-developer';
 export const VAULT_GROUP_KEYCLOAK_GROUPS = 'oidc-css-group';
@@ -27,6 +28,8 @@ export default class VaultGroupController {
     @inject(TYPES.ConfigService) private config: ConfigService,
     @inject(TYPES.AppService) private appService: AppService,
     @inject(TYPES.HclUtil) private hclUtil: HclUtil,
+    @inject(TYPES.RegistrationService)
+    private registrationService: RegistrationService,
     @inject(TYPES.GroupPolicyService)
     private groupRootService: GroupPolicyService,
     @inject(TYPES.AppPolicyService) private appRootService: AppPolicyService,
@@ -40,6 +43,7 @@ export default class VaultGroupController {
     await this.syncAppGroups();
     await this.syncUserGroups();
     // TODO: Remove no longer used groups
+    await this.registrationService.clear();
   }
 
   /**
@@ -129,14 +133,25 @@ export default class VaultGroupController {
     metadata: { [key: string]: string } = {},
   ): Promise<void> {
     const accessors: string[] = await this.vaultApi.getOidcAccessors();
+    const groupName = `identity/group/name/${encodeURIComponent(name)}`;
+    const groupProperties = {
+      policies,
+      type: 'external',
+      metadata,
+    };
+    const groupPropertiesString = JSON.stringify(groupProperties);
+
+    if (
+      await this.registrationService.isSameValue(name, groupPropertiesString)
+    ) {
+      await this.registrationService.setUsed(name);
+      // this.logger.info(`Skip: ${name}`);
+      return;
+    }
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- Library does not provide typing
     let group = await this.vault
-      .write(`identity/group/name/${encodeURIComponent(name)}`, {
-        policies,
-        type: 'external',
-        metadata,
-      })
+      .write(groupName, groupProperties)
       .catch((error) => {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- No typing avialable
         const code = error.response.statusCode as number;
@@ -145,6 +160,7 @@ export default class VaultGroupController {
         );
         throw new Error('Could not create group');
       });
+    await this.registrationService.register(name, groupPropertiesString);
 
     if (!group) {
       // API does not return data if write was an update

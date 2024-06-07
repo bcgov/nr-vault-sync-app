@@ -1,8 +1,8 @@
-import { HlcRenderSpec } from '../../../util/hcl.util';
-import { PolicyRootService, VAULT_ROOT_APPS } from '../policy-root.service';
 import winston from 'winston';
 import { inject, injectable } from 'inversify';
 import { TYPES } from '../../../inversify.types';
+import { HlcRenderSpec } from '../../../util/hcl.util';
+import { PolicyRootService, VAULT_ROOT_APPS } from '../policy-root.service';
 import { Application, AppService } from '../../../services/app.service';
 import EnvironmentUtil from '../../../util/environment.util';
 import deduplicate from '../deduplicate.deco';

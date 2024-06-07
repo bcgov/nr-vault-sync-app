@@ -60,7 +60,7 @@ $ npm install -g vstool
 $ vstool COMMAND
 running command...
 $ vstool (--version)
-vstool/1.0.0 darwin-x64 node-v20.11.1
+vstool/1.0.0 darwin-arm64 node-v22.1.0
 $ vstool --help [COMMAND]
 USAGE
   $ vstool COMMAND
@@ -85,6 +85,7 @@ $ ./bin/dev (-v|--version|version)
 * [`vstool health`](#vstool-health)
 * [`vstool help [COMMAND]`](#vstool-help-command)
 * [`vstool init`](#vstool-init)
+* [`vstool monitor`](#vstool-monitor)
 * [`vstool plugins`](#vstool-plugins)
 * [`vstool plugins:add PLUGIN`](#vstool-pluginsadd-plugin)
 * [`vstool plugins:inspect PLUGIN...`](#vstool-pluginsinspect-plugin)
@@ -189,7 +190,7 @@ DESCRIPTION
   Display help for vstool.
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v6.0.20/src/commands/help.ts)_
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v6.2.0/src/commands/help.ts)_
 
 ## `vstool init`
 
@@ -209,6 +210,28 @@ FLAGS
 
 DESCRIPTION
   Initialize a Vault instance and save root token and unseal keys.
+```
+
+## `vstool monitor`
+
+Monitor for changes to sync to vault
+
+```
+USAGE
+  $ vstool monitor [-h] [--broker-api-url <value>] [--broker-token <value>] [--vault-token <value>]
+    [--vault-addr <value>] [--root <value>...]
+
+FLAGS
+  -h, --help                    Show CLI help.
+      --broker-api-url=<value>  [default: https://nr-broker.apps.silver.devops.gov.bc.ca/] The broker api base url
+      --broker-token=<value>    The broker JWT
+      --root=<value>...         [default: ] The root to constrict the policy sync to. Some roots can be further
+                                constricted such as -root=apps -root=cool-app-war
+      --vault-addr=<value>      [default: http://127.0.0.1:8200] The vault address
+      --vault-token=<value>     [default: myroot] The vault token
+
+DESCRIPTION
+  Monitor for changes to sync to vault
 ```
 
 ## `vstool plugins`
@@ -232,7 +255,7 @@ EXAMPLES
   $ vstool plugins
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.0.7/src/commands/plugins/index.ts)_
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.2.3/src/commands/plugins/index.ts)_
 
 ## `vstool plugins:add PLUGIN`
 
@@ -257,7 +280,7 @@ GLOBAL FLAGS
 DESCRIPTION
   Installs a plugin into vstool.
 
-  Uses bundled npm executable to install plugins into /Users/mbystedt/.local/share/vstool
+  Uses npm to install plugins.
 
   Installation of a user-installed plugin will override a core plugin.
 
@@ -306,7 +329,7 @@ EXAMPLES
   $ vstool plugins:inspect myplugin
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.0.7/src/commands/plugins/inspect.ts)_
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.2.3/src/commands/plugins/inspect.ts)_
 
 ## `vstool plugins:install PLUGIN`
 
@@ -331,7 +354,7 @@ GLOBAL FLAGS
 DESCRIPTION
   Installs a plugin into vstool.
 
-  Uses bundled npm executable to install plugins into /Users/mbystedt/.local/share/vstool
+  Uses npm to install plugins.
 
   Installation of a user-installed plugin will override a core plugin.
 
@@ -355,7 +378,7 @@ EXAMPLES
     $ vstool plugins:install someuser/someplugin
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.0.7/src/commands/plugins/install.ts)_
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.2.3/src/commands/plugins/install.ts)_
 
 ## `vstool plugins:link PATH`
 
@@ -385,7 +408,7 @@ EXAMPLES
   $ vstool plugins:link myplugin
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.0.7/src/commands/plugins/link.ts)_
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.2.3/src/commands/plugins/link.ts)_
 
 ## `vstool plugins:remove [PLUGIN]`
 
@@ -426,7 +449,7 @@ FLAGS
   --reinstall  Reinstall all plugins after uninstalling.
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.0.7/src/commands/plugins/reset.ts)_
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.2.3/src/commands/plugins/reset.ts)_
 
 ## `vstool plugins:uninstall [PLUGIN]`
 
@@ -454,7 +477,7 @@ EXAMPLES
   $ vstool plugins:uninstall myplugin
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.0.7/src/commands/plugins/uninstall.ts)_
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.2.3/src/commands/plugins/uninstall.ts)_
 
 ## `vstool plugins:unlink [PLUGIN]`
 
@@ -498,7 +521,7 @@ DESCRIPTION
   Update installed plugins.
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.0.7/src/commands/plugins/update.ts)_
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.2.3/src/commands/plugins/update.ts)_
 
 ## `vstool policy-sync`
 
@@ -507,7 +530,7 @@ Syncs policies to Vault
 ```
 USAGE
   $ vstool policy-sync [-h] [--broker-api-url <value>] [--broker-token <value>] [--vault-token <value>]
-    [--vault-addr <value>] [--root <value>]
+    [--vault-addr <value>] [--root <value>...]
 
 FLAGS
   -h, --help                    Show CLI help.

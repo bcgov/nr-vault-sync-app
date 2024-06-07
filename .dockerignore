@@ -12,9 +12,6 @@
 /coverage
 /e2e
 /dist
-/lib
 /node_modules
-/scripts
 /setenv*
-/vault-sync
 /vault-policy.hcl

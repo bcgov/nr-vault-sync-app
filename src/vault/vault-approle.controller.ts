@@ -8,6 +8,7 @@ import { AppPolicyService } from './policy-roots/impl/app-policy.service';
 import HclUtil from '../util/hcl.util';
 import EnvironmentUtil from '../util/environment.util';
 import { VAULT_ROOT_SYSTEM } from './policy-roots/policy-root.service';
+import { RegistrationService } from '../services/registration.service';
 
 interface ApproleDict {
   [key: string]: AppConfigApprole;
@@ -29,6 +30,8 @@ export default class VaultApproleController {
     @inject(TYPES.AppPolicyService) private appRootService: AppPolicyService,
     @inject(TYPES.ConfigService) private config: ConfigService,
     @inject(TYPES.HclUtil) private hclUtil: HclUtil,
+    @inject(TYPES.RegistrationService)
+    private registrationService: RegistrationService,
     @inject(TYPES.Logger) private logger: winston.Logger,
   ) {}
 
@@ -43,6 +46,7 @@ export default class VaultApproleController {
     await this.createUpdateRoles(approleDict);
     // Remove roles that no longer exist in configuration
     await this.removeUnusedRoles(new Set(Object.keys(approleDict)));
+    await this.registrationService.clear();
   }
 
   /**
@@ -149,9 +153,7 @@ export default class VaultApproleController {
   public async createUpdateRoles(approleDict: ApproleDict): Promise<void> {
     for (const role of Object.keys(approleDict)) {
       const ar = approleDict[role];
-      this.logger.info(`Add approle: ${role}`);
-      // TODO: Use API directly to send all parameters
-      await this.vault.addApproleRole({
+      const roleProperties = {
         role_name: ar.role_name,
         mount_point: VAULT_APPROLE_MOUNT_POINT,
         bind_secret_id: ar.bind_secret_id,
@@ -163,7 +165,19 @@ export default class VaultApproleController {
         token_ttl: ar.token_ttl,
         token_max_ttl: ar.token_max_ttl,
         period: ar.token_period,
-      });
+      };
+      const rolePropertiesString = JSON.stringify(roleProperties);
+      if (
+        await this.registrationService.isSameValue(role, rolePropertiesString)
+      ) {
+        await this.registrationService.setUsed(role);
+        // this.logger.info(`Skip: ${role}`);
+      } else {
+        // TODO: Use API directly to send all parameters
+        this.logger.info(`Add approle: ${role}`);
+        await this.vault.addApproleRole(roleProperties);
+        await this.registrationService.register(role, rolePropertiesString);
+      }
     }
   }
 

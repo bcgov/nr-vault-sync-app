@@ -1,6 +1,7 @@
 import { inject, injectable } from 'inversify';
 import nv from 'node-vault';
 import winston from 'winston';
+import { BehaviorSubject, firstValueFrom, of, switchMap } from 'rxjs';
 import { TYPES } from '../inversify.types';
 
 interface VaultAuthData {
@@ -14,6 +15,11 @@ interface VaultAuthData {
  * Shared Vault APIs
  */
 export default class VaultApi {
+  private oidcAccessors$ = new BehaviorSubject<{
+    timestamp: number;
+    accessors: string[] | null;
+  }>({ timestamp: 0, accessors: null });
+
   /**
    * Constructor
    */
@@ -26,6 +32,32 @@ export default class VaultApi {
    * Get the accessor from Vault for the Keycloak (OIDC) instance.
    */
   public async getOidcAccessors(): Promise<string[]> {
+    const now = Date.now();
+    return firstValueFrom(
+      this.oidcAccessors$.pipe(
+        switchMap((cache) => {
+          // Check if the cache is valid (i.e., less than 10 seconds old)
+          if (cache.accessors && now - cache.timestamp < 10000) {
+            // console.log('Project Services from cache');
+            return of(cache.accessors); // Return cached data
+          } else {
+            // console.log('Fetching new Project Services');
+            // Make a new request if cache is expired or doesn't exist
+            return this.requestOidcAccessors().then((accessors) => {
+              // Update the cache -- Will trigger cache check which should pass
+              this.oidcAccessors$.next({
+                timestamp: Date.now(),
+                accessors,
+              });
+              return accessors;
+            });
+          }
+        }),
+      ),
+    );
+  }
+
+  private requestOidcAccessors() {
     return this.vault
       .read(`/sys/auth`)
       .then((response) => {

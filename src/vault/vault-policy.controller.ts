@@ -2,9 +2,9 @@ import nv from 'node-vault';
 import { inject, injectable, multiInject } from 'inversify';
 import { TYPES } from '../inversify.types';
 import winston from 'winston';
-import { PolicyRegistrationService } from '../services/policy-registration.service';
 import HclUtil, { HlcRenderSpec } from '../util/hcl.util';
 import { PolicyRootService } from './policy-roots/policy-root.service';
+import { RegistrationService } from '../services/registration.service';
 
 @injectable()
 /**
@@ -18,8 +18,8 @@ export default class VaultPolicyController {
   constructor(
     @inject(TYPES.Vault) private vault: nv.client,
     @inject(TYPES.HclUtil) private hclUtil: HclUtil,
-    @inject(TYPES.PolicyRegistrationService)
-    private policyRegistrationService: PolicyRegistrationService,
+    @inject(TYPES.RegistrationService)
+    private registrationService: RegistrationService,
     @multiInject(TYPES.PolicyRootService)
     private policyRootServices: PolicyRootService<unknown>[],
     @inject(TYPES.Logger) private logger: winston.Logger,
@@ -39,6 +39,7 @@ export default class VaultPolicyController {
         await this.removeUnregisteredPolicies(policyRoot.getName(), false);
       }
     }
+    await this.registrationService.clear();
   }
 
   /**
@@ -47,13 +48,17 @@ export default class VaultPolicyController {
    */
   public async addPolicy(spec: HlcRenderSpec): Promise<void> {
     const name = this.hclUtil.renderName(spec);
-    this.logger.info(`Add policy: ${name}`);
-    if (!(await this.policyRegistrationService.hasRegisteredPolicy(name))) {
-      await this.policyRegistrationService.registerPolicy(name);
+    const policy = this.hclUtil.renderBody(spec);
+    if (await this.registrationService.isSameValue(name, policy)) {
+      await this.registrationService.setUsed(name);
+      // this.logger.info(`Skip: ${name}`);
+    } else {
+      this.logger.info(`Add policy: ${name}`);
+      await this.registrationService.register(name, policy);
       // Using vault.write because vault.addPolicy is not encoding the name correctly
       await this.vault.write(`sys/policies/acl/${encodeURIComponent(name)}`, {
         name,
-        policy: this.hclUtil.renderBody(spec),
+        policy,
       });
     }
   }
@@ -71,7 +76,7 @@ export default class VaultPolicyController {
     const policies = (await this.vault.policies()).data.policies as string[];
     try {
       const policiesToRemove =
-        await this.policyRegistrationService.filterPoliciesForUnregistered(
+        await this.registrationService.filterNamesForUnregistered(
           policies.filter((policyName: string) => policyName.startsWith(group)),
           partialRegistration,
         );
