@@ -31,6 +31,7 @@ jobs:
           node-version: 20
           cache: 'npm'
       - run: npm ci
+      - run: npm run postpack
       # Runs script to obtain Vault token
       - name: Build Intention
         run: sh ./.github/workflows/broker-intention.sh
