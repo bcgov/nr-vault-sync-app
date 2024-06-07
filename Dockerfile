@@ -9,11 +9,13 @@ RUN unzip /tmp/envconsul.zip && \
 # Create app directory
 WORKDIR /app
 COPY . ./
-RUN npm ci
+RUN npm ci && \
+    npm run build
 
-VOLUME /config/envconsul
+VOLUME /app/config/envconsul
+VOLUME /app/config/templates
 VOLUME /app/config
 
 ENV NODE_ENV production
 
-ENTRYPOINT ["envconsul", "-config", "/config/envconsul/env.hcl", "bin/run", "monitor"]
+ENTRYPOINT ["envconsul", "-config", "/app/config/envconsul/env.hcl", "./bin/run", "monitor"]
