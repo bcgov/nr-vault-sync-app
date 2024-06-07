@@ -12,7 +12,8 @@ COPY . ./
 RUN npm ci && \
     npm run build
 
-VOLUME /config/envconsul
+VOLUME /app/config/envconsul
+VOLUME /app/config/templates
 VOLUME /app/config
 
 ENV NODE_ENV production
