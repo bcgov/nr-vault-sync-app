@@ -12,3 +12,5 @@ VAULT_UNSEAL_KEY
 /setenv-local.sh
 .DS_Store
 /intention.json
+/config/envconsul/env.hcl
+/config/config.json

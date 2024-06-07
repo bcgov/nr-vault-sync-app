@@ -1,0 +1,433 @@
+{
+  "commands": {
+    "approle-sync": {
+      "aliases": [],
+      "args": {},
+      "description": "Syncs approles in Vault",
+      "flags": {
+        "help": {
+          "char": "h",
+          "description": "Show CLI help.",
+          "name": "help",
+          "allowNo": false,
+          "type": "boolean"
+        },
+        "broker-api-url": {
+          "description": "The broker api base url",
+          "env": "BROKER_API_URL",
+          "name": "broker-api-url",
+          "default": "https://nr-broker.apps.silver.devops.gov.bc.ca/",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "type": "option"
+        },
+        "broker-token": {
+          "description": "The broker JWT",
+          "env": "BROKER_TOKEN",
+          "name": "broker-token",
+          "required": false,
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "type": "option"
+        },
+        "vault-token": {
+          "description": "The vault token",
+          "env": "VAULT_TOKEN",
+          "name": "vault-token",
+          "default": "myroot",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "type": "option"
+        },
+        "vault-addr": {
+          "description": "The vault address",
+          "env": "VAULT_ADDR",
+          "name": "vault-addr",
+          "default": "http://127.0.0.1:8200",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "type": "option"
+        }
+      },
+      "hasDynamicHelp": false,
+      "hiddenAliases": [],
+      "id": "approle-sync",
+      "pluginAlias": "vstool",
+      "pluginName": "vstool",
+      "pluginType": "core",
+      "strict": true,
+      "enableJsonFlag": false,
+      "isESM": false,
+      "relativePath": [
+        "dist",
+        "commands",
+        "approle-sync.js"
+      ]
+    },
+    "find": {
+      "aliases": [],
+      "args": {},
+      "description": "Find Vault creds",
+      "flags": {
+        "help": {
+          "char": "h",
+          "description": "Show CLI help.",
+          "name": "help",
+          "allowNo": false,
+          "type": "boolean"
+        },
+        "vault-token": {
+          "description": "The vault token",
+          "env": "VAULT_TOKEN",
+          "name": "vault-token",
+          "default": "myroot",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "type": "option"
+        },
+        "vault-addr": {
+          "description": "The vault address",
+          "env": "VAULT_ADDR",
+          "name": "vault-addr",
+          "default": "http://127.0.0.1:8200",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "type": "option"
+        }
+      },
+      "hasDynamicHelp": false,
+      "hiddenAliases": [],
+      "id": "find",
+      "pluginAlias": "vstool",
+      "pluginName": "vstool",
+      "pluginType": "core",
+      "strict": true,
+      "enableJsonFlag": false,
+      "isESM": false,
+      "relativePath": [
+        "dist",
+        "commands",
+        "find.js"
+      ]
+    },
+    "group-sync": {
+      "aliases": [],
+      "args": {},
+      "description": "Syncs external groups in Vault to connect roles with Vault policies",
+      "flags": {
+        "help": {
+          "char": "h",
+          "description": "Show CLI help.",
+          "name": "help",
+          "allowNo": false,
+          "type": "boolean"
+        },
+        "broker-api-url": {
+          "description": "The broker api base url",
+          "env": "BROKER_API_URL",
+          "name": "broker-api-url",
+          "default": "https://nr-broker.apps.silver.devops.gov.bc.ca/",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "type": "option"
+        },
+        "broker-token": {
+          "description": "The broker JWT",
+          "env": "BROKER_TOKEN",
+          "name": "broker-token",
+          "required": false,
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "type": "option"
+        },
+        "vault-token": {
+          "description": "The vault token",
+          "env": "VAULT_TOKEN",
+          "name": "vault-token",
+          "default": "myroot",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "type": "option"
+        },
+        "vault-addr": {
+          "description": "The vault address",
+          "env": "VAULT_ADDR",
+          "name": "vault-addr",
+          "default": "http://127.0.0.1:8200",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "type": "option"
+        }
+      },
+      "hasDynamicHelp": false,
+      "hiddenAliases": [],
+      "id": "group-sync",
+      "pluginAlias": "vstool",
+      "pluginName": "vstool",
+      "pluginType": "core",
+      "strict": true,
+      "enableJsonFlag": false,
+      "isESM": false,
+      "relativePath": [
+        "dist",
+        "commands",
+        "group-sync.js"
+      ]
+    },
+    "health": {
+      "aliases": [],
+      "args": {},
+      "description": "Display Vault health",
+      "flags": {
+        "help": {
+          "char": "h",
+          "description": "Show CLI help.",
+          "name": "help",
+          "allowNo": false,
+          "type": "boolean"
+        },
+        "vault-token": {
+          "description": "The vault token",
+          "env": "VAULT_TOKEN",
+          "name": "vault-token",
+          "default": "myroot",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "type": "option"
+        },
+        "vault-addr": {
+          "description": "The vault address",
+          "env": "VAULT_ADDR",
+          "name": "vault-addr",
+          "default": "http://127.0.0.1:8200",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "type": "option"
+        }
+      },
+      "hasDynamicHelp": false,
+      "hiddenAliases": [],
+      "id": "health",
+      "pluginAlias": "vstool",
+      "pluginName": "vstool",
+      "pluginType": "core",
+      "strict": true,
+      "enableJsonFlag": false,
+      "isESM": false,
+      "relativePath": [
+        "dist",
+        "commands",
+        "health.js"
+      ]
+    },
+    "init": {
+      "aliases": [],
+      "args": {},
+      "description": "Initialize a Vault instance and save root token and unseal keys.",
+      "flags": {
+        "help": {
+          "char": "h",
+          "description": "Show CLI help.",
+          "name": "help",
+          "allowNo": false,
+          "type": "boolean"
+        },
+        "secret-shares": {
+          "description": "The number of shares to split the master key into",
+          "name": "secret-shares",
+          "default": 1,
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "type": "option"
+        },
+        "secret-threshold": {
+          "description": "The number of shares required to reconstruct the master key",
+          "name": "secret-threshold",
+          "default": 1,
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "type": "option"
+        },
+        "vault-token": {
+          "description": "The vault token",
+          "env": "VAULT_TOKEN",
+          "name": "vault-token",
+          "default": "myroot",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "type": "option"
+        },
+        "vault-addr": {
+          "description": "The vault address",
+          "env": "VAULT_ADDR",
+          "name": "vault-addr",
+          "default": "http://127.0.0.1:8200",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "type": "option"
+        }
+      },
+      "hasDynamicHelp": false,
+      "hiddenAliases": [],
+      "id": "init",
+      "pluginAlias": "vstool",
+      "pluginName": "vstool",
+      "pluginType": "core",
+      "strict": true,
+      "enableJsonFlag": false,
+      "isESM": false,
+      "relativePath": [
+        "dist",
+        "commands",
+        "init.js"
+      ]
+    },
+    "monitor": {
+      "aliases": [],
+      "args": {},
+      "description": "Monitor for changes to sync to vault",
+      "flags": {
+        "help": {
+          "char": "h",
+          "description": "Show CLI help.",
+          "name": "help",
+          "allowNo": false,
+          "type": "boolean"
+        },
+        "broker-api-url": {
+          "description": "The broker api base url",
+          "env": "BROKER_API_URL",
+          "name": "broker-api-url",
+          "default": "https://nr-broker.apps.silver.devops.gov.bc.ca/",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "type": "option"
+        },
+        "broker-token": {
+          "description": "The broker JWT",
+          "env": "BROKER_TOKEN",
+          "name": "broker-token",
+          "required": false,
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "type": "option"
+        },
+        "vault-token": {
+          "description": "The vault token",
+          "env": "VAULT_TOKEN",
+          "name": "vault-token",
+          "default": "myroot",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "type": "option"
+        },
+        "vault-addr": {
+          "description": "The vault address",
+          "env": "VAULT_ADDR",
+          "name": "vault-addr",
+          "default": "http://127.0.0.1:8200",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "type": "option"
+        },
+        "root": {
+          "description": "The root to constrict the policy sync to. Some roots can be further constricted such as -root=apps -root=cool-app-war ",
+          "env": "POLICY_ROOT",
+          "name": "root",
+          "default": [],
+          "hasDynamicHelp": false,
+          "multiple": true,
+          "type": "option"
+        }
+      },
+      "hasDynamicHelp": false,
+      "hiddenAliases": [],
+      "id": "monitor",
+      "pluginAlias": "vstool",
+      "pluginName": "vstool",
+      "pluginType": "core",
+      "strict": true,
+      "enableJsonFlag": false,
+      "isESM": false,
+      "relativePath": [
+        "dist",
+        "commands",
+        "monitor.js"
+      ]
+    },
+    "policy-sync": {
+      "aliases": [],
+      "args": {},
+      "description": "Syncs policies to Vault",
+      "flags": {
+        "help": {
+          "char": "h",
+          "description": "Show CLI help.",
+          "name": "help",
+          "allowNo": false,
+          "type": "boolean"
+        },
+        "broker-api-url": {
+          "description": "The broker api base url",
+          "env": "BROKER_API_URL",
+          "name": "broker-api-url",
+          "default": "https://nr-broker.apps.silver.devops.gov.bc.ca/",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "type": "option"
+        },
+        "broker-token": {
+          "description": "The broker JWT",
+          "env": "BROKER_TOKEN",
+          "name": "broker-token",
+          "required": false,
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "type": "option"
+        },
+        "vault-token": {
+          "description": "The vault token",
+          "env": "VAULT_TOKEN",
+          "name": "vault-token",
+          "default": "myroot",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "type": "option"
+        },
+        "vault-addr": {
+          "description": "The vault address",
+          "env": "VAULT_ADDR",
+          "name": "vault-addr",
+          "default": "http://127.0.0.1:8200",
+          "hasDynamicHelp": false,
+          "multiple": false,
+          "type": "option"
+        },
+        "root": {
+          "description": "The root to constrict the policy sync to. Some roots can be further constricted such as -root=apps -root=cool-app-war ",
+          "env": "POLICY_ROOT",
+          "name": "root",
+          "default": [],
+          "hasDynamicHelp": false,
+          "multiple": true,
+          "type": "option"
+        }
+      },
+      "hasDynamicHelp": false,
+      "hiddenAliases": [],
+      "id": "policy-sync",
+      "pluginAlias": "vstool",
+      "pluginName": "vstool",
+      "pluginType": "core",
+      "strict": true,
+      "enableJsonFlag": false,
+      "isESM": false,
+      "relativePath": [
+        "dist",
+        "commands",
+        "policy-sync.js"
+      ]
+    }
+  },
+  "version": "1.0.0"
+}

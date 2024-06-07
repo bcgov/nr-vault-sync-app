@@ -16,12 +16,7 @@ export interface HlcRenderSpec {
  * Utility class for HCL
  */
 export default class HclUtil {
-  private static templatesdir = path.join(
-    __dirname,
-    '..',
-    'vault',
-    'templates',
-  );
+  private static templatesdir = path.join('config', 'templates');
 
   /**
    * Renders a body from the template

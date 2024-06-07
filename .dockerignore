@@ -8,7 +8,8 @@
 # No docs
 *.md
 
-/config
+/config/envconsul
+/config/config.json
 /coverage
 /e2e
 /dist
