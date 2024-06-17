@@ -29,6 +29,7 @@ export default class VaultPolicyController {
    * Syncs policies to vault
    */
   public async sync(root: string[]): Promise<void> {
+    const policies = (await this.vault.policies()).data.policies as string[];
     for (const policyRoot of this.policyRootServices) {
       if (root.length === 0 || root[0] === policyRoot.getName()) {
         this.logger.info(`- Sync ${policyRoot.getName()}`);
@@ -36,7 +37,11 @@ export default class VaultPolicyController {
         for (const spec of specs) {
           await this.addPolicy(spec);
         }
-        await this.removeUnregisteredPolicies(policyRoot.getName(), false);
+        await this.removeUnregisteredPolicies(
+          policies,
+          policyRoot.getName(),
+          false,
+        );
       }
     }
     await this.registrationService.clear();
@@ -69,11 +74,10 @@ export default class VaultPolicyController {
    * @param partialRegistration True if not all policies were registered this run and false otherwise
    */
   public async removeUnregisteredPolicies(
+    policies: string[],
     group: string,
     partialRegistration: boolean,
   ): Promise<void> {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- No typing avialable
-    const policies = (await this.vault.policies()).data.policies as string[];
     try {
       const policiesToRemove =
         await this.registrationService.filterNamesForUnregistered(

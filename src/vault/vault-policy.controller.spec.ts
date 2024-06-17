@@ -15,6 +15,7 @@ describe('vault-policy.controller', () => {
   const vault = {
     read: jest.fn(),
     write: jest.fn(),
+    policies: jest.fn(() => Promise.resolve({ data: { policies: [] } })),
   } as unknown as nv.client;
 
   const mockRegistrationService = {
