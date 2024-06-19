@@ -40,7 +40,3 @@ function readActualFile(filePath: string): void {
     },
   );
 }
-
-// Example usage
-const filePath: string = 'path/to/your/file/or/symlink.txt';
-readFile(filePath);
