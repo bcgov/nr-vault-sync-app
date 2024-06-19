@@ -9,7 +9,7 @@ export default class FsUtil {
   public readFile(
     filePath: string,
     encoding: BufferEncoding = 'utf-8',
-  ): string | undefined {
+  ): string {
     const stats = fs.lstatSync(filePath);
     if (stats.isSymbolicLink()) {
       // If the file is a symbolic link, resolve the actual path
