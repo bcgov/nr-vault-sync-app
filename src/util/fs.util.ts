@@ -10,20 +10,14 @@ export default class FsUtil {
     filePath: string,
     encoding: BufferEncoding = 'utf-8',
   ): string | undefined {
-    try {
-      const stats = fs.lstatSync(filePath);
-      if (stats.isSymbolicLink()) {
-        // If the file is a symbolic link, resolve the actual path
-        const realPath = fs.readlinkSync(filePath);
-        return this.readActualFile(realPath, encoding);
-      } else {
-        // If it's not a symbolic link, read the file directly
-        return this.readActualFile(filePath, encoding);
-      }
-    } catch (err) {
-      console.error(
-        `Error getting stats of the file: ${(err as Error).message}`,
-      );
+    const stats = fs.lstatSync(filePath);
+    if (stats.isSymbolicLink()) {
+      // If the file is a symbolic link, resolve the actual path
+      const realPath = fs.readlinkSync(filePath);
+      return this.readActualFile(realPath, encoding);
+    } else {
+      // If it's not a symbolic link, read the file directly
+      return this.readActualFile(filePath, encoding);
     }
   }
 
