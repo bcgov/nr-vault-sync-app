@@ -4,12 +4,15 @@ import * as path from 'path';
 import { injectable } from 'inversify';
 import { Application } from '../services/app.service';
 import EnvironmentUtil from './environment.util';
+import FsUtil from './fs.util';
 
 export interface HlcRenderSpec {
   group: string;
   templateName: string;
   data?: ejs.Data | undefined;
 }
+
+const fsUtil = new FsUtil();
 
 @injectable()
 /**
@@ -29,7 +32,7 @@ export default class HclUtil {
       `${spec.templateName}.hcl.tpl`,
     ].filter((s): s is string => s != undefined);
     const filePath = path.join(...pathArray);
-    return ejs.render(fs.readFileSync(filePath, { encoding: 'utf8' }), {
+    return ejs.render(fsUtil.readFile(filePath), {
       ...spec.data,
     });
   }
