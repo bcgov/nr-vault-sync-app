@@ -6,7 +6,7 @@ import { injectable } from 'inversify';
  * Utility class for HCL
  */
 export default class FsUtil {
-  public readFile(filePath: string): void {
+  public readFile(filePath: string, encoding: BufferEncoding = 'utf-8'): void {
     fs.lstat(filePath, (err: NodeJS.ErrnoException | null, stats: fs.Stats) => {
       if (err) {
         return console.error(`Error getting stats of the file: ${err.message}`);
@@ -23,20 +23,20 @@ export default class FsUtil {
               );
             }
 
-            this.readActualFile(realPath);
+            this.readActualFile(realPath, encoding);
           },
         );
       } else {
         // If it's not a symbolic link, read the file directly
-        this.readActualFile(filePath);
+        this.readActualFile(filePath, encoding);
       }
     });
   }
 
-  private readActualFile(filePath: string): void {
+  private readActualFile(filePath: string, encoding: BufferEncoding): void {
     fs.readFile(
       filePath,
-      'utf-8',
+      encoding,
       (err: NodeJS.ErrnoException | null, data: string) => {
         if (err) {
           return console.error(`Error reading the file: ${err.message}`);
