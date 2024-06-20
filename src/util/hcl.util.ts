@@ -12,9 +12,6 @@ export interface HlcRenderSpec {
   data?: ejs.Data | undefined;
 }
 
-const fsUtil = new FsUtil();
-
-@injectable()
 /**
  * Utility class for HCL
  */
@@ -26,6 +23,7 @@ export default class HclUtil {
    * @param spec The information to use to render the body
    */
   public renderBody(spec: HlcRenderSpec): string {
+    const fsUtil = new FsUtil();
     const pathArray = [
       HclUtil.templatesdir,
       spec.group,
