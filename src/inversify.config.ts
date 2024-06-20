@@ -23,6 +23,7 @@ import { AppBrokerService } from './services/impl/app-broker.service';
 import { RegistrationService } from './services/registration.service';
 import { RegistrationMemoryService } from './services/impl/registration-memory.service';
 import BrokerMonitorController from './broker/broker-monitor.controller';
+import FsUtil from './util/fs.util';
 
 const vsContainer = new Container();
 // Services
@@ -71,6 +72,7 @@ vsContainer
 // Util
 vsContainer.bind<EnvironmentUtil>(TYPES.EnvironmentUtil).to(EnvironmentUtil);
 vsContainer.bind<HclUtil>(TYPES.HclUtil).to(HclUtil);
+vsContainer.bind<FsUtil>(TYPES.FsUtil).to(FsUtil);
 vsContainer.bind<VaultApi>(TYPES.VaultApi).to(VaultApi);
 
 // Logging
