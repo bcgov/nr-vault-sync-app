@@ -6,10 +6,7 @@ import { injectable } from 'inversify';
  * Utility class for reading files
  */
 export default class FsUtil {
-  public readFile(
-    filePath: string,
-    encoding: BufferEncoding = 'utf-8',
-  ): string {
+  public readFile(filePath: string, encoding: BufferEncoding = 'utf8'): string {
     const stats = fs.lstatSync(filePath);
     if (stats.isSymbolicLink()) {
       // If the file is a symbolic link, resolve the actual path
