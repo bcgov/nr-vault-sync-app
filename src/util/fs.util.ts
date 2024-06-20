@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import * as path from 'path';
 import { injectable } from 'inversify';
 
 @injectable()
@@ -18,7 +19,10 @@ export default class FsUtil {
     const stats = fs.lstatSync(filePath);
     if (stats.isSymbolicLink()) {
       // If the file is a symbolic link, resolve the actual path
-      const realPath = fs.readlinkSync(filePath);
+      const realPath = path.join(
+        path.dirname(filePath),
+        fs.readlinkSync(filePath),
+      );
       return this.readActualFileSync(realPath, encoding);
     } else {
       // If it's not a symbolic link, read the file directly
