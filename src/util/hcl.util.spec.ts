@@ -2,6 +2,7 @@ import * as fs from 'fs';
 import * as ejs from 'ejs';
 import * as path from 'path';
 import HclUtil from './hcl.util';
+import FsUtil from './fs.util';
 
 jest.mock('fs');
 jest.mock('ejs');
@@ -15,8 +16,10 @@ describe('hcl util', () => {
   });
 
   it('renderBody - renders a body', () => {
-    const hclUtil = new HclUtil();
-    mockFs.readFileSync.mockReturnValue('template');
+    const mockFsUtil = {
+      readFileSync: jest.fn(() => 'template'),
+    } as unknown as FsUtil;
+    const hclUtil = new HclUtil(mockFsUtil);
     mockEjs.render.mockReturnValue('rendered!');
 
     const rVal = hclUtil.renderBody({
@@ -27,8 +30,8 @@ describe('hcl util', () => {
     const filePath = path.join('group', 'cool-temp.hcl.tpl');
 
     expect(rVal).toBe('rendered!');
-    expect(mockFs.readFileSync).toHaveBeenCalledTimes(1);
-    expect(mockFs.readFileSync).toHaveBeenCalledWith(
+    expect(mockFsUtil.readFileSync).toHaveBeenCalledTimes(1);
+    expect(mockFsUtil.readFileSync).toHaveBeenCalledWith(
       expect.stringContaining(filePath),
       { encoding: 'utf8' },
     );
@@ -38,8 +41,10 @@ describe('hcl util', () => {
   });
 
   it('renderName - renders a name with template', () => {
-    const hclUtil = new HclUtil();
-    mockFs.readFileSync.mockReturnValue('template');
+    const mockFsUtil = {
+      readFileSync: jest.fn(() => 'template'),
+    } as unknown as FsUtil;
+    const hclUtil = new HclUtil(mockFsUtil);
     mockFs.existsSync.mockReturnValue(true);
     mockEjs.render.mockReturnValue('rendered!');
 
@@ -55,8 +60,8 @@ describe('hcl util', () => {
     expect(mockFs.existsSync).toHaveBeenCalledWith(
       expect.stringContaining(filePath),
     );
-    expect(mockFs.readFileSync).toHaveBeenCalledTimes(1);
-    expect(mockFs.readFileSync).toHaveBeenCalledWith(
+    expect(mockFsUtil.readFileSync).toHaveBeenCalledTimes(1);
+    expect(mockFsUtil.readFileSync).toHaveBeenCalledWith(
       expect.stringContaining(filePath),
       { encoding: 'utf8' },
     );
@@ -66,7 +71,10 @@ describe('hcl util', () => {
   });
 
   it('renderName - renders a name without a template', () => {
-    const hclUtil = new HclUtil();
+    const mockFsUtil = {
+      readFileSync: jest.fn(() => 'template'),
+    } as unknown as FsUtil;
+    const hclUtil = new HclUtil(mockFsUtil);
     mockFs.existsSync.mockReturnValue(false);
 
     const rVal = hclUtil.renderName({
@@ -86,7 +94,10 @@ describe('hcl util', () => {
   });
 
   it('renderApproleName - renders approles', () => {
-    const hclUtil = new HclUtil();
+    const mockFsUtil = {
+      readFileSync: jest.fn(() => 'template'),
+    } as unknown as FsUtil;
+    const hclUtil = new HclUtil(mockFsUtil);
 
     const rVal = hclUtil.renderApproleName(
       {

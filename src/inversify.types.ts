@@ -9,6 +9,7 @@ const TYPES = {
   BrokerToken: Symbol.for('BrokerToken'),
   ConfigService: Symbol.for('ConfigService'),
   EnvironmentUtil: Symbol.for('EnvironmentUtil'),
+  FsUtil: Symbol.for('FsUtil'),
   GenerateController: Symbol.for('GenerateController'),
   GroupPolicyService: Symbol.for('GroupPolicyService'),
   HclUtil: Symbol.for('HclUtil'),
