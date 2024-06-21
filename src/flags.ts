@@ -6,7 +6,7 @@ export const help = {
 
 export const brokerApiUrl = {
   'broker-api-url': Flags.string({
-    default: 'https://nr-broker.apps.silver.devops.gov.bc.ca/',
+    default: 'https://broker.io.nrs.gov.bc.ca/',
     description: 'The broker api base url',
     env: 'BROKER_API_URL',
   }),

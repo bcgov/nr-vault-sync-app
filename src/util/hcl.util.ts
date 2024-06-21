@@ -1,9 +1,11 @@
 import * as ejs from 'ejs';
 import * as fs from 'fs';
 import * as path from 'path';
-import { injectable } from 'inversify';
+import { inject, injectable } from 'inversify';
 import { Application } from '../services/app.service';
 import EnvironmentUtil from './environment.util';
+import FsUtil from './fs.util';
+import { TYPES } from '../inversify.types';
 
 export interface HlcRenderSpec {
   group: string;
@@ -11,12 +13,18 @@ export interface HlcRenderSpec {
   data?: ejs.Data | undefined;
 }
 
-@injectable()
 /**
  * Utility class for HCL
  */
+@injectable()
 export default class HclUtil {
   private static templatesdir = path.join('config', 'templates');
+
+  /**
+   * Constructor
+   * @param fsUtil fs utility object
+   */
+  constructor(@inject(TYPES.FsUtil) private fsUtil: FsUtil) {}
 
   /**
    * Renders a body from the template
@@ -29,9 +37,12 @@ export default class HclUtil {
       `${spec.templateName}.hcl.tpl`,
     ].filter((s): s is string => s != undefined);
     const filePath = path.join(...pathArray);
-    return ejs.render(fs.readFileSync(filePath, { encoding: 'utf8' }), {
-      ...spec.data,
-    });
+    return ejs.render(
+      this.fsUtil.readFileSync(filePath, { encoding: 'utf8' }),
+      {
+        ...spec.data,
+      },
+    );
   }
 
   /**
@@ -47,7 +58,7 @@ export default class HclUtil {
     const filePath = path.join(...pathArray);
     if (fs.existsSync(filePath)) {
       return `${spec.group}/${ejs.render(
-        fs.readFileSync(filePath, { encoding: 'utf8' }),
+        this.fsUtil.readFileSync(filePath, { encoding: 'utf8' }),
         {
           ...spec.data,
         },

@@ -16,7 +16,7 @@
           "description": "The broker api base url",
           "env": "BROKER_API_URL",
           "name": "broker-api-url",
-          "default": "https://nr-broker.apps.silver.devops.gov.bc.ca/",
+          "default": "https://broker.io.nrs.gov.bc.ca/",
           "hasDynamicHelp": false,
           "multiple": false,
           "type": "option"
@@ -126,7 +126,7 @@
           "description": "The broker api base url",
           "env": "BROKER_API_URL",
           "name": "broker-api-url",
-          "default": "https://nr-broker.apps.silver.devops.gov.bc.ca/",
+          "default": "https://broker.io.nrs.gov.bc.ca/",
           "hasDynamicHelp": false,
           "multiple": false,
           "type": "option"
@@ -298,7 +298,7 @@
           "description": "The broker api base url",
           "env": "BROKER_API_URL",
           "name": "broker-api-url",
-          "default": "https://nr-broker.apps.silver.devops.gov.bc.ca/",
+          "default": "https://broker.io.nrs.gov.bc.ca/",
           "hasDynamicHelp": false,
           "multiple": false,
           "type": "option"
@@ -371,7 +371,7 @@
           "description": "The broker api base url",
           "env": "BROKER_API_URL",
           "name": "broker-api-url",
-          "default": "https://nr-broker.apps.silver.devops.gov.bc.ca/",
+          "default": "https://broker.io.nrs.gov.bc.ca/",
           "hasDynamicHelp": false,
           "multiple": false,
           "type": "option"
