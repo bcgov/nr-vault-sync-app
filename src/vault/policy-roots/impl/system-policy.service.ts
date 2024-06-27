@@ -45,14 +45,23 @@ export class SystemPolicyService implements PolicyRootService<undefined> {
   }
 
   /**
+   * Set the path to the system policy config
+   */
+  private static readonly sysPolicyConfigPath = path.join(
+    __dirname,
+    '../../../../config/system',
+  );
+
+  /**
    * Sync system policies to vault
    */
   public async buildSystem(): Promise<HlcRenderSpec[]> {
     this.logger.debug(`Build system - global`);
     const sysSpecs: HlcRenderSpec[] = [];
     // Directory containing the template files
-    const templatesDir = path.join(__dirname, '../../../../config/system');
-    const templateFiles = fs.readdirSync(templatesDir);
+    const templateFiles = fs.readdirSync(
+      SystemPolicyService.sysPolicyConfigPath,
+    );
     const data = {
       kvPaths: await this.config.getKvStores(),
       authMount: VAULT_APPROLE_MOUNT_POINT,
@@ -61,10 +70,10 @@ export class SystemPolicyService implements PolicyRootService<undefined> {
     };
     for (const file of templateFiles) {
       if (file.endsWith('.hcl.tpl') && !file.startsWith('kv-')) {
-        const _templateName = path.basename(file, '.hcl.tpl');
+        const templateName = path.basename(file, '.hcl.tpl');
         const spec: HlcRenderSpec = {
           group: VAULT_ROOT_SYSTEM,
-          templateName: _templateName,
+          templateName: templateName,
           data: data,
         };
         sysSpecs.push(spec);
