@@ -72,8 +72,8 @@ export class SystemPolicyService implements PolicyRootService<undefined> {
         const templateName = path.basename(file, '.hcl.tpl');
         const spec: HlcRenderSpec = {
           group: VAULT_ROOT_SYSTEM,
-          templateName: templateName,
-          data: data,
+          templateName,
+          data,
         };
         sysSpecs.push(spec);
       }
