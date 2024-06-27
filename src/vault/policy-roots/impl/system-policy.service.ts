@@ -58,7 +58,6 @@ export class SystemPolicyService implements PolicyRootService<undefined> {
   public async buildSystem(): Promise<HlcRenderSpec[]> {
     this.logger.debug(`Build system - global`);
     const sysSpecs: HlcRenderSpec[] = [];
-    // Directory containing the template files
     const templateFiles = fs.readdirSync(
       SystemPolicyService.sysPolicyConfigPath,
     );
