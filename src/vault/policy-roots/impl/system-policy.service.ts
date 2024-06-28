@@ -7,6 +7,8 @@ import { ConfigService } from '../../../services/config.service';
 import oidcData from '../oidc-data.deco';
 import { VAULT_APPROLE_MOUNT_POINT } from '../../vault-approle.controller';
 import { AppService } from '../../../services/app.service';
+import path from 'path';
+import fs from 'fs';
 
 @injectable()
 /**
@@ -43,42 +45,42 @@ export class SystemPolicyService implements PolicyRootService<undefined> {
   }
 
   /**
+   * Set the path to the system policy config
+   */
+  private static readonly sysPolicyConfigPath = path.join(
+    __dirname,
+    '../../../../config/system',
+  );
+
+  /**
    * Sync system policies to vault
    */
   public async buildSystem(): Promise<HlcRenderSpec[]> {
     this.logger.debug(`Build system - global`);
-    return [
-      {
-        group: VAULT_ROOT_SYSTEM,
-        templateName: 'admin-super',
-        data: {
-          kvPaths: await this.config.getKvStores(),
-        },
-      },
-      { group: VAULT_ROOT_SYSTEM, templateName: 'admin-general' },
-      { group: VAULT_ROOT_SYSTEM, templateName: 'admin-token' },
-      { group: VAULT_ROOT_SYSTEM, templateName: 'admin-audit-hash' },
-      {
-        group: VAULT_ROOT_SYSTEM,
-        templateName: 'broker-auth',
-        data: {
-          authMount: VAULT_APPROLE_MOUNT_POINT,
-          restrictedPaths: await this.restrictedBrokerAppPaths(),
-        },
-      },
-      {
-        group: VAULT_ROOT_SYSTEM,
-        templateName: 'db-admin-super',
-        data: { secertDbPath: 'db' },
-      },
-      { group: VAULT_ROOT_SYSTEM, templateName: 'isss-cdua-read' },
-      { group: VAULT_ROOT_SYSTEM, templateName: 'isss-ci-read' },
-      { group: VAULT_ROOT_SYSTEM, templateName: 'nrcd-read' },
-      { group: VAULT_ROOT_SYSTEM, templateName: 'oraapp-imborapp-read' },
-      { group: VAULT_ROOT_SYSTEM, templateName: 'user-generic' },
-      { group: VAULT_ROOT_SYSTEM, templateName: 'vault-sync' },
-    ];
+    const sysSpecs: HlcRenderSpec[] = [];
+    const templateFiles = fs.readdirSync(
+      SystemPolicyService.sysPolicyConfigPath,
+    );
+    const data = {
+      kvPaths: await this.config.getKvStores(),
+      authMount: VAULT_APPROLE_MOUNT_POINT,
+      restrictedPaths: await this.restrictedBrokerAppPaths(),
+      secertDbPath: 'db',
+    };
+    for (const file of templateFiles) {
+      if (file.endsWith('.hcl.tpl') && !file.startsWith('kv-')) {
+        const templateName = path.basename(file, '.hcl.tpl');
+        const spec: HlcRenderSpec = {
+          group: VAULT_ROOT_SYSTEM,
+          templateName,
+          data,
+        };
+        sysSpecs.push(spec);
+      }
+    }
+    return sysSpecs;
   }
+
   /**
    * Sync kv engine policies to vault
    */
