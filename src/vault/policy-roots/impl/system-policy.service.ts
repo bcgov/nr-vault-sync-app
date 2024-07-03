@@ -65,7 +65,7 @@ export class SystemPolicyService implements PolicyRootService<undefined> {
       kvPaths: await this.config.getKvStores(),
       authMount: VAULT_APPROLE_MOUNT_POINT,
       restrictedPaths: await this.restrictedBrokerAppPaths(),
-      secertDbPath: 'db',
+      secretDbPath: 'db',
     };
     for (const file of templateFiles) {
       if (file.endsWith('.hcl.tpl') && !file.startsWith('kv-')) {
@@ -87,16 +87,16 @@ export class SystemPolicyService implements PolicyRootService<undefined> {
   public async buildKvSecretEngines(): Promise<HlcRenderSpec[]> {
     this.logger.debug(`Build system - kv`);
     const kvSpecs: HlcRenderSpec[] = [];
-    for (const secertKvPath of await this.config.getKvStores()) {
+    for (const secretKvPath of await this.config.getKvStores()) {
       kvSpecs.push({
         group: VAULT_ROOT_SYSTEM,
         templateName: 'kv-admin',
-        data: { secertKvPath },
+        data: { secretKvPath },
       });
       kvSpecs.push({
         group: VAULT_ROOT_SYSTEM,
         templateName: 'kv-developer',
-        data: { secertKvPath },
+        data: { secretKvPath },
       });
     }
     return kvSpecs;

@@ -84,7 +84,7 @@ export default class VaultGroupController {
           this.hclUtil.renderName({
             group: VAULT_ROOT_SYSTEM,
             templateName: 'kv-developer',
-            data: { secertKvPath: 'apps' },
+            data: { secretKvPath: 'apps' },
           }),
         );
         await this.syncGroup(

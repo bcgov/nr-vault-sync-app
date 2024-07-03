@@ -1,6 +1,6 @@
-# Key value developer for <%= secertKvPath %>/
+# Key value developer for <%= secretKvPath %>/
 # Scope: Users with developer access to this kv secret engine
 
-path "<%= secertKvPath %>/config" {
+path "<%= secretKvPath %>/config" {
   capabilities = ["read"]
 }

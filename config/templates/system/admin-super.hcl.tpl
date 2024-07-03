@@ -10,8 +10,8 @@ path "user/*" {
   capabilities = []
 }
 
-<% kvPaths.forEach(function(secertKvPath){ %>
-path "<%= secertKvPath %>/config" {
+<% kvPaths.forEach(function(secretKvPath){ %>
+path "<%= secretKvPath %>/config" {
   capabilities = ["read", "update"]
 }
 <% }); %>

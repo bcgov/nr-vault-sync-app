@@ -6,23 +6,23 @@ path "apps/metadata/<%= environment %>/<%= project %>/shared" {
   capabilities = ["read", "list"]
 }
 
-path "<%= secertKvPath %>/data/<%= environment %>/<%= project %>/shared" {
+path "<%= secretKvPath %>/data/<%= environment %>/<%= project %>/shared" {
   capabilities = ["read", "list"]
 }
 <% } %>
 
-path "<%= secertKvPath %>/data/<%= environment %>/<%= project %>/<%= application %>" {
+path "<%= secretKvPath %>/data/<%= environment %>/<%= project %>/<%= application %>" {
   capabilities = ["read"]
 }
 
-path "<%= secertKvPath %>/metadata/<%= environment %>/<%= project %>/<%= application %>" {
+path "<%= secretKvPath %>/metadata/<%= environment %>/<%= project %>/<%= application %>" {
   capabilities = ["read", "list"]
 }
 
-path "<%= secertKvPath %>/data/<%= environment %>/<%= project %>/<%= application %>/+" {
+path "<%= secretKvPath %>/data/<%= environment %>/<%= project %>/<%= application %>/+" {
   capabilities = ["read"]
 }
 
-path "<%= secertKvPath %>/metadata/<%= environment %>/<%= project %>/<%= application %>/+" {
+path "<%= secretKvPath %>/metadata/<%= environment %>/<%= project %>/<%= application %>/+" {
   capabilities = ["read", "list"]
 }

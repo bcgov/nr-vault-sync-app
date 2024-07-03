@@ -67,8 +67,8 @@ describe('app-policy.service', () => {
       appCanReadProject: undefined,
       application: 'demoapp',
       authMount: VAULT_APPROLE_MOUNT_POINT,
-      secertKvPath: 'apps',
-      secertDbPath: 'db',
+      secretKvPath: 'apps',
+      secretDbPath: 'db',
       project: 'demo',
       environment: 'prod',
     };

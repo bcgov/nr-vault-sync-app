@@ -1,10 +1,10 @@
-# Key value admin for <%= secertKvPath %>/
+# Key value admin for <%= secretKvPath %>/
 # Scope: Users with administrative access to this kv secret engine
 
-path "<%= secertKvPath %>/+/*" {
+path "<%= secretKvPath %>/+/*" {
   capabilities = ["create", "read", "update", "delete", "list"]
 }
 
-path "<%= secertKvPath %>/config" {
+path "<%= secretKvPath %>/config" {
   capabilities = ["read", "update"]
 }
