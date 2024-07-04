@@ -1,38 +1,38 @@
 # DB admin policy
 # Scope: Database admin users
 
-path "<%= secertDbPath %>" {
+path "<%= secretDbPath %>" {
   capabilities = ["list"]
 }
 
-path "<%= secertDbPath %>/+" {
+path "<%= secretDbPath %>/+" {
   capabilities = ["list"]
 }
 
-path "<%= secertDbPath %>/+/config" {
+path "<%= secretDbPath %>/+/config" {
   capabilities = ["list"]
 }
 
-path "<%= secertDbPath %>/+/config/*" {
+path "<%= secretDbPath %>/+/config/*" {
   capabilities = ["create", "read", "update", "delete"]
 }
 
-path "<%= secertDbPath %>/+/reset/*" {
+path "<%= secretDbPath %>/+/reset/*" {
   capabilities = ["create", "update"]
 }
 
-path "<%= secertDbPath %>/+/rotate-root/*" {
+path "<%= secretDbPath %>/+/rotate-root/*" {
   capabilities = ["create", "update"]
 }
 
-path "<%= secertDbPath %>/+/roles" {
+path "<%= secretDbPath %>/+/roles" {
   capabilities = ["list"]
 }
 
-path "<%= secertDbPath %>/+/roles/*" {
+path "<%= secretDbPath %>/+/roles/*" {
   capabilities = ["create", "read", "update", "delete"]
 }
 
-path "<%= secertDbPath %>/+/creds/*" {
+path "<%= secretDbPath %>/+/creds/*" {
   capabilities = ["read"]
 }

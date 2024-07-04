@@ -1,1 +1,1 @@
-<%= project %>/<%= application %>/<%= environment %>-<%= secertDbPath %>-<%= dbType %>-<%= dbName %>-readwrite
+<%= project %>/<%= application %>/<%= environment %>-<%= secretDbPath %>-<%= dbType %>-<%= dbName %>-readwrite

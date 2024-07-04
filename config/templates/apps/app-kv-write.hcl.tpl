@@ -1,42 +1,42 @@
 # Write policy for application
 # Scope: Approle
 
-path "<%= secertKvPath %>/data/<%= environment %>/<%= project %>/<%= application %>" {
+path "<%= secretKvPath %>/data/<%= environment %>/<%= project %>/<%= application %>" {
   capabilities = ["create", "update", "delete"]
 }
 
-path "<%= secertKvPath %>/data/<%= environment %>/<%= project %>/<%= application %>/+" {
+path "<%= secretKvPath %>/data/<%= environment %>/<%= project %>/<%= application %>/+" {
   capabilities = ["create", "update", "delete"]
 }
 
-path "<%= secertKvPath %>/metadata/<%= environment %>/<%= project %>/<%= application %>" {
+path "<%= secretKvPath %>/metadata/<%= environment %>/<%= project %>/<%= application %>" {
   capabilities = ["create", "update", "delete"]
 }
 
-path "<%= secertKvPath %>/metadata/<%= environment %>/<%= project %>/<%= application %>/+" {
+path "<%= secretKvPath %>/metadata/<%= environment %>/<%= project %>/<%= application %>/+" {
   capabilities = ["create", "update", "delete"]
 }
 
-path "<%= secertKvPath %>/delete/<%= environment %>/<%= project %>/<%= application %>" {
+path "<%= secretKvPath %>/delete/<%= environment %>/<%= project %>/<%= application %>" {
   capabilities = ["create", "update"]
 }
 
-path "<%= secertKvPath %>/delete/<%= environment %>/<%= project %>/<%= application %>/+" {
+path "<%= secretKvPath %>/delete/<%= environment %>/<%= project %>/<%= application %>/+" {
   capabilities = ["create", "update"]
 }
 
-path "<%= secertKvPath %>/undelete/<%= environment %>/<%= project %>/<%= application %>" {
+path "<%= secretKvPath %>/undelete/<%= environment %>/<%= project %>/<%= application %>" {
   capabilities = ["create", "update"]
 }
 
-path "<%= secertKvPath %>/undelete/<%= environment %>/<%= project %>/<%= application %>/+" {
+path "<%= secretKvPath %>/undelete/<%= environment %>/<%= project %>/<%= application %>/+" {
   capabilities = ["create", "update"]
 }
 
-path "<%= secertKvPath %>/destroy/<%= environment %>/<%= project %>/<%= application %>" {
+path "<%= secretKvPath %>/destroy/<%= environment %>/<%= project %>/<%= application %>" {
   capabilities = ["create", "update"]
 }
 
-path "<%= secertKvPath %>/destroy/<%= environment %>/<%= project %>/<%= application %>/+" {
+path "<%= secretKvPath %>/destroy/<%= environment %>/<%= project %>/<%= application %>/+" {
   capabilities = ["create", "update"]
 }

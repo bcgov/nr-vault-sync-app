@@ -1,1 +1,1 @@
-<%= secertKvPath %>-kv-admin
+<%= secretKvPath %>-kv-admin

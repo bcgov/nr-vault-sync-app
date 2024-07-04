@@ -92,8 +92,8 @@ export class AppPolicyService implements PolicyRootService<Application> {
     const policyData = {
       application: appInfo.app.toLowerCase(),
       authMount: VAULT_APPROLE_MOUNT_POINT,
-      secertKvPath: 'apps',
-      secertDbPath: 'db',
+      secretKvPath: 'apps',
+      secretDbPath: 'db',
       project: appInfo.project.toLowerCase(),
       environment: normEvn,
       appCanReadProject: appInfo.config?.policyOptions?.kvReadProject,

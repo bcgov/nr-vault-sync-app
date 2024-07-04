@@ -1,1 +1,1 @@
-<%= secertKvPath %>-kv-developer
+<%= secretKvPath %>-kv-developer

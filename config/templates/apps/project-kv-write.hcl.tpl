@@ -1,44 +1,44 @@
 
-path "<%= secertKvPath %>/data/<%= environment %>/<%= project %>" {
+path "<%= secretKvPath %>/data/<%= environment %>/<%= project %>" {
   capabilities = ["create", "update", "delete"]
 }
 
-path "<%= secertKvPath %>/data/<%= environment %>/<%= project %>/+" {
+path "<%= secretKvPath %>/data/<%= environment %>/<%= project %>/+" {
   capabilities = ["create", "update", "delete"]
 }
 
-path "<%= secertKvPath %>/data/<%= environment %>/<%= project %>/+/+" {
+path "<%= secretKvPath %>/data/<%= environment %>/<%= project %>/+/+" {
   capabilities = ["create", "update", "delete"]
 }
 
-path "<%= secertKvPath %>/metadata/<%= environment %>/<%= project %>/+" {
+path "<%= secretKvPath %>/metadata/<%= environment %>/<%= project %>/+" {
   capabilities = ["create", "update", "delete"]
 }
 
-path "<%= secertKvPath %>/metadata/<%= environment %>/<%= project %>/+/+" {
+path "<%= secretKvPath %>/metadata/<%= environment %>/<%= project %>/+/+" {
   capabilities = ["create", "update", "delete"]
 }
 
-path "<%= secertKvPath %>/delete/<%= environment %>/<%= project %>/+" {
+path "<%= secretKvPath %>/delete/<%= environment %>/<%= project %>/+" {
   capabilities = ["create", "update"]
 }
 
-path "<%= secertKvPath %>/delete/<%= environment %>/<%= project %>/+/+" {
+path "<%= secretKvPath %>/delete/<%= environment %>/<%= project %>/+/+" {
   capabilities = ["create", "update"]
 }
 
-path "<%= secertKvPath %>/undelete/<%= environment %>/<%= project %>/+" {
+path "<%= secretKvPath %>/undelete/<%= environment %>/<%= project %>/+" {
   capabilities = ["create", "update"]
 }
 
-path "<%= secertKvPath %>/undelete/<%= environment %>/<%= project %>/+/+" {
+path "<%= secretKvPath %>/undelete/<%= environment %>/<%= project %>/+/+" {
   capabilities = ["create", "update"]
 }
 
-path "<%= secertKvPath %>/destroy/<%= environment %>/<%= project %>/+" {
+path "<%= secretKvPath %>/destroy/<%= environment %>/<%= project %>/+" {
   capabilities = ["create", "update"]
 }
 
-path "<%= secertKvPath %>/destroy/<%= environment %>/<%= project %>/+/+" {
+path "<%= secretKvPath %>/destroy/<%= environment %>/<%= project %>/+/+" {
   capabilities = ["create", "update"]
 }

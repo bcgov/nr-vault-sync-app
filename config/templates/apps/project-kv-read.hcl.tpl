@@ -1,5 +1,5 @@
 
-path "<%= secertKvPath %>/metadata" {
+path "<%= secretKvPath %>/metadata" {
   capabilities = ["list"]
 }
 
@@ -15,7 +15,7 @@ path "apps/metadata/<%= environment %>/<%= project %>/+" {
   capabilities = ["read", "list"]
 }
 
-path "<%= secertKvPath %>/data/<%= environment %>/<%= project %>/+" {
+path "<%= secretKvPath %>/data/<%= environment %>/<%= project %>/+" {
   capabilities = ["read"]
 }
 
@@ -23,6 +23,6 @@ path "apps/metadata/<%= environment %>/<%= project %>/+/+" {
   capabilities = ["read", "list"]
 }
 
-path "<%= secertKvPath %>/data/<%= environment %>/<%= project %>/+/+" {
+path "<%= secretKvPath %>/data/<%= environment %>/<%= project %>/+/+" {
   capabilities = ["read"]
 }

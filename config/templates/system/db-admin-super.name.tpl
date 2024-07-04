@@ -1,1 +1,1 @@
-<%= secertDbPath %>-db-admin-super
+<%= secretDbPath %>-db-admin-super
