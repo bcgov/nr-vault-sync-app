@@ -1,1 +1,34 @@
-{}
+{
+  "db": [],
+  "kv": [
+    "apps",
+    "groups"
+  ],
+  "appActorDefaults": {
+    "approle": {
+      "tools": ["app-kv-read", "app-kv-write",  "app-db-readwrite"],
+      "dev": ["app-kv-read", "app-kv-write", "app-db-readwrite"],
+      "test": ["app-kv-read", "app-kv-write",  "app-db-readwrite"],
+      "prod": ["app-kv-read", "app-kv-write",  "app-db-readwrite"]
+    },
+    "developer": {
+      "tools": ["project-kv-read", "project-kv-write", "app-db-readwrite"],
+      "dev": ["project-kv-read", "project-kv-write", "app-db-readwrite"],
+      "test": ["project-kv-read", "app-db-read"]
+    }
+  },
+  "groups": [
+    {
+      "kv": "groups",
+      "name": "test"
+    },
+    {
+      "name": "vault-admin",
+      "policies": ["system/admin-general"]
+    },
+    {
+      "name": "vault-superadmin",
+      "policies": ["system/admin-super"]
+    }
+  ]
+}

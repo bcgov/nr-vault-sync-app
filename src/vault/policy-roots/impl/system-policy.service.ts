@@ -49,7 +49,7 @@ export class SystemPolicyService implements PolicyRootService<undefined> {
    */
   private static readonly sysPolicyConfigPath = path.join(
     __dirname,
-    '../../../../config/system',
+    '../../../../config/templates/system',
   );
 
   /**
