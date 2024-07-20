@@ -209,7 +209,11 @@ export default class VaultApproleController {
       });
     } catch (err: unknown) {
       // Assume this to be an approle with no roles
-      return [];
+      return {
+        data: {
+          keys: [],
+        },
+      };
     }
   }
 }
