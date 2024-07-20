@@ -14,3 +14,4 @@ VAULT_UNSEAL_KEY
 /intention.json
 /config/envconsul/env.hcl
 /config/config.json
+/setenv/*

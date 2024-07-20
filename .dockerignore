@@ -8,11 +8,10 @@
 # No docs
 *.md
 
-/config/envconsul
-/config/config.json
 /coverage
 /e2e
 /dist
 /node_modules
 /setenv*
+/setenv/*
 /vault-policy.hcl

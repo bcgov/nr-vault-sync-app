@@ -1,4 +1,4 @@
-# This file provides the policies required to run the vault policy generator
+# This file provides the policies required to run the vault sync
 
 # Create and manage roles
 path "auth/approle/*" {

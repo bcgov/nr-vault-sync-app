@@ -1,8 +1,6 @@
 # Vault Sync Tool
 
-The Vault Sync tool or VST is for generating and syncing vault policies, groups and appRoles.
-
-See: [Confluence Documentation](https://apps.nrs.gov.bc.ca/int/confluence/x/m4FvBQ)
+The Vault Sync Tool configures HashiCorp Vault using data sources to allow applications and users to access Vault securely. It can read a static configuration or read dynamic data from the business intelligence tool, [NR Broker](https://github.com/bcgov-nr/nr-broker). It can monitor for changes in its datasources or be run on-demand.
 
 <!-- toc -->
 * [Vault Sync Tool](#vault-sync-tool)
@@ -10,48 +8,43 @@ See: [Confluence Documentation](https://apps.nrs.gov.bc.ca/int/confluence/x/m4Fv
 * [Commands](#commands)
 <!-- tocstop -->
 
-## Building the Docker image
+## Running
 
-`podman build . -t vsync`
+The tool can be run from the source using Node.js or a release container image by using Podman or Docker.
+
+```
+./bin/dev health
+```
+
+```
+podman run --rm ghcr.io/bcgov-nr/vault-sync-app:v1.0.4 health
+```
+
+The sample command runs the health command. All the commands will probably require some arguments set up to work with your Vault.
+
+The container expects to recieve a VAULT_ADDR and VAULT_TOKEN to load
 
 ## Environment Variables
 
-The tool can use the following environment variables in place of command arguments. The default is in the brackets. The defaults are for testing with a local Vault instance.
+The tool can use environment variables in place of most command arguments. It is recommended that all confidential paramaters (tokens, etc.) be set using environment variables.
 
-* VAULT_ADDR - The address of the vault server ('http://127.0.0.1:8200')
-* VAULT_TOKEN - The token to use when connecting to vault (myroot)
+These can be found by looking in the [src/flags.ts](src/flags.ts) file.
 
-To set the environment variables, source the target environment's setenv-*.sh file. For example, to set the address and token for the dev environment, run the following command:
+A sample env file is provided. To setup for running the tool using a local dev environment, run the following command:
 
-`source setenv-dev.sh`
+`source setenv-local.sh`
 
-You will need vault and jq installed to run the above.
+## Development
 
-## Supported npm commands
+This document is aimed at developers looking to setup the Vault Sync Tool to run or make modifications to it.
 
-* npm start - deploy configuration to provided vault instance
-* npm run lint - lint source code
-* npm run test - Run unit tests
-* npm run e2e - Run end-to-end tests
+See: [Development](README-dev.md)
 
 ## Configuration
 
-See: [Confluence Documentation](https://apps.nrs.gov.bc.ca/int/confluence/x/m4FvBQ)
+This document is aimed at Vault Administrators looking to alter the policies and access the Vault Sync Tool configures.
 
-## Local testing
-
-The following will start up vault in docker. The Vault Sync Tool defaults for the address and token should work with it.
-
-`podman run --rm -e 'VAULT_DEV_ROOT_TOKEN_ID=myroot' -e 'VAULT_DEV_LISTEN_ADDRESS=0.0.0.0:8200' --name=dev-vault -p 8200:8200 vault`
-
-You will need to add an OIDC authentication method to do local testing of group syncs.
-
-```
-source setenv-local.sh
-vault auth enable oidc
-vault auth enable -path=vs_apps_approle approle
-vault secrets enable -path=apps -version=2 kv
-```
+See: [Configuration](README-config.md)
 
 # Usage
 <!-- usage -->
@@ -60,7 +53,7 @@ $ npm install -g vstool
 $ vstool COMMAND
 running command...
 $ vstool (--version)
-vstool/1.0.0 darwin-arm64 node-v22.1.0
+vstool/1.0.0 darwin-x64 node-v20.11.1
 $ vstool --help [COMMAND]
 USAGE
   $ vstool COMMAND
@@ -109,7 +102,7 @@ USAGE
 
 FLAGS
   -h, --help                    Show CLI help.
-      --broker-api-url=<value>  [default: https://nr-broker.apps.silver.devops.gov.bc.ca/] The broker api base url
+      --broker-api-url=<value>  [default: https://broker.io.nrs.gov.bc.ca/] The broker api base url
       --broker-token=<value>    The broker JWT
       --vault-addr=<value>      [default: http://127.0.0.1:8200] The vault address
       --vault-token=<value>     [default: myroot] The vault token
@@ -146,7 +139,7 @@ USAGE
 
 FLAGS
   -h, --help                    Show CLI help.
-      --broker-api-url=<value>  [default: https://nr-broker.apps.silver.devops.gov.bc.ca/] The broker api base url
+      --broker-api-url=<value>  [default: https://broker.io.nrs.gov.bc.ca/] The broker api base url
       --broker-token=<value>    The broker JWT
       --vault-addr=<value>      [default: http://127.0.0.1:8200] The vault address
       --vault-token=<value>     [default: myroot] The vault token
@@ -190,7 +183,7 @@ DESCRIPTION
   Display help for vstool.
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v6.2.0/src/commands/help.ts)_
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v6.2.6/src/commands/help.ts)_
 
 ## `vstool init`
 
@@ -223,7 +216,7 @@ USAGE
 
 FLAGS
   -h, --help                    Show CLI help.
-      --broker-api-url=<value>  [default: https://nr-broker.apps.silver.devops.gov.bc.ca/] The broker api base url
+      --broker-api-url=<value>  [default: https://broker.io.nrs.gov.bc.ca/] The broker api base url
       --broker-token=<value>    The broker JWT
       --root=<value>...         [default: ] The root to constrict the policy sync to. Some roots can be further
                                 constricted such as -root=apps -root=cool-app-war
@@ -255,7 +248,7 @@ EXAMPLES
   $ vstool plugins
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.2.3/src/commands/plugins/index.ts)_
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.3.7/src/commands/plugins/index.ts)_
 
 ## `vstool plugins:add PLUGIN`
 
@@ -329,7 +322,7 @@ EXAMPLES
   $ vstool plugins:inspect myplugin
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.2.3/src/commands/plugins/inspect.ts)_
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.3.7/src/commands/plugins/inspect.ts)_
 
 ## `vstool plugins:install PLUGIN`
 
@@ -378,7 +371,7 @@ EXAMPLES
     $ vstool plugins:install someuser/someplugin
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.2.3/src/commands/plugins/install.ts)_
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.3.7/src/commands/plugins/install.ts)_
 
 ## `vstool plugins:link PATH`
 
@@ -408,7 +401,7 @@ EXAMPLES
   $ vstool plugins:link myplugin
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.2.3/src/commands/plugins/link.ts)_
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.3.7/src/commands/plugins/link.ts)_
 
 ## `vstool plugins:remove [PLUGIN]`
 
@@ -449,7 +442,7 @@ FLAGS
   --reinstall  Reinstall all plugins after uninstalling.
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.2.3/src/commands/plugins/reset.ts)_
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.3.7/src/commands/plugins/reset.ts)_
 
 ## `vstool plugins:uninstall [PLUGIN]`
 
@@ -477,7 +470,7 @@ EXAMPLES
   $ vstool plugins:uninstall myplugin
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.2.3/src/commands/plugins/uninstall.ts)_
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.3.7/src/commands/plugins/uninstall.ts)_
 
 ## `vstool plugins:unlink [PLUGIN]`
 
@@ -521,7 +514,7 @@ DESCRIPTION
   Update installed plugins.
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.2.3/src/commands/plugins/update.ts)_
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.3.7/src/commands/plugins/update.ts)_
 
 ## `vstool policy-sync`
 
@@ -534,7 +527,7 @@ USAGE
 
 FLAGS
   -h, --help                    Show CLI help.
-      --broker-api-url=<value>  [default: https://nr-broker.apps.silver.devops.gov.bc.ca/] The broker api base url
+      --broker-api-url=<value>  [default: https://broker.io.nrs.gov.bc.ca/] The broker api base url
       --broker-token=<value>    The broker JWT
       --root=<value>...         [default: ] The root to constrict the policy sync to. Some roots can be further
                                 constricted such as -root=apps -root=cool-app-war
