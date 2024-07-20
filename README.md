@@ -53,7 +53,7 @@ $ npm install -g vstool
 $ vstool COMMAND
 running command...
 $ vstool (--version)
-vstool/1.0.0 darwin-arm64 node-v22.1.0
+vstool/1.0.0 darwin-x64 node-v20.11.1
 $ vstool --help [COMMAND]
 USAGE
   $ vstool COMMAND
@@ -102,7 +102,7 @@ USAGE
 
 FLAGS
   -h, --help                    Show CLI help.
-      --broker-api-url=<value>  [default: https://nr-broker.apps.silver.devops.gov.bc.ca/] The broker api base url
+      --broker-api-url=<value>  [default: https://broker.io.nrs.gov.bc.ca/] The broker api base url
       --broker-token=<value>    The broker JWT
       --vault-addr=<value>      [default: http://127.0.0.1:8200] The vault address
       --vault-token=<value>     [default: myroot] The vault token
@@ -139,7 +139,7 @@ USAGE
 
 FLAGS
   -h, --help                    Show CLI help.
-      --broker-api-url=<value>  [default: https://nr-broker.apps.silver.devops.gov.bc.ca/] The broker api base url
+      --broker-api-url=<value>  [default: https://broker.io.nrs.gov.bc.ca/] The broker api base url
       --broker-token=<value>    The broker JWT
       --vault-addr=<value>      [default: http://127.0.0.1:8200] The vault address
       --vault-token=<value>     [default: myroot] The vault token
@@ -183,7 +183,7 @@ DESCRIPTION
   Display help for vstool.
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v6.2.0/src/commands/help.ts)_
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v6.2.6/src/commands/help.ts)_
 
 ## `vstool init`
 
@@ -216,7 +216,7 @@ USAGE
 
 FLAGS
   -h, --help                    Show CLI help.
-      --broker-api-url=<value>  [default: https://nr-broker.apps.silver.devops.gov.bc.ca/] The broker api base url
+      --broker-api-url=<value>  [default: https://broker.io.nrs.gov.bc.ca/] The broker api base url
       --broker-token=<value>    The broker JWT
       --root=<value>...         [default: ] The root to constrict the policy sync to. Some roots can be further
                                 constricted such as -root=apps -root=cool-app-war
@@ -248,7 +248,7 @@ EXAMPLES
   $ vstool plugins
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.2.3/src/commands/plugins/index.ts)_
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.3.7/src/commands/plugins/index.ts)_
 
 ## `vstool plugins:add PLUGIN`
 
@@ -322,7 +322,7 @@ EXAMPLES
   $ vstool plugins:inspect myplugin
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.2.3/src/commands/plugins/inspect.ts)_
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.3.7/src/commands/plugins/inspect.ts)_
 
 ## `vstool plugins:install PLUGIN`
 
@@ -371,7 +371,7 @@ EXAMPLES
     $ vstool plugins:install someuser/someplugin
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.2.3/src/commands/plugins/install.ts)_
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.3.7/src/commands/plugins/install.ts)_
 
 ## `vstool plugins:link PATH`
 
@@ -401,7 +401,7 @@ EXAMPLES
   $ vstool plugins:link myplugin
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.2.3/src/commands/plugins/link.ts)_
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.3.7/src/commands/plugins/link.ts)_
 
 ## `vstool plugins:remove [PLUGIN]`
 
@@ -442,7 +442,7 @@ FLAGS
   --reinstall  Reinstall all plugins after uninstalling.
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.2.3/src/commands/plugins/reset.ts)_
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.3.7/src/commands/plugins/reset.ts)_
 
 ## `vstool plugins:uninstall [PLUGIN]`
 
@@ -470,7 +470,7 @@ EXAMPLES
   $ vstool plugins:uninstall myplugin
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.2.3/src/commands/plugins/uninstall.ts)_
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.3.7/src/commands/plugins/uninstall.ts)_
 
 ## `vstool plugins:unlink [PLUGIN]`
 
@@ -514,7 +514,7 @@ DESCRIPTION
   Update installed plugins.
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.2.3/src/commands/plugins/update.ts)_
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.3.7/src/commands/plugins/update.ts)_
 
 ## `vstool policy-sync`
 
@@ -527,7 +527,7 @@ USAGE
 
 FLAGS
   -h, --help                    Show CLI help.
-      --broker-api-url=<value>  [default: https://nr-broker.apps.silver.devops.gov.bc.ca/] The broker api base url
+      --broker-api-url=<value>  [default: https://broker.io.nrs.gov.bc.ca/] The broker api base url
       --broker-token=<value>    The broker JWT
       --root=<value>...         [default: ] The root to constrict the policy sync to. Some roots can be further
                                 constricted such as -root=apps -root=cool-app-war

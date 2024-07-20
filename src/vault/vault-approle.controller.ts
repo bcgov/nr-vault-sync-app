@@ -186,10 +186,7 @@ export default class VaultApproleController {
    * @param registeredRoles The approles that have been registered to create/update
    */
   public async removeUnusedRoles(registeredRoles: Set<string>): Promise<void> {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- No typing available
-    const vaultAppRoles = await this.vault.approleRoles({
-      mount_point: VAULT_APPROLE_MOUNT_POINT,
-    });
+    const vaultAppRoles = await this.getRoles();
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- No typing available
     const existingRoles = vaultAppRoles.data.keys as string[];
     for (const eRole of existingRoles) {
@@ -201,6 +198,18 @@ export default class VaultApproleController {
         mount_point: VAULT_APPROLE_MOUNT_POINT,
         role_name: eRole,
       });
+    }
+  }
+
+  private async getRoles() {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- No typing available
+      return await this.vault.approleRoles({
+        mount_point: VAULT_APPROLE_MOUNT_POINT,
+      });
+    } catch (err: unknown) {
+      // Assume this to be an approle with no roles
+      return [];
     }
   }
 }
