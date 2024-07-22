@@ -27,13 +27,13 @@ podman build . -t vsync
 
 ### With NR Broker
 
-NR Broker's local setup will start a Vault container and run a setup script. No further setup should be required.
+Setting up NR Broker locally involves starting a Vault container and executing a setup script. This process enables the Vault Sync Tool to operate seamlessly with the local installation, requiring no additional setup.
 
 This is currently the only practical way to run the Vault Sync Tool because NR Broker is the only implemented data source for applications.
 
 ### Without NR Broker
 
-The following will start up Vault in Podman. The Vault Sync Tool defaults to localhost:8200 for the address and myroot for the token.
+The following will start up Vault in Podman. The Vault Sync Tool defaults to 'localhost:8200' for the address and 'myroot' for the token.
 
 `podman run --rm -e 'VAULT_DEV_ROOT_TOKEN_ID=myroot' -e 'VAULT_DEV_LISTEN_ADDRESS=0.0.0.0:8200' --name=dev-vault -p 8200:8200 vault`
 
@@ -47,6 +47,12 @@ vault secrets enable -path=apps -version=2 kv
 vault secrets enable -path=groups -version=2 kv
 ```
 
-## Running with Broker
+## Running Vault Sync Tool
+
+### With NR Broker
 
 See: [Running Vault Sync Tool](https://bcgov-nr.github.io/nr-broker/#/development?id=running-vault-sync-tool)
+
+### Without NR Broker
+
+This is unsupported currently.

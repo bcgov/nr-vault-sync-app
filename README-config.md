@@ -1,18 +1,28 @@
 # Vault Sync Tool - Configuration
 
+Back: [README.md](README.md)
+
 This document is aimed at Vault Administrators looking to alter the policies and access the Vault Sync Tool configures.
 
-For users, the Vault Sync Tool maps client roles coming from OIDC to internal groups with policies that manage what the group can do. For services, it maps App Roles to policies that manage what the service can do.
+For users, the Vault Sync Tool maps client roles coming from OIDC to internal groups with policies that manage what the group can do. For services, it maps [AppRoles](https://developer.hashicorp.com/vault/docs/auth/approle) to policies that manage what the service can do.
+
+## Configuring OIDC
+
+Configuring OIDC is out of scope for the Vault Sync Tool. The tool assumes there is another process (manual or automated) that maps end users to the roles included in their token.
+
+It is extremely important that roles are correctly mapped.
 
 ## Defined Groups
 
-The 'group' here refers to a grouping of policies and not a Vault group. This allows for the syncing of a specific group of policies (like apps or system) by themselves. A group is a collection of policies aimed at solving a class of access.
+A group is a collection of policies aimed at solving a class of access. This allows for the syncing of a specific group of policies (like apps or system) by themselves.
+
+The 'group' here is not a Vault group which is a separate thing.
 
 | Group | Definition | Examples | Typical Usage |
 | --- | --- | --- | --- |
-| system | Policies that provide broad access of Vault or a specific part. | system/admin-super | Admin users |
-| apps | Policies that an individual application needs for itself. | apps/fidq/prod-kv-read	| Applications or developers of an application |
-| groups | Policies for a group of end users (humans) | groups/appdelivery-user | A group of end users (application delivery, DBA, etc) |
+| system | Policies that provide broad access to Vault. | system/admin-super | Admin users; Generic access |
+| apps | Policies required by an individual application for its own use. | apps/fidq/prod-kv-read	| Applications or developers of an application |
+| groups | Policies for a group of end users (humans) | groups/appdelivery-user | A group of end users (developers, operations, security, auditors, management) |
 
 ### Policy Naming Pattern
 
@@ -23,6 +33,8 @@ The tool uses a naming pattern that Vault admins need to be aware of. The patter
 ## Configuration Folder
 
 This repo includes a generic configuration in [./config](./config/). If you have specific needs, you can copy this folder to another repository and make your changes there.
+
+If required, copy (or mount) your configuration to the config folder before you run the tool.
 
 ## File: config.json
 

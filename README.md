@@ -1,6 +1,6 @@
 # Vault Sync Tool
 
-The Vault Sync Tool configures HashiCorp Vault using data sources to allow applications and users to access Vault securely. It can read a static configuration or read dynamic data from the business intelligence tool, [NR Broker](https://github.com/bcgov-nr/nr-broker). It can monitor for changes in its datasources or be run on-demand.
+The Vault Sync Tool configures HashiCorp Vault by utilizing data sources, enabling secure access for applications and users. It can either read a static configuration or dynamically retrieve data from the business intelligence tool, [NR Broker](https://github.com/bcgov-nr/nr-broker). Additionally, it can monitor data source changes or be run on-demand.
 
 <!-- toc -->
 * [Vault Sync Tool](#vault-sync-tool)
@@ -10,23 +10,21 @@ The Vault Sync Tool configures HashiCorp Vault using data sources to allow appli
 
 ## Running
 
-The tool can be run from the source using Node.js or a release container image by using Podman or Docker.
+The tool can be run from the source using Node.js or a container image by using Podman or Docker.
 
 ```
 ./bin/dev health
 ```
 
 ```
-podman run --rm ghcr.io/bcgov-nr/vault-sync-app:v1.0.4 health
+podman run --rm ghcr.io/bcgov-nr/vault-sync-app:v2.0.1 health
 ```
 
-The sample command runs the health command. All the commands will probably require some arguments set up to work with your Vault.
-
-The container expects to recieve a VAULT_ADDR and VAULT_TOKEN to load
+The sample command runs the health command. All the commands will probably require some arguments set up to work with your installation of Hashicorp Vault. With no arguments set, it will try to use a local Vault installation with a static token.
 
 ## Environment Variables
 
-The tool can use environment variables in place of most command arguments. It is recommended that all confidential paramaters (tokens, etc.) be set using environment variables.
+The tool can utilize environment variables instead of most command arguments. It is recommended to set all confidential parameters (such as tokens) using environment variables. Specifically, the argument 'vault-token' should always be configured with the environment variable 'VAULT_TOKEN'.
 
 These can be found by looking in the [src/flags.ts](src/flags.ts) file.
 
