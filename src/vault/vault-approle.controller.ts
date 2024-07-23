@@ -7,7 +7,10 @@ import { AppConfigApprole, ConfigService } from '../services/config.service';
 import { AppPolicyService } from './policy-roots/impl/app-policy.service';
 import HclUtil from '../util/hcl.util';
 import EnvironmentUtil from '../util/environment.util';
-import { VAULT_ROOT_SYSTEM } from './policy-roots/policy-root.service';
+import {
+  VAULT_ROOT_APPS,
+  VAULT_ROOT_SYSTEM,
+} from './policy-roots/policy-root.service';
 import { RegistrationService } from '../services/registration.service';
 
 interface ApproleDict {
@@ -83,7 +86,10 @@ export default class VaultApproleController {
               this.hclUtil.renderName({
                 group: VAULT_ROOT_SYSTEM,
                 templateName: 'broker-auth',
-                data: { authMount: VAULT_APPROLE_MOUNT_POINT },
+                data: {
+                  authMount: VAULT_APPROLE_MOUNT_POINT,
+                  secretKvPath: 'apps',
+                },
               }),
             );
           }
@@ -115,7 +121,7 @@ export default class VaultApproleController {
 
                 templateNames.push(
                   this.hclUtil.renderName({
-                    group: 'apps',
+                    group: VAULT_ROOT_APPS,
                     templateName: 'app-auth',
                     data: {
                       project: app.project,

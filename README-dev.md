@@ -23,6 +23,8 @@ See: [Oclif CLI](https://oclif.io)
 podman build . -t vsync
 ```
 
+The built container can be substituted for the released container when running locally with NR Broker.
+
 ## Hashicorp Vault Setup for local testing
 
 ### With NR Broker

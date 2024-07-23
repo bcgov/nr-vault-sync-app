@@ -66,6 +66,7 @@ export class SystemPolicyService implements PolicyRootService<undefined> {
       authMount: VAULT_APPROLE_MOUNT_POINT,
       restrictedPaths: await this.restrictedBrokerAppPaths(),
       secretDbPath: 'db',
+      secretKvAppsPath: 'apps',
     };
     for (const file of templateFiles) {
       if (file.endsWith('.hcl.tpl') && !file.startsWith('kv-')) {

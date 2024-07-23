@@ -17,11 +17,9 @@ path "auth/<%= authMount %>/role/<%= path %>" {
 }
 <% }); %>
 
-<% kvPaths.forEach(function(secretKvPath){ %>
-path "<%= secretKvPath %>/subkeys/tools/+/+" {
+path "<%= secretKvAppsPath %>/subkeys/tools/+/+" {
   capabilities = ["read"]
 }
-path "<%= secretKvPath %>/data/tools/+/+" {
+path "<%= secretKvAppsPath %>/data/tools/+/+" {
   capabilities = ["update"]
 }
-<% }); %>

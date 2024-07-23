@@ -19,7 +19,7 @@ path "<%= secretKvPath %>/data/<%= environment %>/<%= project %>/+" {
   capabilities = ["read"]
 }
 
-path "apps/metadata/<%= environment %>/<%= project %>/+/+" {
+path "<%= secretKvPath %>/metadata/<%= environment %>/<%= project %>/+/+" {
   capabilities = ["read", "list"]
 }
 
