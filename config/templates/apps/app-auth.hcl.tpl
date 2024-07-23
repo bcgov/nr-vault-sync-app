@@ -8,3 +8,10 @@ path "auth/<%= authMount %>/role/<%= project %>_<%= application %>_<%= environme
 path "auth/<%= authMount %>/role/<%= project %>_<%= application %>_<%= environment %>/secret-id" {
   capabilities = ["update"]
 }
+
+path "<%= secretKvPath %>/subkeys/tools/<%= project %>/<%= application %>" {
+  capabilities = ["read"]
+}
+path "<%= secretKvPath %>/data/tools/<%= project %>/<%= application %>" {
+  capabilities = ["create", "update", "patch"]
+}

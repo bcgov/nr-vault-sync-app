@@ -2,7 +2,7 @@
 # Scope: Approle
 
 <% if (appCanReadProject) { %>
-path "apps/metadata/<%= environment %>/<%= project %>/shared" {
+path "<%= secretKvPath %>/metadata/<%= environment %>/<%= project %>/shared" {
   capabilities = ["read", "list"]
 }
 
