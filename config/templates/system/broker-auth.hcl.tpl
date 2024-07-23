@@ -21,5 +21,5 @@ path "<%= secretKvAppsPath %>/subkeys/tools/+/+" {
   capabilities = ["read"]
 }
 path "<%= secretKvAppsPath %>/data/tools/+/+" {
-  capabilities = ["update"]
+  capabilities = ["create", "update", "patch"]
 }
