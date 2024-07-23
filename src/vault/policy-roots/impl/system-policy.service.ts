@@ -1,14 +1,14 @@
-import { HlcRenderSpec } from '../../../util/hcl.util';
-import { PolicyRootService, VAULT_ROOT_SYSTEM } from '../policy-root.service';
+import fs from 'fs';
+import path from 'path';
 import winston from 'winston';
 import { inject, injectable } from 'inversify';
+import { PolicyRootService, VAULT_ROOT_SYSTEM } from '../policy-root.service';
 import { TYPES } from '../../../inversify.types';
 import { ConfigService } from '../../../services/config.service';
 import oidcData from '../oidc-data.deco';
 import { VAULT_APPROLE_MOUNT_POINT } from '../../vault-approle.controller';
 import { AppService } from '../../../services/app.service';
-import path from 'path';
-import fs from 'fs';
+import { HlcRenderSpec } from '../../../util/hcl.util';
 
 @injectable()
 /**

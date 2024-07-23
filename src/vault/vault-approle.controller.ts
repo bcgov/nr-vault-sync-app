@@ -87,6 +87,15 @@ export default class VaultApproleController {
               }),
             );
           }
+          if (app.config.brokerGlobal || app.config.brokerFor) {
+            templateNames.push(
+              this.hclUtil.renderName({
+                group: VAULT_ROOT_SYSTEM,
+                templateName: 'admin-audit-hash',
+                data: {},
+              }),
+            );
+          }
           // Add broker policies
           if (app.config.brokerFor) {
             for (const brokerApp of app.config.brokerFor) {
