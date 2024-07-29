@@ -10,11 +10,11 @@ path "<%= secretKvPath %>/data/<%= environment %>/<%= project %>/<%= application
 }
 
 path "<%= secretKvPath %>/metadata/<%= environment %>/<%= project %>/<%= application %>" {
-  capabilities = ["create", "update", "delete"]
+  capabilities = ["create", "update", "patch", "delete"]
 }
 
 path "<%= secretKvPath %>/metadata/<%= environment %>/<%= project %>/<%= application %>/+" {
-  capabilities = ["create", "update", "delete"]
+  capabilities = ["create", "update", "patch", "delete"]
 }
 
 path "<%= secretKvPath %>/delete/<%= environment %>/<%= project %>/<%= application %>" {
