@@ -2,7 +2,7 @@
 # Scope: Users with administrative access to this kv secret engine
 
 path "<%= secretKvPath %>/+/*" {
-  capabilities = ["create", "read", "update", "delete", "list"]
+  capabilities = ["create", "read", "update", "patch", "delete", "list"]
 }
 
 path "<%= secretKvPath %>/config" {
