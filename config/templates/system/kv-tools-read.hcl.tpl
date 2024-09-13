@@ -1,4 +1,4 @@
-# Write policy for tools space
+# Read policy for tools space
 # Scope: apps/data/tools access
 
 path "<%= secretKvPath %>/data/tools/+/+" {
