@@ -92,6 +92,15 @@ export default class VaultApproleController {
                 },
               }),
             );
+            templateNames.push(
+              this.hclUtil.renderName({
+                group: VAULT_ROOT_SYSTEM,
+                templateName: 'kv-tools-read',
+                data: {
+                  secretKvPath: 'apps',
+                },
+              }),
+            );
           }
           if (app.config.brokerGlobal || app.config.brokerFor) {
             templateNames.push(
