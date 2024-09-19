@@ -99,7 +99,7 @@ export class SystemPolicyService implements PolicyRootService<undefined> {
         templateName: 'kv-developer',
         data: { secretKvPath },
       });
-      if (secretKvPath == 'apps')
+      if (secretKvPath === 'apps')
         kvSpecs.push({
         group: VAULT_ROOT_SYSTEM,
         templateName: 'kv-tools-read',
