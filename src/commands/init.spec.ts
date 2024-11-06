@@ -7,9 +7,7 @@ jest.mock('../vault/vault.factory');
 describe('init command', () => {
   let stdoutSpy: jest.SpyInstance;
   beforeEach(() => {
-    stdoutSpy = jest
-      .spyOn(process.stdout, 'write')
-      .mockImplementation(() => true);
+    stdoutSpy = jest.spyOn(console, 'log').mockImplementation(() => true);
   });
 
   afterEach(() => jest.restoreAllMocks());
@@ -33,9 +31,9 @@ describe('init command', () => {
 
     expect(vaultFactory).toHaveBeenCalledTimes(1);
     expect(vaultFactory).toHaveBeenCalledWith('addr', 'token');
-    expect(stdoutSpy).toHaveBeenCalledWith('Init vault - endpoint (best)\n');
+    expect(stdoutSpy).toHaveBeenCalledWith('Init vault - endpoint (best)');
     expect(stdoutSpy).toHaveBeenCalledWith(
-      'Already initialized. No action taken.\n',
+      'Already initialized. No action taken.',
     );
   });
 });

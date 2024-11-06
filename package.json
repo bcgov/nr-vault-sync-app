@@ -22,7 +22,7 @@
     "prepack": "npm run build && oclif manifest && oclif readme",
     "postpack": "shx rm -f oclif.manifest.json",
     "test": "jest --config=jest.config.cjs",
-    "posttest": "npm lint",
+    "posttest": "npm run lint",
     "e2e": "jest --config=jest.e2e.config.cjs",
     "start": "ts-node src/index.ts",
     "version": "oclif-dev readme && git add README.md"
