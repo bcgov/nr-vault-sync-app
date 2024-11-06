@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import winston from 'winston';
 import { AppService } from '../../../services/app.service';
 import { ConfigService } from '../../../services/config.service';

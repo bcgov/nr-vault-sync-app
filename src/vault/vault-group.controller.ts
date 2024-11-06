@@ -149,11 +149,9 @@ export default class VaultGroupController {
       return;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- Library does not provide typing
     let group = await this.vault
       .write(groupName, groupProperties)
       .catch((error) => {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- No typing avialable
         const code = error.response.statusCode as number;
         this.logger.error(
           `Error creating group '${name}' in Vault: Error ${code}`,
@@ -164,26 +162,24 @@ export default class VaultGroupController {
 
     if (!group) {
       // API does not return data if write was an update
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- Library does not provide typing
+
       group = await this.vault.read(
         `identity/group/name/${encodeURIComponent(name)}`,
       );
     }
-    /* eslint-disable @typescript-eslint/no-unsafe-argument */
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- No typing avialable
+
     if (
       !group.data.alias ||
       (group.data.alias && Object.keys(group.data.alias).length === 0)
     ) {
       const promises = accessors.map((accessor) => {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- No typing avialable
         return this.createGroupAlias(group.data.id, accessor, role);
       });
       await Promise.all(promises);
     } else {
       this.logger.debug('Skip adding alias');
     }
-    /* eslint-enable @typescript-eslint/no-unsafe-argument */
+
     this.logger.info(`Role: ${role} -> Group: ${name} [${policies.join(',')}]`);
   }
 
@@ -198,14 +194,12 @@ export default class VaultGroupController {
     mountAccessor: string,
     name: string,
   ): Promise<void> {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- Library does not provide typing
     const alias = await this.vault.write(`identity/lookup/group`, {
       alias_name: name,
       alias_mount_accessor: mountAccessor,
     });
 
     if (!alias) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- Library does not provide typing
       await this.vault
         .write(`identity/group-alias`, {
           name,
@@ -213,7 +207,6 @@ export default class VaultGroupController {
           canonical_id: canonicalId,
         })
         .catch((error) => {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- No typing avialable
           const code = error.response.statusCode as number;
           this.logger.error(
             `Failed to create alias '${name}' for '${canonicalId}' on '${mountAccessor}' in Vault. Error ${code}`,

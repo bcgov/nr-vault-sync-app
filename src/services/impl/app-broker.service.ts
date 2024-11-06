@@ -65,7 +65,7 @@ export class AppBrokerService implements AppService {
       periodLookup[app.policyOptions?.tokenPeriod]
         ? periodLookup[app.policyOptions?.tokenPeriod]
         : periodLookup['daily'];
-    /* eslint-disable camelcase -- Library code style issue */
+
     return merge(
       {
         approle: {
@@ -103,6 +103,5 @@ export class AppBrokerService implements AppService {
       },
       app,
     );
-    /* eslint-enable camelcase */
   }
 }

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import winston from 'winston';
 import { ConfigService } from '../../../services/config.service';
 import { HlcRenderSpec } from '../../../util/hcl.util';

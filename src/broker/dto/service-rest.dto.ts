@@ -6,6 +6,6 @@ export class ServiceRestDto extends VertexPointerRestDto {
   description?: string;
   name!: string;
   title?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   vaultConfig?: any;
 }

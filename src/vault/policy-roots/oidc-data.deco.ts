@@ -3,8 +3,6 @@ import { TYPES } from '../../inversify.types';
 import { HlcRenderSpec } from '../../util/hcl.util';
 import VaultApi from '../vault.api';
 
-/* eslint-disable @typescript-eslint/no-explicit-any -- Use of any required by decorators */
-
 let oidcDecoData: ejs.Data | undefined;
 
 /**
@@ -21,7 +19,6 @@ export default function oidcData(
   const method = descriptor.value as () => Promise<HlcRenderSpec[]>;
 
   descriptor.value = async function (...args: any) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     const specArr = await method.apply(this, args);
     // Danger: IoC should not be used this way.
     // Decorators aren't bound to classes so this is the only way.

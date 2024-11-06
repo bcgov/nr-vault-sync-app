@@ -24,7 +24,6 @@ describe('vault.factory', () => {
   });
 
   // Disabled because the factory only runs once
-  // eslint-disable-next-line jest/no-disabled-tests
   it.skip('Returns a nv.client (without ending slash)', () => {
     const mockNodeVault = jest.mocked(nv);
     const val = 'return';

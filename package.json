@@ -18,11 +18,11 @@
   ],
   "scripts": {
     "build": "shx rm -rf dist && tsc -b",
-    "lint": "eslint \"**/*.{js,ts}\" --fix --config .eslintrc.json",
+    "lint": "eslint \"src/**/*.ts\"",
     "prepack": "npm run build && oclif manifest && oclif readme",
     "postpack": "shx rm -f oclif.manifest.json",
     "test": "jest --config=jest.config.cjs",
-    "posttest": "eslint \"**/*.{js,ts}\" --fix --config .eslintrc.json",
+    "posttest": "npm lint",
     "e2e": "jest --config=jest.e2e.config.cjs",
     "start": "ts-node src/index.ts",
     "version": "oclif-dev readme && git add README.md"
@@ -67,7 +67,8 @@
     "shx": "^0.3.4",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
-    "typescript": "^5.6.3"
+    "typescript": "^5.6.3",
+    "typescript-eslint": "^8.13.0"
   },
   "engines": {
     "node": ">=18.0.0"

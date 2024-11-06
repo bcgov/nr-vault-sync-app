@@ -38,6 +38,7 @@ export default class BrokerMonitorController {
           console.log(`---- sync end [${Date.now() - startMs}]`);
         }),
       )
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
       .subscribe(() => {});
   }
 }

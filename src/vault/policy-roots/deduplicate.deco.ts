@@ -2,8 +2,6 @@ import { vsContainer } from '../../inversify.config';
 import { TYPES } from '../../inversify.types';
 import HclUtil, { HlcRenderSpec } from '../../util/hcl.util';
 
-/* eslint-disable @typescript-eslint/no-explicit-any -- Use of any required by decorators */
-
 /**
  * Policy deduplication decorator
  * @param target
@@ -19,7 +17,7 @@ export default function deduplicate(
 
   descriptor.value = async function (...args: any) {
     const set = new Set<string>();
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+
     const specArr = await method.apply(this, args);
     // Danger: IoC should not be used this way.
     // Decorators aren't bound to classes so this is the only way.
