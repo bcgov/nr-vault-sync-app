@@ -61,7 +61,6 @@ export default class VaultApi {
     return this.vault
       .read(`/sys/auth`)
       .then((response) => {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- No typing avialable
         const accessors = Object.entries(response.data as VaultAuthData)
           .filter(([key, value]) => key === 'oidc/' && value.type === 'oidc')
           .map(([, value]) => value.accessor);
@@ -74,9 +73,7 @@ export default class VaultApi {
         throw new Error('No OIDC configured');
       })
       .catch((error) => {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- No typing avialable
         if (error.response) {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- No typing avialable
           const code = error.response.statusCode as number;
           this.logger.error(
             `Could not lookup accessor in Vault: Error ${code}`,

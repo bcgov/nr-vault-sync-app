@@ -27,7 +27,7 @@ export class VertexSearchDto {
 
 export class VertexInsertDto {
   collection!: CollectionNames;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   data: any;
   geo?: PointGeom;
   prop?: VertexPropDto;

@@ -8,7 +8,7 @@ path "<%= kv %>/config" {
 }
 
 path "<%= kv %>/metadata/*" {
-  capabilities = ["list", "read", "delete"]
+  capabilities = ["create", "read", "delete", "update", "list"]
 }
 
 path "<%= kv %>/data/<%= name %>/*" {

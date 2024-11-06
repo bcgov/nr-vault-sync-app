@@ -6,9 +6,7 @@ jest.mock('../inversify.config');
 describe('group sync command', () => {
   let stdoutSpy: jest.SpyInstance;
   beforeEach(() => {
-    stdoutSpy = jest
-      .spyOn(process.stdout, 'write')
-      .mockImplementation(() => true);
+    stdoutSpy = jest.spyOn(console, 'log').mockImplementation(() => true);
   });
 
   afterEach(() => jest.restoreAllMocks());
@@ -28,6 +26,6 @@ describe('group sync command', () => {
     expect(mockBindVault).toHaveBeenCalledTimes(1);
     expect(mockBindVault).toHaveBeenCalledWith('addr', 'token');
     expect(mockVgcInstance.sync).toHaveBeenCalled();
-    expect(stdoutSpy).toHaveBeenCalledWith('Vault Group Sync\n');
+    expect(stdoutSpy).toHaveBeenCalledWith('Vault Group Sync');
   });
 });

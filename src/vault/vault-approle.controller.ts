@@ -69,6 +69,7 @@ export default class VaultApproleController {
             env,
           );
           const normEnv = EnvironmentUtil.normalize(env);
+          /* eslint-disable no-unsafe-optional-chaining */
           const templateNames = [
             ...(app.config?.actor?.approle &&
             app.config?.actor?.approle[normEnv]
@@ -81,6 +82,7 @@ export default class VaultApproleController {
               templateNames.push(policy);
             }
           }
+          /* eslint-enable no-unsafe-optional-chaining */
           if (app.config.brokerGlobal) {
             templateNames.push(
               this.hclUtil.renderName({
@@ -211,7 +213,7 @@ export default class VaultApproleController {
    */
   public async removeUnusedRoles(registeredRoles: Set<string>): Promise<void> {
     const vaultAppRoles = await this.getRoles();
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- No typing available
+
     const existingRoles = vaultAppRoles.data.keys as string[];
     for (const eRole of existingRoles) {
       if (registeredRoles.has(eRole)) {
@@ -227,7 +229,6 @@ export default class VaultApproleController {
 
   private async getRoles() {
     try {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- No typing available
       return await this.vault.approleRoles({
         mount_point: VAULT_APPROLE_MOUNT_POINT,
       });

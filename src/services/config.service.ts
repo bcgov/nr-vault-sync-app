@@ -7,7 +7,6 @@ export interface AppActorPolicies {
   };
 }
 
-/* eslint-disable camelcase -- Library code style issue */
 export interface AppConfigApprole {
   // non-standard
   enabled: boolean;
@@ -28,7 +27,6 @@ export interface AppConfigApprole {
   token_period: number | string;
   token_type: string;
 }
-/* eslint-enable camelcase */
 
 export interface AppConfig {
   /** Per-environment overrides of policies for each type of actor */

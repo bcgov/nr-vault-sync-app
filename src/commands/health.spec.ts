@@ -7,9 +7,7 @@ jest.mock('../vault/vault.factory');
 describe('health command', () => {
   let stdoutSpy: jest.SpyInstance;
   beforeEach(() => {
-    stdoutSpy = jest
-      .spyOn(process.stdout, 'write')
-      .mockImplementation(() => true);
+    stdoutSpy = jest.spyOn(console, 'log').mockImplementation(() => true);
   });
 
   afterEach(() => jest.restoreAllMocks());
@@ -29,7 +27,7 @@ describe('health command', () => {
 
     expect(vaultFactory).toHaveBeenCalledTimes(1);
     expect(vaultFactory).toHaveBeenCalledWith('addr', 'token');
-    expect(stdoutSpy).toHaveBeenCalledWith('Vault health - endpoint\n');
-    expect(stdoutSpy).toHaveBeenCalledWith('{}\n');
+    expect(stdoutSpy).toHaveBeenCalledWith('Vault health - endpoint');
+    expect(stdoutSpy).toHaveBeenCalledWith('{}');
   });
 });

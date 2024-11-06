@@ -14,11 +14,7 @@ export class BrokerApi {
   private axiosOptions!: AxiosRequestConfig;
   private projectServices$ = new BehaviorSubject<{
     timestamp: number;
-    response: AxiosResponse<
-      GraphProjectServicesResponseDto[],
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      any
-    > | null;
+    response: AxiosResponse<GraphProjectServicesResponseDto[], any> | null;
   }>({ timestamp: 0, response: null });
 
   /**

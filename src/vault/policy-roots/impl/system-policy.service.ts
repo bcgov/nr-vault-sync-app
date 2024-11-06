@@ -101,10 +101,10 @@ export class SystemPolicyService implements PolicyRootService<undefined> {
       });
       if (secretKvPath === 'apps')
         kvSpecs.push({
-        group: VAULT_ROOT_SYSTEM,
-        templateName: 'kv-tools-read',
-        data: { secretKvPath },
-      });
+          group: VAULT_ROOT_SYSTEM,
+          templateName: 'kv-tools-read',
+          data: { secretKvPath },
+        });
     }
     return kvSpecs;
   }

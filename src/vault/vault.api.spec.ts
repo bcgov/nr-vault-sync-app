@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import nv from 'node-vault';
 import winston from 'winston';
 import VaultApi from './vault.api';

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import nv from 'node-vault';
 import winston from 'winston';
 import VaultGroupController from './vault-group.controller';
@@ -29,7 +30,7 @@ describe('vault-group.controller', () => {
 
   const mockConfigService = {
     getGroups: jest.fn(() => {
-      [];
+      return [];
     }),
   } as unknown as ConfigService;
 

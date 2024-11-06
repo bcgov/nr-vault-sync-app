@@ -6,9 +6,7 @@ jest.mock('../inversify.config');
 describe('policy sync command', () => {
   let stdoutSpy: jest.SpyInstance;
   beforeEach(() => {
-    stdoutSpy = jest
-      .spyOn(process.stdout, 'write')
-      .mockImplementation(() => true);
+    stdoutSpy = jest.spyOn(console, 'log').mockImplementation(() => true);
   });
 
   afterEach(() => jest.restoreAllMocks());
@@ -29,6 +27,6 @@ describe('policy sync command', () => {
     expect(mockBindVault).toHaveBeenCalledWith('addr', 'token');
     expect(mockVpcInstance.sync).toHaveBeenCalled();
     expect(mockVpcInstance.sync).toHaveBeenCalledWith([]);
-    expect(stdoutSpy).toHaveBeenCalledWith('Vault Policy Sync\n');
+    expect(stdoutSpy).toHaveBeenCalledWith('Vault Policy Sync');
   });
 });

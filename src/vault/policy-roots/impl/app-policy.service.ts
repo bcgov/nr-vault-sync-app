@@ -127,6 +127,7 @@ export class AppPolicyService implements PolicyRootService<Application> {
       });
     }
     if (appInfo.config?.db) {
+      // eslint-disable-next-line no-unsafe-optional-chaining
       for (const db of appInfo.config?.db) {
         try {
           const dbType = await this.config.getDbType(db);

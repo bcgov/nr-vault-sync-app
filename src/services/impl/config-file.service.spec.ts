@@ -3,7 +3,7 @@ import { VaultConfig } from '../config.service';
 
 jest.mock('fs');
 const mockFs = jest.mocked(fs);
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 const mockConfig: VaultConfig = {
   appActorDefaults: {
     approle: {
