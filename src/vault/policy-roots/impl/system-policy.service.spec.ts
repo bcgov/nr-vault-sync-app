@@ -6,6 +6,7 @@ import { SystemPolicyService } from './system-policy.service';
 import { AppService } from '../../../services/app.service';
 
 jest.mock('../oidc-data.deco', () => jest.fn());
+jest.mock('../deduplicate.deco', () => jest.fn());
 
 describe('system-policy.service', () => {
   const mockLogger = {

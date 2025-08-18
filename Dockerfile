@@ -1,5 +1,5 @@
-FROM node:20-alpine
-ARG ENVCONSUL_VERSION=0.13.2
+FROM node:24-alpine
+ARG ENVCONSUL_VERSION=0.13.3
 
 ADD https://releases.hashicorp.com/envconsul/${ENVCONSUL_VERSION}/envconsul_${ENVCONSUL_VERSION}_linux_amd64.zip /tmp/envconsul.zip
 RUN unzip /tmp/envconsul.zip && \
