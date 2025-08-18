@@ -10,6 +10,8 @@ import { AppPolicyService } from './policy-roots/impl/app-policy.service';
 import { ConfigService } from '../services/config.service';
 import { RegistrationService } from '../services/registration.service';
 
+jest.mock('./policy-roots/deduplicate.deco', () => jest.fn());
+
 describe('vault-approle.controller', () => {
   const mockHclUtil = {
     renderName: jest.fn(() => 'policyname'),

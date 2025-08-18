@@ -10,6 +10,8 @@ import { AppService } from '../services/app.service';
 import HclUtil from '../util/hcl.util';
 import { RegistrationService } from '../services/registration.service';
 
+jest.mock('./policy-roots/deduplicate.deco', () => jest.fn());
+
 /**
  * Helper function to create an HTTP error
  * @param statusCode The http status code
