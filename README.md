@@ -199,17 +199,18 @@ Monitor for changes to sync to vault
 
 ```
 USAGE
-  $ vstool monitor [-h] [--broker-api-url <value>] [--broker-token <value>] [--vault-token <value>]
-    [--vault-addr <value>] [--root <value>...]
+  $ vstool monitor [-h] [--broker-api-url <value>] [--broker-token <value>] [--monitor-interval <value>]
+    [--vault-token <value>] [--vault-addr <value>] [--root <value>...]
 
 FLAGS
-  -h, --help                    Show CLI help.
-      --broker-api-url=<value>  [default: https://broker.io.nrs.gov.bc.ca/] The broker api base url
-      --broker-token=<value>    The broker JWT
-      --root=<value>...         [default: ] The root to constrict the policy sync to. Some roots can be further
-                                constricted such as -root=apps -root=cool-app-war
-      --vault-addr=<value>      [default: http://127.0.0.1:8200] The vault address
-      --vault-token=<value>     [default: myroot] The vault token
+  -h, --help                      Show CLI help.
+      --broker-api-url=<value>    [default: https://broker.io.nrs.gov.bc.ca/] The broker api base url
+      --broker-token=<value>      The broker JWT
+      --monitor-interval=<value>  [default: 60000] The duration between each monitor check in milliseconds
+      --root=<value>...           [default: ] The root to constrict the policy sync to. Some roots can be further
+                                  constricted such as -root=apps -root=cool-app-war
+      --vault-addr=<value>        [default: http://127.0.0.1:8200] The vault address
+      --vault-token=<value>       [default: myroot] The vault token
 
 DESCRIPTION
   Monitor for changes to sync to vault

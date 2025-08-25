@@ -5,6 +5,7 @@ import {
   brokerApiUrl,
   brokerToken,
   help,
+  monitorIntervalDuration,
   root,
   vaultAddr,
   vaultToken,
@@ -23,6 +24,7 @@ export default class Monitor extends Command {
     ...help,
     ...brokerApiUrl,
     ...brokerToken,
+    ...monitorIntervalDuration,
     ...vaultToken,
     ...vaultAddr,
     ...root,
@@ -42,6 +44,6 @@ export default class Monitor extends Command {
 
     await vsContainer
       .get<BrokerMonitorController>(TYPES.BrokerMonitorController)
-      .monitor(flags.root);
+      .monitor(flags.root, flags['monitor-interval']);
   }
 }
