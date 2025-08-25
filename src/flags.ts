@@ -20,6 +20,14 @@ export const brokerToken = {
   }),
 };
 
+export const monitorIntervalDuration = {
+  'monitor-interval': Flags.integer({
+    description: 'The duration between each monitor check in milliseconds',
+    default: 60 * 1000,
+    env: 'MONITOR_INTERVAL_DURATION',
+  }),
+};
+
 export const secretShares = {
   'secret-shares': Flags.integer({
     description: 'The number of shares to split the master key into',
@@ -33,7 +41,6 @@ export const secretThreshold = {
     default: 1,
   }),
 };
-
 export const vaultAddr = {
   'vault-addr': Flags.string({
     default: 'http://127.0.0.1:8200',

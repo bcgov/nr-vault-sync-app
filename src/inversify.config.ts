@@ -1,12 +1,12 @@
 import { Container } from 'inversify';
+import nv from 'node-vault';
+import winston from 'winston';
 import { logger } from './logger';
 import { TYPES } from './inversify.types';
 import { AppService } from './services/app.service';
 import VaultPolicyController from './vault/vault-policy.controller';
 import { vaultFactory } from './vault/vault.factory';
-import nv from 'node-vault';
 import { ConfigService } from './services/config.service';
-import winston from 'winston';
 import VaultGroupController from './vault/vault-group.controller';
 import EnvironmentUtil from './util/environment.util';
 import HclUtil from './util/hcl.util';

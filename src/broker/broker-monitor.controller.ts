@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
 import winston from 'winston';
-import { TYPES } from '../inversify.types';
 import { exhaustMap, timer } from 'rxjs';
+import { TYPES } from '../inversify.types';
 import VaultPolicyController from '../vault/vault-policy.controller';
 import VaultGroupController from '../vault/vault-group.controller';
 import VaultApproleController from '../vault/vault-approle.controller';
@@ -24,8 +24,16 @@ export default class BrokerMonitorController {
     private vaultPolicyController: VaultPolicyController,
   ) {}
 
-  public async monitor(root: string[]) {
-    const source$ = timer(0, 60000);
+  /**
+   * Monitor vault and sync changes
+   * @param root The policy roots to monitor
+   * @param monitorIntervalDuration The duration between each monitor check in milliseconds
+   */
+  public async monitor(
+    root: string[],
+    monitorIntervalDuration: number,
+  ): Promise<void> {
+    const source$ = timer(0, monitorIntervalDuration);
 
     source$
       .pipe(
