@@ -16,11 +16,15 @@ path "<%= secretKvPath %>/subkeys/<%= environment %>/<%= project %>/shared" {
 }
 
 <% appProjectSharedSync.forEach(function(sharedSync){ %>
-path "<%= secretKvPath %>/metadata/<%= environment %>/<%= project %>/shared/<%= sharedSync %>" {
+path "<%= secretKvPath %>/subkeys/<%= environment %>/<%= project %>/shared/<%= sharedSync %>/+" {
+  capabilities = ["read"]
+}
+
+path "<%= secretKvPath %>/metadata/<%= environment %>/<%= project %>/shared/<%= sharedSync %>/+" {
   capabilities = ["read", "list"]
 }
 
-path "<%= secretKvPath %>/data/<%= environment %>/<%= project %>/shared/<%= sharedSync %>" {
+path "<%= secretKvPath %>/data/<%= environment %>/<%= project %>/shared/<%= sharedSync %>/+" {
   capabilities = ["read"]
 }
 
@@ -48,3 +52,18 @@ path "<%= secretKvPath %>/metadata/<%= environment %>/<%= project %>/<%= applica
 path "<%= secretKvPath %>/subkeys/<%= environment %>/<%= project %>/<%= application %>/+" {
   capabilities = ["read"]
 }
+<% appProjectSharedSync.forEach(function(sharedSync){ %>
+
+path "<%= secretKvPath %>/data/<%= environment %>/<%= project %>/<%= application %>/<%= sharedSync %>/+" {
+  capabilities = ["read"]
+}
+
+path "<%= secretKvPath %>/metadata/<%= environment %>/<%= project %>/<%= application %>/<%= sharedSync %>/+" {
+  capabilities = ["read", "list"]
+}
+
+path "<%= secretKvPath %>/subkeys/<%= environment %>/<%= project %>/<%= application %>/<%= sharedSync %>/+" {
+  capabilities = ["read"]
+}
+
+<% }); -%>
