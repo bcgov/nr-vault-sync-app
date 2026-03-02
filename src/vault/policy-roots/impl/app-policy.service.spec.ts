@@ -72,6 +72,7 @@ describe('app-policy.service', () => {
       secretDbPath: 'db',
       project: 'demo',
       environment: 'prod',
+      appProjectSharedSync: ['aws-ssm-sync'],
     };
     const dataDbEnvProd = {
       dbName: 'db',

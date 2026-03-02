@@ -105,6 +105,11 @@ export class SystemPolicyService implements PolicyRootService<undefined> {
           templateName: 'kv-tools-read',
           data: { secretKvPath },
         });
+      kvSpecs.push({
+        group: VAULT_ROOT_SYSTEM,
+        templateName: 'kv-sync',
+        data: { secretKvPath, syncName: 'aws-ssm-sync' },
+      });
     }
     return kvSpecs;
   }
