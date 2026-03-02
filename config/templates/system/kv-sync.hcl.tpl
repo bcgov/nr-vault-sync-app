@@ -1,14 +1,24 @@
 # Sync app (<%= syncName %>) for <%= secretKvPath %>/
 # Scope: Users with administrative access to this kv secret engine
-# Comment: 'p' -> project, 's' -> service
+# Comment: 'env' -> environment, 'p' -> project, 's' -> service or shared (project-level)
 
-# Service-level sync:
-# Project-level sync: s -> 'shared'
-# path: secret-mount-path/data/p/s/<%= syncName %>/+
-path "<%= secretKvPath %>/data/+/+/<%= syncName %>/+" {
+# path: secret-mount-path/data/env/p/s/<%= syncName %>/+
+path "<%= secretKvPath %>/data/dev/+/+/<%= syncName %>/+" {
   capabilities = ["create", "update", "patch"]
 }
-# path: secret-mount-path/metadata/p/s/<%= syncName %>/+
-path "<%= secretKvPath %>/data/+/+/<%= syncName %>/+" {
+path "<%= secretKvPath %>/data/test/+/+/<%= syncName %>/+" {
+  capabilities = ["create", "update", "patch"]
+}
+path "<%= secretKvPath %>/data/prod/+/+/<%= syncName %>/+" {
+  capabilities = ["create", "update", "patch"]
+}
+# path: secret-mount-path/metadata/env/p/s/<%= syncName %>/+
+path "<%= secretKvPath %>/metadata/dev/+/+/<%= syncName %>/+" {
+  capabilities = ["create", "update", "patch"]
+}
+path "<%= secretKvPath %>/metadata/test/+/+/<%= syncName %>/+" {
+  capabilities = ["create", "update", "patch"]
+}
+path "<%= secretKvPath %>/metadata/prod/+/+/<%= syncName %>/+" {
   capabilities = ["create", "update", "patch"]
 }
