@@ -11,6 +11,20 @@ path "<%= secretKvPath %>/data/<%= environment %>/<%= project %>/shared" {
 }
 <% } %>
 
+path "<%= secretKvPath %>/subkeys/<%= environment %>/<%= project %>/shared" {
+  capabilities = ["read"]
+}
+
+<% appProjectSharedSync.forEach(function(sharedSync){ %>
+path "<%= secretKvPath %>/metadata/<%= environment %>/<%= project %>/shared/<%= sharedSync %>" {
+  capabilities = ["read", "list"]
+}
+
+path "<%= secretKvPath %>/data/<%= environment %>/<%= project %>/shared/<%= sharedSync %>" {
+  capabilities = ["read"]
+}
+
+<% }); -%>
 path "<%= secretKvPath %>/data/<%= environment %>/<%= project %>/<%= application %>" {
   capabilities = ["read"]
 }
@@ -31,6 +45,6 @@ path "<%= secretKvPath %>/metadata/<%= environment %>/<%= project %>/<%= applica
   capabilities = ["read", "list"]
 }
 
-path "apps/subkeys/<%= environment %>/<%= project %>/<%= application %>/+" {
+path "<%= secretKvPath %>/subkeys/<%= environment %>/<%= project %>/<%= application %>/+" {
   capabilities = ["read"]
 }

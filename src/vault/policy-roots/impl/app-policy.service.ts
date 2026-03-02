@@ -97,6 +97,7 @@ export class AppPolicyService implements PolicyRootService<Application> {
       project: appInfo.project.toLowerCase(),
       environment: normEvn,
       appCanReadProject: appInfo.config?.policyOptions?.kvReadProject,
+      appProjectSharedSync: ['aws-ssm-sync'],
     };
     const renderSpecs: HlcRenderSpec[] = [];
     renderSpecs.push({

@@ -1,0 +1,1 @@
+<%= secretKvPath %>-kv-sync-<%= syncName %>

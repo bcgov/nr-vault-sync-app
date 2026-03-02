@@ -119,7 +119,7 @@ export default class VaultApproleController {
               const app = await this.appService.getApp(brokerApp);
               const appEnvironments = app.env;
               for (const appEnvironment of appEnvironments) {
-                let normAppEnvironment = '';
+                let normAppEnvironment: string;
                 try {
                   normAppEnvironment =
                     EnvironmentUtil.normalize(appEnvironment);
