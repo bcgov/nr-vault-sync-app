@@ -14,11 +14,11 @@ path "<%= secretKvPath %>/data/prod/+/+/<%= syncName %>/+" {
 }
 # path: secret-mount-path/metadata/env/p/s/<%= syncName %>/+
 path "<%= secretKvPath %>/metadata/dev/+/+/<%= syncName %>/+" {
-  capabilities = ["create", "update", "patch"]
+  capabilities = ["create", "read", "list", "update", "patch"]
 }
 path "<%= secretKvPath %>/metadata/test/+/+/<%= syncName %>/+" {
-  capabilities = ["create", "update", "patch"]
+  capabilities = ["create", "read", "list", "update", "patch"]
 }
 path "<%= secretKvPath %>/metadata/prod/+/+/<%= syncName %>/+" {
-  capabilities = ["create", "update", "patch"]
+  capabilities = ["create", "read", "list", "update", "patch"]
 }
