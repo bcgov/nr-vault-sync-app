@@ -8,7 +8,10 @@ import {
   secretThreshold,
   vaultAddr,
   vaultToken,
+  vaultTokenFile,
+  vaultTokenUnwrap,
 } from '../flags';
+import { resolveVaultToken } from '../vault/vault-token.util';
 
 /**
  * Vault Initialization command
@@ -22,6 +25,8 @@ export default class Init extends Command {
     ...secretShares,
     ...secretThreshold,
     ...vaultToken,
+    ...vaultTokenFile,
+    ...vaultTokenUnwrap,
     ...vaultAddr,
   };
 
@@ -30,7 +35,11 @@ export default class Init extends Command {
    */
   async run(): Promise<void> {
     const { flags } = await this.parse(Init);
-    const vault = vaultFactory(flags['vault-addr'], flags['vault-token']);
+
+    const vault = vaultFactory(
+      flags['vault-addr'],
+      await resolveVaultToken(flags),
+    );
     const { initialized, version } = (await vault.health()) as {
       initialized: boolean;
       version: string;

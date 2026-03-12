@@ -79,11 +79,51 @@ The Vault Sync Tool also reads all teams from NR Broker that are setup to "use" 
 | name | String | Required | The... uh... name of the name? Used to create the external group. |
 | policies | String[] | Required | An array of policies to attach. Other properties like kv will attach policies as well. It is preferred that this only be for one-off grants. Patterns should be added as extension of the team configuration. |
 
+## File: apps.json
+
+This file defines applications for use with the file-based app service (`AppFileService`). It is only needed when running without NR Broker for local development.
+
+The file contains a single `apps` array of application entries.
+
+### Application Entry Contents
+
+| Property | Type | Req | Description |
+| --- | --- | --- | --- |
+| app | String | Required | The name of the application. Must be unique. |
+| project | String | Required | The project the application belongs to. |
+| env | String[] | Required | The environments (e.g., dev, test, prod) the application is deployed to. |
+| config | AppConfig | Required | The application vault configuration. See Vault Configuration Contents below. |
+
+#### Example
+
+```json
+{
+  "apps": [
+    {
+      "app": "sample-app-war",
+      "project": "sample-project",
+      "env": ["dev", "test", "prod"],
+      "config": {
+        "enabled": true,
+        "name": "sample-app-war",
+        "approle": {
+          "enabled": true
+        },
+        "db": [],
+        "policyOptions": {
+          "tokenPeriod": "daily"
+        }
+      }
+    }
+  ]
+}
+```
+
 ## Application Configuration
 
-The only implement source from applications and their configuration is retrieves the information from NR Broker.
+Applications and their configuration can be sourced from NR Broker (default) or from the local `config/apps.json` file (for local development without the broker). See [Development](README-dev.md#without-nr-broker-local-file-mode) for setup instructions.
 
-When on boarding an application:
+When on boarding an application via NR Broker:
 
 * Confirm the service is in Broker
 * Confirm instances that link to the service to environments have been added

@@ -57,6 +57,29 @@ export const vaultToken = {
   }),
 };
 
+export const vaultTokenFile = {
+  'vault-token-file': Flags.string({
+    description: 'Path to a file containing the vault token',
+    env: 'VAULT_TOKEN_FILE',
+  }),
+};
+
+export const vaultTokenUnwrap = {
+  'vault-token-unwrap': Flags.boolean({
+    description: 'Unwrap the vault token before use',
+    default: false,
+    env: 'VAULT_TOKEN_UNWRAP',
+  }),
+};
+
+export const vaultTokenRenew = {
+  'vault-token-renew': Flags.boolean({
+    description: 'Periodically renew the vault token',
+    default: true,
+    env: 'VAULT_TOKEN_RENEW',
+  }),
+};
+
 export const root = {
   root: Flags.string({
     multiple: true,

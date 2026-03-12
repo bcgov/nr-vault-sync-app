@@ -6,7 +6,10 @@ import {
   help,
   vaultAddr,
   vaultToken,
+  vaultTokenFile,
+  vaultTokenUnwrap,
 } from '../flags';
+import { resolveVaultToken } from '../vault/vault-token.util';
 import VaultGroupController from '../vault/vault-group.controller';
 import { bindBroker, bindVault, vsContainer } from '../inversify.config';
 import { TYPES } from '../inversify.types';
@@ -23,6 +26,8 @@ export default class GroupSync extends Command {
     ...brokerApiUrl,
     ...brokerToken,
     ...vaultToken,
+    ...vaultTokenFile,
+    ...vaultTokenUnwrap,
     ...vaultAddr,
   };
 
@@ -33,7 +38,8 @@ export default class GroupSync extends Command {
     const { flags } = await this.parse(GroupSync);
 
     this.log('Vault Group Sync');
-    bindVault(flags['vault-addr'], flags['vault-token']);
+
+    bindVault(flags['vault-addr'], await resolveVaultToken(flags));
     bindBroker(flags['broker-api-url'], flags['broker-token']);
 
     await vsContainer

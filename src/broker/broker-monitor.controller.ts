@@ -1,10 +1,12 @@
 import { inject, injectable } from 'inversify';
-import winston from 'winston';
 import { exhaustMap, timer } from 'rxjs';
 import { TYPES } from '../inversify.types';
 import VaultPolicyController from '../vault/vault-policy.controller';
 import VaultGroupController from '../vault/vault-group.controller';
 import VaultApproleController from '../vault/vault-approle.controller';
+import VaultApi from '../vault/vault.api';
+
+const TOKEN_RENEW_INTERVAL_MS = 60_000;
 
 @injectable()
 /**
@@ -15,7 +17,7 @@ export default class BrokerMonitorController {
    * Constructor
    */
   constructor(
-    @inject(TYPES.Logger) private logger: winston.Logger,
+    @inject(TYPES.VaultApi) private vaultApi: VaultApi,
     @inject(TYPES.VaultApproleController)
     private vaultApproleController: VaultApproleController,
     @inject(TYPES.VaultGroupController)
@@ -32,10 +34,28 @@ export default class BrokerMonitorController {
   public async monitor(
     root: string[],
     monitorIntervalDuration: number,
+    vaultTokenRenew: boolean,
   ): Promise<void> {
-    const source$ = timer(0, monitorIntervalDuration);
+    if (vaultTokenRenew) {
+      await this.vaultApi.lookupSelf();
+      timer(0, TOKEN_RENEW_INTERVAL_MS)
+        .pipe(
+          exhaustMap(async () => {
+            await this.vaultApi.renewVaultToken();
+          }),
+        )
+        .subscribe({
+          error: (err) => {
+            console.error('---- Error renewing vault token', {
+              error: err,
+            });
+            // Exit
+            process.exit(1);
+          },
+        });
+    }
 
-    source$
+    timer(0, monitorIntervalDuration)
       .pipe(
         exhaustMap(async () => {
           const startMs = Date.now();
