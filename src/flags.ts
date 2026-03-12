@@ -74,8 +74,8 @@ export const vaultTokenUnwrap = {
 
 export const vaultTokenRenew = {
   'vault-token-renew': Flags.boolean({
-    description: 'Periodically renew the vault token during monitoring',
-    default: false,
+    description: 'Periodically renew the vault token',
+    default: true,
     env: 'VAULT_TOKEN_RENEW',
   }),
 };
