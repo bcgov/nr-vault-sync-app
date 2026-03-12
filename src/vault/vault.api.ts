@@ -4,12 +4,22 @@ import winston from 'winston';
 import { BehaviorSubject, firstValueFrom, of, switchMap } from 'rxjs';
 import { TYPES } from '../inversify.types';
 
+/** Fraction of TTL at which to renew the token */
+const TOKEN_RENEW_RATIO = 0.7;
+
 interface VaultAuthData {
   [key: string]: {
     type: string;
     accessor: string;
   };
 }
+
+interface TokenLookupData {
+  creation_time: number;
+  creation_ttl: number;
+  last_renewal_time?: number;
+}
+
 @injectable()
 /**
  * Shared Vault APIs
@@ -19,6 +29,8 @@ export default class VaultApi {
     timestamp: number;
     accessors: string[] | null;
   }>({ timestamp: 0, accessors: null });
+
+  private renewAt: number | undefined;
 
   /**
    * Constructor
@@ -55,6 +67,41 @@ export default class VaultApi {
         }),
       ),
     );
+  }
+
+  /**
+   * Look up the current token and compute when it should next be renewed.
+   */
+  public async lookupSelf(): Promise<void> {
+    try {
+      const result = await this.vault.tokenLookupSelf();
+      const data = result.data as TokenLookupData;
+      this.logger.info('Lookup: success');
+      const baseTime = data.last_renewal_time ?? data.creation_time;
+      this.renewAt =
+        (baseTime + Math.round(data.creation_ttl * TOKEN_RENEW_RATIO)) * 1000;
+    } catch {
+      this.logger.error('Lookup: fail');
+    }
+  }
+
+  /**
+   * Renew the current vault token if the renewal window has been reached.
+   */
+  public async renewVaultToken(): Promise<void> {
+    if (this.renewAt === undefined || Date.now() < this.renewAt) {
+      return;
+    }
+    this.logger.debug('Renew: start');
+    try {
+      const result = await this.vault.tokenRenewSelf();
+      this.logger.info(
+        `Renew: success (duration: ${result.auth.lease_duration})`,
+      );
+      await this.lookupSelf();
+    } catch {
+      this.logger.error('Renew: fail');
+    }
   }
 
   private requestOidcAccessors() {

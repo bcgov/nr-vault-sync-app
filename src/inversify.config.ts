@@ -20,6 +20,7 @@ import { ConfigBrokerService } from './services/impl/config-broker.service';
 import { BrokerApi } from './broker/broker.api';
 import { ConfigFileService } from './services/impl/config-file.service';
 import { AppBrokerService } from './services/impl/app-broker.service';
+import { AppFileService } from './services/impl/app-file.service';
 import { RegistrationService } from './services/registration.service';
 import { RegistrationMemoryService } from './services/impl/registration-memory.service';
 import BrokerMonitorController from './broker/broker-monitor.controller';
@@ -28,9 +29,9 @@ import FsUtil from './util/fs.util';
 const vsContainer = new Container();
 // Services
 vsContainer.bind<BrokerApi>(BrokerApi).to(BrokerApi).inSingletonScope();
-vsContainer.bind<AppService>(TYPES.AppService).to(AppBrokerService);
-vsContainer.bind<ConfigService>(TYPES.ConfigService).to(ConfigBrokerService);
+vsContainer.bind<ConfigService>(TYPES.ConfigService).to(ConfigFileService);
 vsContainer.bind<ConfigFileService>(ConfigFileService).to(ConfigFileService);
+vsContainer.bind<AppService>(TYPES.AppService).to(AppFileService);
 
 vsContainer
   .bind<RegistrationService>(TYPES.RegistrationService)
@@ -88,6 +89,14 @@ export { vsContainer };
 export function bindBroker(apiUrl: string, token: string | undefined): void {
   vsContainer.bind<string>(TYPES.BrokerApiUrl).toConstantValue(apiUrl);
   if (token) {
+    vsContainer.unbind(TYPES.AppService);
+    vsContainer.unbind(TYPES.ConfigService);
+
+    vsContainer.bind<AppService>(TYPES.AppService).to(AppBrokerService);
+    vsContainer
+      .bind<ConfigService>(TYPES.ConfigService)
+      .to(ConfigBrokerService);
+
     vsContainer.bind<string>(TYPES.BrokerToken).toConstantValue(token);
   }
 }

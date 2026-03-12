@@ -53,8 +53,16 @@ vault secrets enable -path=groups -version=2 kv
 
 ### With NR Broker
 
-See: [Running Vault Sync Tool](https://bcgov-nr.github.io/nr-broker/#/development?id=running-vault-sync-tool)
+If a value for the Broker Token (BROKER_TOKEN) is set, then the Vault Sync Tool will run using NR Broker as its data source.
 
-### Without NR Broker
+See: [Running Vault Sync Tool](https://bcgov.github.io/nr-broker/#/./dev_vault)
 
-This is unsupported currently.
+### Without NR Broker (Local File Mode)
+
+If a value for the Broker Token (BROKER_TOKEN) is not set, then the Vault Sync Tool can run without NR Broker by using a file-based application service. This reads application definitions from a local JSON file instead of the broker API.
+
+#### Setup
+
+1. Start a local Vault instance (see above)
+2. Configure your applications in `config/apps.json` (see [Configuration](README-config.md#file-appsjson))
+

@@ -1,0 +1,20 @@
+{
+  "apps": [
+    {
+      "app": "sample-app-war",
+      "project": "sample-project",
+      "env": ["dev", "test", "prod"],
+      "config": {
+        "enabled": true,
+        "name": "sample-app-war",
+        "approle": {
+          "enabled": true
+        },
+        "db": [],
+        "policyOptions": {
+          "tokenPeriod": "daily"
+        }
+      }
+    }
+  ]
+}
