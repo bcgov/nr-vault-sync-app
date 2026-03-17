@@ -1,7 +1,14 @@
 import 'reflect-metadata';
 import { Command } from '@oclif/core';
 import { vaultFactory } from '../vault/vault.factory';
-import { help, vaultAddr, vaultToken } from '../flags';
+import {
+  help,
+  vaultAddr,
+  vaultToken,
+  vaultTokenFile,
+  vaultTokenUnwrap,
+} from '../flags';
+import { resolveVaultToken } from '../vault/vault-token.util';
 
 /**
  * Vault health check command
@@ -12,6 +19,8 @@ export default class Health extends Command {
   static flags = {
     ...help,
     ...vaultToken,
+    ...vaultTokenFile,
+    ...vaultTokenUnwrap,
     ...vaultAddr,
   };
 
@@ -20,7 +29,11 @@ export default class Health extends Command {
    */
   async run(): Promise<void> {
     const { flags } = await this.parse(Health);
-    const vault = vaultFactory(flags['vault-addr'], flags['vault-token']);
+
+    const vault = vaultFactory(
+      flags['vault-addr'],
+      await resolveVaultToken(flags),
+    );
 
     this.log(`Vault health - ${vault.endpoint}`);
     this.log(JSON.stringify(await vault.health(), undefined, 2));

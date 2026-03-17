@@ -1,7 +1,14 @@
 import 'reflect-metadata';
 import { Command } from '@oclif/core';
 import { vaultFactory } from '../vault/vault.factory';
-import { help, vaultAddr, vaultToken } from '../flags';
+import {
+  help,
+  vaultAddr,
+  vaultToken,
+  vaultTokenFile,
+  vaultTokenUnwrap,
+} from '../flags';
+import { resolveVaultToken } from '../vault/vault-token.util';
 import nv from 'node-vault';
 
 /**
@@ -13,6 +20,8 @@ export default class Find extends Command {
   static flags = {
     ...help,
     ...vaultToken,
+    ...vaultTokenFile,
+    ...vaultTokenUnwrap,
     ...vaultAddr,
   };
 
@@ -23,7 +32,10 @@ export default class Find extends Command {
    */
   async run(): Promise<void> {
     const { flags } = await this.parse(Find);
-    const vault = vaultFactory(flags['vault-addr'], flags['vault-token']);
+    const vault = vaultFactory(
+      flags['vault-addr'],
+      await resolveVaultToken(flags),
+    );
     this.vault = vault;
 
     this.log(`Vault find - ${vault.endpoint}`);

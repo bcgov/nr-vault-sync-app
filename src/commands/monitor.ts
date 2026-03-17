@@ -9,10 +9,14 @@ import {
   root,
   vaultAddr,
   vaultToken,
+  vaultTokenFile,
+  vaultTokenRenew,
+  vaultTokenUnwrap,
 } from '../flags';
 import { bindVault, bindBroker, vsContainer } from '../inversify.config';
 import { TYPES } from '../inversify.types';
 import BrokerMonitorController from '../broker/broker-monitor.controller';
+import { resolveVaultToken } from '../vault/vault-token.util';
 
 /**
  * Monitor and sync on demand
@@ -26,6 +30,9 @@ export default class Monitor extends Command {
     ...brokerToken,
     ...monitorIntervalDuration,
     ...vaultToken,
+    ...vaultTokenFile,
+    ...vaultTokenUnwrap,
+    ...vaultTokenRenew,
     ...vaultAddr,
     ...root,
   };
@@ -39,11 +46,16 @@ export default class Monitor extends Command {
     const { flags } = await this.parse(Monitor);
 
     this.log('Vault Monitered Sync');
-    bindVault(flags['vault-addr'], flags['vault-token']);
+
+    bindVault(flags['vault-addr'], await resolveVaultToken(flags));
     bindBroker(flags['broker-api-url'], flags['broker-token']);
 
     await vsContainer
       .get<BrokerMonitorController>(TYPES.BrokerMonitorController)
-      .monitor(flags.root, flags['monitor-interval']);
+      .monitor(
+        flags.root,
+        flags['monitor-interval'],
+        flags['vault-token-renew'],
+      );
   }
 }
