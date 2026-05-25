@@ -63,6 +63,7 @@ export default class VaultApproleController {
       if (app.config && app.config?.enabled && app.config.approle?.enabled) {
         for (const env of app.env) {
           const approleName = this.hclUtil.renderApproleName(app, env);
+          const longAppEnvironment = EnvironmentUtil.getLongForm(env);
 
           const specs = await this.appRootService.buildApplicationForEnv(
             app,
@@ -158,6 +159,10 @@ export default class VaultApproleController {
             .join(',');
           approleDict[approleName] = {
             ...app.config.approle,
+            ...(app.config.cidr?.[longAppEnvironment] && {
+              secret_id_bound_cidrs: app.config.cidr[longAppEnvironment],
+              token_bound_cidrs: app.config.cidr[longAppEnvironment],
+            }),
             ...{
               role_name: approleName,
               token_policies:

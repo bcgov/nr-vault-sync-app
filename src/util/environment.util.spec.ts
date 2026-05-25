@@ -63,4 +63,30 @@ describe('environment util', () => {
       EnvironmentUtil.normalize('octopus');
     }).toThrow('Unsupported env: octopus');
   });
+
+  it('getLongForm - prod', () => {
+    const rVal = EnvironmentUtil.getLongForm('prod');
+    expect(rVal).toBe('production');
+  });
+
+  it('getLongForm - test', () => {
+    const rVal = EnvironmentUtil.getLongForm('test');
+    expect(rVal).toBe('test');
+  });
+
+  it('getLongForm - dev', () => {
+    const rVal = EnvironmentUtil.getLongForm('dev');
+    expect(rVal).toBe('development');
+  });
+
+  it('getLongForm - tools', () => {
+    const rVal = EnvironmentUtil.getLongForm('tools');
+    expect(rVal).toBe('tools');
+  });
+
+  it('getLongForm - garbage', () => {
+    expect(() => {
+      EnvironmentUtil.getLongForm('octopus');
+    }).toThrow('Unsupported env: octopus');
+  });
 });

@@ -3,7 +3,7 @@ import { injectable } from 'inversify';
 /**
  * Library of environment aliases
  */
-const envAlias: { [key: string]: string } = {
+const envAlias: Record<string, string> = {
   PRODUCTION: 'prod',
   TEST: 'test',
   DELIVERY: 'dev',
@@ -23,6 +23,13 @@ const envAlias: { [key: string]: string } = {
   prod: 'prod',
 };
 
+const envShortToLong: Record<string, string> = {
+  prod: 'production',
+  test: 'test',
+  dev: 'development',
+  tools: 'tools',
+};
+
 @injectable()
 /**
  * Utility class for environment strings
@@ -35,6 +42,17 @@ export default class EnvironmentUtil {
   public static normalize(environment: string): string {
     if (environment in envAlias) {
       return envAlias[environment];
+    }
+    throw new Error(`Unsupported env: ${environment}`);
+  }
+
+  /**
+   * Get the long form of an environment name
+   * @param environment The string to get the long form of
+   */
+  public static getLongForm(environment: string): string {
+    if (environment in envShortToLong) {
+      return envShortToLong[environment];
     }
     throw new Error(`Unsupported env: ${environment}`);
   }
