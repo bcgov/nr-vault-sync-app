@@ -57,6 +57,10 @@ If a value for the Broker Token (BROKER_TOKEN) is set, then the Vault Sync Tool 
 
 See: [Running Vault Sync Tool](https://bcgov.github.io/nr-broker/#/./dev_vault)
 
+Full local CIDR testing runbook (recommended)
+
+See [RUNBOOK-cidr-testing.md](RUNBOOK-cidr-testing.md).
+
 ### Without NR Broker (Local File Mode)
 
 If a value for the Broker Token (BROKER_TOKEN) is not set, then the Vault Sync Tool can run without NR Broker by using a file-based application service. This reads application definitions from a local JSON file instead of the broker API.
