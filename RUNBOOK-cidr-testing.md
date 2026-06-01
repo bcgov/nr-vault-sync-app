@@ -172,56 +172,42 @@ If you only see sample roles, `BROKER_TOKEN` is missing or empty in that shell.
 
 ## 10. Verify CIDR enforcement during AppRole login and token issuance
 
-Role names are rendered as `<project>_<app>_<env-short>`. Example below uses `cidrtest_test-cidr_prod`.
+Role names are rendered as `<project>_<app>_<env-short>`.
 
-### 10a. Denied-first check (should fail)
+Test setup used here:
+- `cidrtest_test-cidr_prod` — restricted to `10.20.0.0/24` (does not match Vault bridge IP `192.168.0.29`) → **denied**
+- `cidrtest_test-cidr_dev` — restricted to `192.168.0.0/24` (matches Vault bridge IP `192.168.0.29`) → **allowed**
 
-Use a CIDR that does not include your current Vault-evaluated source IP.
-You can use the existing example value `10.20.0.0/24` for this first check.
+### 10a. Denied check (should fail)
 
-1. In Broker UI, set production CIDR for the app to `10.20.0.0/24`.
-2. Run Step 7 again to sync the updated CIDR settings.
-3. Attempt AppRole login and confirm it fails with a CIDR restriction error.
+The prod role is restricted to `10.20.0.0/24`. The Vault bridge IP (`192.168.0.29`) is outside that range, so login must be rejected.
+
+```bash
+cd "$VS_APP"
+bash scripts/cidr-test-denied.sh cidrtest_test-cidr_prod
+```
+
+The script attempts secret_id generation and login; it exits with `PASS` if either is rejected by a CIDR error, or prints `UNEXPECTED PASS` and exits 1 if login somehow succeeded.
 
 ### 10b. Allowed CIDR test (should succeed)
 
-First determine the source IP Vault evaluates for CIDR checks.
-If login fails with a CIDR error, Vault usually prints it directly (for example `source address "192.168.0.29" unauthorized ...`).
-Use that IP in Broker for the production CIDR value (for example `192.168.0.29/32`), then rerun Step 7.
+The dev role is restricted to `192.168.0.0/24`. The Vault bridge IP (`192.168.0.29`) falls inside that range, so login must succeed.
 
 ```bash
-ROLE_NAME="cidrtest_test-cidr_prod"
-
-# 1) Get role_id
-ROLE_ID="$(vault read -field=role_id auth/vs_apps_approle/role/${ROLE_NAME}/role-id)"
-
-# 2) Generate secret_id (allowed when client IP matches secret_id_bound_cidrs)
-SECRET_ID="$(vault write -field=secret_id -f auth/vs_apps_approle/role/${ROLE_NAME}/secret-id)"
-
-# 3) Login and get client token (allowed when client IP satisfies CIDR restrictions)
-CLIENT_TOKEN="$(vault write -field=token auth/vs_apps_approle/login role_id="$ROLE_ID" secret_id="$SECRET_ID")"
-
-# 4) Verify token is valid
-VAULT_TOKEN="$CLIENT_TOKEN" vault token lookup
+cd "$VS_APP"
+bash scripts/cidr-test-allowed.sh cidrtest_test-cidr_dev
 ```
 
-### 10c. Optional extra denied CIDR test (should fail)
+The script fetches role_id, generates a secret_id, logs in, and runs `vault token lookup`.
+Success is indicated by the token details being printed and a final `PASS` message.
 
-After a successful allowed test, you can switch to another non-matching CIDR and confirm denial again.
+### 10c. Optional extra denied check using dev role (should fail)
 
-1. In Broker UI, set production CIDR for the same app to a range that does not include the source IP Vault sees (example `203.0.113.0/24`).
-2. Run Step 7 again to sync the updated CIDR settings.
-3. Retry secret-id creation and AppRole login:
+To confirm the dev role is also enforcing CIDR (not just open), temporarily set its CIDR in Broker UI to a non-matching range (example `203.0.113.0/24`), rerun Step 7, then:
 
 ```bash
-ROLE_NAME="cidrtest_test-cidr_prod"
-ROLE_ID="$(vault read -field=role_id auth/vs_apps_approle/role/${ROLE_NAME}/role-id)"
-
-# Expected to fail due to CIDR restriction
-vault write -f auth/vs_apps_approle/role/${ROLE_NAME}/secret-id
-
-# If secret-id creation is still allowed for your policy setup, login should fail instead
-vault write auth/vs_apps_approle/login role_id="$ROLE_ID" secret_id="<secret-id>"
+cd "$VS_APP"
+bash scripts/cidr-test-denied.sh cidrtest_test-cidr_dev
 ```
 
-At least one of these should fail when CIDR is restricted away from your client source IP.
+Restore the dev CIDR to `192.168.0.0/24` and rerun Step 7 when done.
