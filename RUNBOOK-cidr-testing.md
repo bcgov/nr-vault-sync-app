@@ -122,17 +122,31 @@ cd "$BROKER_WT/ui" && npm test
 cd "$VS_APP" && npm test
 ```
 
-## 7. Run AppRole sync using TypeScript entrypoint
+## 6.5 Preflight check before sync
+
+Run this in the same terminal where you will run sync:
+
+```bash
+printf "BROKER_API_URL=%s\n" "${BROKER_API_URL-<unset>}"
+printf "BROKER_TOKEN_LEN=%s\n" "${#BROKER_TOKEN}"
+printf "VAULT_ADDR=%s\n" "${VAULT_ADDR-<unset>}"
+printf "VAULT_TOKEN_LEN=%s\n" "${#VAULT_TOKEN}"
+
+curl -s -H "Authorization: Bearer $BROKER_TOKEN" \
+  "$BROKER_API_URL/v1/graph/data/project-services" | jq '.[0] | keys'
+```
+
+If `BROKER_TOKEN_LEN` is `0` or the `curl|jq` command fails, stop and re-run Step 4 in this same shell.
+
+## 7. Run AppRole sync (recommended direct path)
 
 ```bash
 cd "$VS_APP"
 
-npm run start -- approle-sync \
-  --broker-api-url "$BROKER_API_URL" \
-  --broker-token "$BROKER_TOKEN" \
-  --vault-addr "$VAULT_ADDR" \
-  --vault-token "$VAULT_TOKEN"
+npx ts-node -e "import 'reflect-metadata'; import { bindBroker, bindVault, vsContainer } from './src/inversify.config'; import { TYPES } from './src/inversify.types'; import VaultApproleController from './src/vault/vault-approle.controller'; (async()=>{ const brokerApiUrl = process.env.BROKER_API_URL || ''; const brokerToken = process.env.BROKER_TOKEN || ''; bindVault(process.env.VAULT_ADDR || 'http://127.0.0.1:8200', process.env.VAULT_TOKEN || 'myroot'); bindBroker(brokerApiUrl, brokerToken); const c = vsContainer.get<VaultApproleController>(TYPES.VaultApproleController); await c.sync(); console.log('approle sync completed'); })().catch((e)=>{ console.error(e); process.exit(1); });"
 ```
+
+Note: `npm run start -- approle-sync ...` may silently no-op in some local setups. Use the direct path above for deterministic results.
 
 ## 8. Verify role creation and CIDR values
 
