@@ -42,7 +42,7 @@ describe('vault.api', () => {
     const va = new VaultApi(vault, mockLogger);
     const accessor = await va.getOidcAccessors();
     expect(vault.read).toHaveBeenCalledTimes(1);
-    expect(vault.read).toHaveBeenCalledWith('/sys/auth');
+    expect(vault.read).toHaveBeenCalledWith('sys/auth');
     expect(accessor).toStrictEqual(['auth_oidc_c3e3ffc']);
   });
 
@@ -59,7 +59,7 @@ describe('vault.api', () => {
     const va = new VaultApi(vault, mockLogger);
     await expect(va.getOidcAccessors()).rejects.toThrow();
     expect(vault.read).toHaveBeenCalledTimes(1);
-    expect(vault.read).toHaveBeenCalledWith('/sys/auth');
+    expect(vault.read).toHaveBeenCalledWith('sys/auth');
     expect(mockLogger.info).toHaveBeenCalledTimes(0);
     expect(mockLogger.error).toHaveBeenCalledTimes(1);
   });
@@ -70,7 +70,7 @@ describe('vault.api', () => {
     const va = new VaultApi(vault, mockLogger);
     await expect(va.getOidcAccessors()).rejects.toThrow();
     expect(vault.read).toHaveBeenCalledTimes(1);
-    expect(vault.read).toHaveBeenCalledWith('/sys/auth');
+    expect(vault.read).toHaveBeenCalledWith('sys/auth');
     expect(mockLogger.info).toHaveBeenCalledTimes(0);
     expect(mockLogger.error).toHaveBeenCalledTimes(1);
     expect(mockLogger.error).toHaveBeenCalledWith(

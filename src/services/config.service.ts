@@ -37,6 +37,8 @@ export interface AppConfig {
   brokerGlobal?: boolean;
   /** Array of applications this application may login for */
   brokerFor?: string[];
+  /** Per-environment CIDR blocks */
+  cidr?: Record<string, string | undefined>;
   /** Array of databases this application has access to */
   db?: string[];
   /** True if this application, policies, groups will be generated. */

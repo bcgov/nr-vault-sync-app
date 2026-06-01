@@ -34,7 +34,7 @@ describe('vault-approle.controller', () => {
           enabled: true,
         },
       },
-      env: ['PRODUCTION'],
+      env: ['prod'],
     },
   ];
 
@@ -127,13 +127,13 @@ describe('vault-approle.controller', () => {
     expect(mockHclUtil.renderApproleName).toHaveBeenCalledTimes(1);
     expect(mockHclUtil.renderApproleName).toHaveBeenCalledWith(
       mockApps[0],
-      'PRODUCTION',
+      'prod',
     );
 
     expect(mockAppRootService.buildApplicationForEnv).toHaveBeenCalledTimes(1);
     expect(mockAppRootService.buildApplicationForEnv).toHaveBeenCalledWith(
       mockApps[0],
-      'PRODUCTION',
+      'prod',
     );
 
     expect(mockHclUtil.renderName).toHaveBeenCalledTimes(1);

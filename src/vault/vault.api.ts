@@ -106,7 +106,7 @@ export default class VaultApi {
 
   private requestOidcAccessors() {
     return this.vault
-      .read(`/sys/auth`)
+      .read(`sys/auth`)
       .then((response) => {
         const accessors = Object.entries(response.data as VaultAuthData)
           .filter(([key, value]) => key === 'oidc/' && value.type === 'oidc')
