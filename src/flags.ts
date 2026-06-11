@@ -90,3 +90,24 @@ export const root = {
     env: 'POLICY_ROOT',
   }),
 };
+export const vaultRoleId = {
+  'vault-role-id': Flags.string({
+    description: 'The AppRole role ID for authentication',
+    env: 'VAULT_ROLE_ID',
+  }),
+};
+
+export const vaultSecretId = {
+  'vault-secret-id': Flags.string({
+    description: 'The AppRole secret ID for authentication',
+    env: 'VAULT_SECRET_ID',
+  }),
+};
+
+export const vaultApprolePath = {
+  'vault-approle-path': Flags.string({
+    description: 'The AppRole auth mount path',
+    default: 'approle',
+    env: 'VAULT_APPROLE_PATH',
+  }),
+};

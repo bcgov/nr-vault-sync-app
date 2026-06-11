@@ -37,8 +37,8 @@
   },
   "dependencies": {
     "@oclif/core": "^4.11.4",
-    "@oclif/plugin-help": "^6.2.49",
-    "axios": "^1.16.1",
+    "@oclif/plugin-help": "^6.2.50",
+    "axios": "^1.17.0",
     "ejs": "^5.0.2",
     "inversify": "^7.11.0",
     "merge-deep": "^3.0.3",
@@ -56,17 +56,17 @@
     "@types/request": "^2.48.13",
     "@typescript-eslint/eslint-plugin": "^8.56.1",
     "@typescript-eslint/parser": "^8.56.1",
-    "eslint": "^10.4.0",
+    "eslint": "^10.4.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-jest": "^29.15.2",
-    "eslint-plugin-prettier": "^5.5.5",
+    "eslint-plugin-prettier": "^5.5.6",
     "jest": "^30.4.2",
-    "oclif": "^4.23.8",
+    "oclif": "^4.23.14",
     "shx": "^0.4.0",
     "ts-jest": "^29.4.11",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.60.0"
+    "typescript-eslint": "^8.61.0"
   },
   "engines": {
     "node": ">=18.0.0"

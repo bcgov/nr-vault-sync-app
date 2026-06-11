@@ -4,6 +4,9 @@ import { vaultFactory } from '../vault/vault.factory';
 import {
   help,
   vaultAddr,
+  vaultApprolePath,
+  vaultRoleId,
+  vaultSecretId,
   vaultToken,
   vaultTokenFile,
   vaultTokenUnwrap,
@@ -18,6 +21,9 @@ export default class Health extends Command {
 
   static flags = {
     ...help,
+    ...vaultRoleId,
+    ...vaultSecretId,
+    ...vaultApprolePath,
     ...vaultToken,
     ...vaultTokenFile,
     ...vaultTokenUnwrap,
