@@ -51,7 +51,7 @@ $ npm install -g vstool
 $ vstool COMMAND
 running command...
 $ vstool (--version)
-vstool/1.0.0 darwin-arm64 node-v24.13.0
+vstool/1.0.0 darwin-arm64 node-v24.16.0
 $ vstool --help [COMMAND]
 USAGE
   $ vstool COMMAND
@@ -85,18 +85,22 @@ Syncs approles in Vault
 
 ```
 USAGE
-  $ vstool approle-sync [-h] [--broker-api-url <value>] [--broker-token <value>] [--vault-token <value>]
-    [--vault-token-file <value>] [--vault-token-unwrap] [--vault-addr <value>]
+  $ vstool approle-sync [-h] [--broker-api-url <value>] [--broker-token <value>] [--vault-role-id <value>]
+    [--vault-secret-id <value>] [--vault-approle-path <value>] [--vault-token <value>] [--vault-token-file <value>]
+    [--vault-token-unwrap] [--vault-addr <value>]
 
 FLAGS
-  -h, --help                      Show CLI help.
-      --broker-api-url=<value>    [default: https://broker.io.nrs.gov.bc.ca/, env: BROKER_API_URL] The broker api base
-                                  url
-      --broker-token=<value>      [env: BROKER_TOKEN] The broker JWT
-      --vault-addr=<value>        [default: http://127.0.0.1:8200, env: VAULT_ADDR] The vault address
-      --vault-token=<value>       [default: myroot, env: VAULT_TOKEN] The vault token
-      --vault-token-file=<value>  [env: VAULT_TOKEN_FILE] Path to a file containing the vault token
-      --vault-token-unwrap        [env: VAULT_TOKEN_UNWRAP] Unwrap the vault token before use
+  -h, --help                        Show CLI help.
+      --broker-api-url=<value>      [default: https://broker.io.nrs.gov.bc.ca/, env: BROKER_API_URL] The broker api base
+                                    url
+      --broker-token=<value>        [env: BROKER_TOKEN] The broker JWT
+      --vault-addr=<value>          [default: http://127.0.0.1:8200, env: VAULT_ADDR] The vault address
+      --vault-approle-path=<value>  [default: approle, env: VAULT_APPROLE_PATH] The AppRole auth mount path
+      --vault-role-id=<value>       [env: VAULT_ROLE_ID] The AppRole role ID for authentication
+      --vault-secret-id=<value>     [env: VAULT_SECRET_ID] The AppRole secret ID for authentication
+      --vault-token=<value>         [default: myroot, env: VAULT_TOKEN] The vault token
+      --vault-token-file=<value>    [env: VAULT_TOKEN_FILE] Path to a file containing the vault token
+      --vault-token-unwrap          [env: VAULT_TOKEN_UNWRAP] Unwrap the vault token before use
 
 DESCRIPTION
   Syncs approles in Vault
@@ -128,18 +132,22 @@ Syncs external groups in Vault to connect roles with Vault policies
 
 ```
 USAGE
-  $ vstool group-sync [-h] [--broker-api-url <value>] [--broker-token <value>] [--vault-token <value>]
-    [--vault-token-file <value>] [--vault-token-unwrap] [--vault-addr <value>]
+  $ vstool group-sync [-h] [--broker-api-url <value>] [--broker-token <value>] [--vault-role-id <value>]
+    [--vault-secret-id <value>] [--vault-approle-path <value>] [--vault-token <value>] [--vault-token-file <value>]
+    [--vault-token-unwrap] [--vault-addr <value>]
 
 FLAGS
-  -h, --help                      Show CLI help.
-      --broker-api-url=<value>    [default: https://broker.io.nrs.gov.bc.ca/, env: BROKER_API_URL] The broker api base
-                                  url
-      --broker-token=<value>      [env: BROKER_TOKEN] The broker JWT
-      --vault-addr=<value>        [default: http://127.0.0.1:8200, env: VAULT_ADDR] The vault address
-      --vault-token=<value>       [default: myroot, env: VAULT_TOKEN] The vault token
-      --vault-token-file=<value>  [env: VAULT_TOKEN_FILE] Path to a file containing the vault token
-      --vault-token-unwrap        [env: VAULT_TOKEN_UNWRAP] Unwrap the vault token before use
+  -h, --help                        Show CLI help.
+      --broker-api-url=<value>      [default: https://broker.io.nrs.gov.bc.ca/, env: BROKER_API_URL] The broker api base
+                                    url
+      --broker-token=<value>        [env: BROKER_TOKEN] The broker JWT
+      --vault-addr=<value>          [default: http://127.0.0.1:8200, env: VAULT_ADDR] The vault address
+      --vault-approle-path=<value>  [default: approle, env: VAULT_APPROLE_PATH] The AppRole auth mount path
+      --vault-role-id=<value>       [env: VAULT_ROLE_ID] The AppRole role ID for authentication
+      --vault-secret-id=<value>     [env: VAULT_SECRET_ID] The AppRole secret ID for authentication
+      --vault-token=<value>         [default: myroot, env: VAULT_TOKEN] The vault token
+      --vault-token-file=<value>    [env: VAULT_TOKEN_FILE] Path to a file containing the vault token
+      --vault-token-unwrap          [env: VAULT_TOKEN_UNWRAP] Unwrap the vault token before use
 
 DESCRIPTION
   Syncs external groups in Vault to connect roles with Vault policies
@@ -151,15 +159,18 @@ Display Vault health
 
 ```
 USAGE
-  $ vstool health [-h] [--vault-token <value>] [--vault-token-file <value>] [--vault-token-unwrap]
-    [--vault-addr <value>]
+  $ vstool health [-h] [--vault-role-id <value>] [--vault-secret-id <value>] [--vault-approle-path <value>]
+    [--vault-token <value>] [--vault-token-file <value>] [--vault-token-unwrap] [--vault-addr <value>]
 
 FLAGS
-  -h, --help                      Show CLI help.
-      --vault-addr=<value>        [default: http://127.0.0.1:8200, env: VAULT_ADDR] The vault address
-      --vault-token=<value>       [default: myroot, env: VAULT_TOKEN] The vault token
-      --vault-token-file=<value>  [env: VAULT_TOKEN_FILE] Path to a file containing the vault token
-      --vault-token-unwrap        [env: VAULT_TOKEN_UNWRAP] Unwrap the vault token before use
+  -h, --help                        Show CLI help.
+      --vault-addr=<value>          [default: http://127.0.0.1:8200, env: VAULT_ADDR] The vault address
+      --vault-approle-path=<value>  [default: approle, env: VAULT_APPROLE_PATH] The AppRole auth mount path
+      --vault-role-id=<value>       [env: VAULT_ROLE_ID] The AppRole role ID for authentication
+      --vault-secret-id=<value>     [env: VAULT_SECRET_ID] The AppRole secret ID for authentication
+      --vault-token=<value>         [default: myroot, env: VAULT_TOKEN] The vault token
+      --vault-token-file=<value>    [env: VAULT_TOKEN_FILE] Path to a file containing the vault token
+      --vault-token-unwrap          [env: VAULT_TOKEN_UNWRAP] Unwrap the vault token before use
 
 DESCRIPTION
   Display Vault health
@@ -183,7 +194,7 @@ DESCRIPTION
   Display help for vstool.
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v6.2.37/src/commands/help.ts)_
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/6.2.50/src/commands/help.ts)_
 
 ## `vstool init`
 
@@ -214,23 +225,26 @@ Monitor for changes to sync to vault
 ```
 USAGE
   $ vstool monitor [-h] [--broker-api-url <value>] [--broker-token <value>] [--monitor-interval <value>]
-    [--vault-token <value>] [--vault-token-file <value>] [--vault-token-unwrap] [--vault-token-renew] [--vault-addr
-    <value>] [--root <value>...]
+    [--vault-role-id <value>] [--vault-secret-id <value>] [--vault-approle-path <value>] [--vault-token <value>]
+    [--vault-token-file <value>] [--vault-token-unwrap] [--vault-token-renew] [--vault-addr <value>] [--root <value>...]
 
 FLAGS
-  -h, --help                      Show CLI help.
-      --broker-api-url=<value>    [default: https://broker.io.nrs.gov.bc.ca/, env: BROKER_API_URL] The broker api base
-                                  url
-      --broker-token=<value>      [env: BROKER_TOKEN] The broker JWT
-      --monitor-interval=<value>  [default: 60000, env: MONITOR_INTERVAL_DURATION] The duration between each monitor
-                                  check in milliseconds
-      --root=<value>...           [default: , env: POLICY_ROOT] The root to constrict the policy sync to. Some roots can
-                                  be further constricted such as -root=apps -root=cool-app-war
-      --vault-addr=<value>        [default: http://127.0.0.1:8200, env: VAULT_ADDR] The vault address
-      --vault-token=<value>       [default: myroot, env: VAULT_TOKEN] The vault token
-      --vault-token-file=<value>  [env: VAULT_TOKEN_FILE] Path to a file containing the vault token
-      --vault-token-renew         [env: VAULT_TOKEN_RENEW] Periodically renew the vault token during monitoring
-      --vault-token-unwrap        [env: VAULT_TOKEN_UNWRAP] Unwrap the vault token before use
+  -h, --help                        Show CLI help.
+      --broker-api-url=<value>      [default: https://broker.io.nrs.gov.bc.ca/, env: BROKER_API_URL] The broker api base
+                                    url
+      --broker-token=<value>        [env: BROKER_TOKEN] The broker JWT
+      --monitor-interval=<value>    [default: 60000, env: MONITOR_INTERVAL_DURATION] The duration between each monitor
+                                    check in milliseconds
+      --root=<value>...             [default: , env: POLICY_ROOT] The root to constrict the policy sync to. Some roots
+                                    can be further constricted such as -root=apps -root=cool-app-war
+      --vault-addr=<value>          [default: http://127.0.0.1:8200, env: VAULT_ADDR] The vault address
+      --vault-approle-path=<value>  [default: approle, env: VAULT_APPROLE_PATH] The AppRole auth mount path
+      --vault-role-id=<value>       [env: VAULT_ROLE_ID] The AppRole role ID for authentication
+      --vault-secret-id=<value>     [env: VAULT_SECRET_ID] The AppRole secret ID for authentication
+      --vault-token=<value>         [default: myroot, env: VAULT_TOKEN] The vault token
+      --vault-token-file=<value>    [env: VAULT_TOKEN_FILE] Path to a file containing the vault token
+      --vault-token-renew           [env: VAULT_TOKEN_RENEW] Periodically renew the vault token
+      --vault-token-unwrap          [env: VAULT_TOKEN_UNWRAP] Unwrap the vault token before use
 
 DESCRIPTION
   Monitor for changes to sync to vault
@@ -242,20 +256,24 @@ Syncs policies to Vault
 
 ```
 USAGE
-  $ vstool policy-sync [-h] [--broker-api-url <value>] [--broker-token <value>] [--vault-token <value>]
-    [--vault-token-file <value>] [--vault-token-unwrap] [--vault-addr <value>] [--root <value>...]
+  $ vstool policy-sync [-h] [--broker-api-url <value>] [--broker-token <value>] [--vault-role-id <value>]
+    [--vault-secret-id <value>] [--vault-approle-path <value>] [--vault-token <value>] [--vault-token-file <value>]
+    [--vault-token-unwrap] [--vault-addr <value>] [--root <value>...]
 
 FLAGS
-  -h, --help                      Show CLI help.
-      --broker-api-url=<value>    [default: https://broker.io.nrs.gov.bc.ca/, env: BROKER_API_URL] The broker api base
-                                  url
-      --broker-token=<value>      [env: BROKER_TOKEN] The broker JWT
-      --root=<value>...           [default: , env: POLICY_ROOT] The root to constrict the policy sync to. Some roots can
-                                  be further constricted such as -root=apps -root=cool-app-war
-      --vault-addr=<value>        [default: http://127.0.0.1:8200, env: VAULT_ADDR] The vault address
-      --vault-token=<value>       [default: myroot, env: VAULT_TOKEN] The vault token
-      --vault-token-file=<value>  [env: VAULT_TOKEN_FILE] Path to a file containing the vault token
-      --vault-token-unwrap        [env: VAULT_TOKEN_UNWRAP] Unwrap the vault token before use
+  -h, --help                        Show CLI help.
+      --broker-api-url=<value>      [default: https://broker.io.nrs.gov.bc.ca/, env: BROKER_API_URL] The broker api base
+                                    url
+      --broker-token=<value>        [env: BROKER_TOKEN] The broker JWT
+      --root=<value>...             [default: , env: POLICY_ROOT] The root to constrict the policy sync to. Some roots
+                                    can be further constricted such as -root=apps -root=cool-app-war
+      --vault-addr=<value>          [default: http://127.0.0.1:8200, env: VAULT_ADDR] The vault address
+      --vault-approle-path=<value>  [default: approle, env: VAULT_APPROLE_PATH] The AppRole auth mount path
+      --vault-role-id=<value>       [env: VAULT_ROLE_ID] The AppRole role ID for authentication
+      --vault-secret-id=<value>     [env: VAULT_SECRET_ID] The AppRole secret ID for authentication
+      --vault-token=<value>         [default: myroot, env: VAULT_TOKEN] The vault token
+      --vault-token-file=<value>    [env: VAULT_TOKEN_FILE] Path to a file containing the vault token
+      --vault-token-unwrap          [env: VAULT_TOKEN_UNWRAP] Unwrap the vault token before use
 
 DESCRIPTION
   Syncs policies to Vault

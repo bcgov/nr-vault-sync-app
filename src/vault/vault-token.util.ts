@@ -6,15 +6,36 @@ interface settings {
   'vault-token-file'?: string;
   'vault-token-unwrap'?: boolean;
   'vault-addr': string;
+  'vault-role-id'?: string;
+  'vault-secret-id'?: string;
+  'vault-approle-path'?: string;
 }
 
 /**
- * Resolve the vault token from either a file or a direct value.
- * The file takes precedence if provided.
- * @param token The token value from the flag/env
- * @param tokenFile The path to a file containing the token
+ * Resolve the vault token from either a file, direct value, or AppRole authentication.
+ *
+ * Priority order:
+ * 1. If vault-role-id, vault-secret-id, and vault-approle-path are all set, authenticate via AppRole
+ * 2. If vault-token-file is set, read token from file (file takes precedence)
+ * 3. Otherwise use the direct vault-token value
+ *
+ * @param flags The flags object containing vault configuration
  */
 export async function resolveVaultToken(flags: settings): Promise<string> {
+  // If all three AppRole credentials are provided, authenticate via AppRole
+  if (
+    flags['vault-role-id'] &&
+    flags['vault-secret-id'] &&
+    flags['vault-approle-path']
+  ) {
+    return await authenticateWithApprole(
+      flags['vault-addr'],
+      flags['vault-approle-path'],
+      flags['vault-role-id'],
+      flags['vault-secret-id'],
+    );
+  }
+
   let token = flags['vault-token'];
 
   if (flags['vault-token-file']) {
@@ -46,5 +67,30 @@ async function unwrapVaultToken(
     token: wrappedToken,
   });
   const result = await tempVault.write('sys/wrapping/unwrap', {});
+  return result.auth.client_token;
+}
+
+/**
+ * Authenticate with Vault using AppRole credentials.
+ * @param vaultAddr The vault server address
+ * @param approlePath The AppRole auth mount path
+ * @param roleId The role ID for authentication
+ * @param secretId The secret ID for authentication
+ * @returns The client token after successful authentication
+ */
+async function authenticateWithApprole(
+  vaultAddr: string,
+  approlePath: string,
+  roleId: string,
+  secretId: string,
+): Promise<string> {
+  const tempVault = nv({
+    apiVersion: 'v1',
+    endpoint: vaultAddr.replace(/\/$/, ''),
+  });
+  const result = await tempVault.write(`auth/${approlePath}/login`, {
+    role_id: roleId,
+    secret_id: secretId,
+  });
   return result.auth.client_token;
 }
