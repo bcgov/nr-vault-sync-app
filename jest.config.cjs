@@ -1,6 +1,7 @@
 // For a detailed explanation regarding each configuration property, visit:
 // https://jestjs.io/docs/en/configuration.html
 
+// eslint-disable-next-line no-undef
 module.exports = {
   // All imported modules in your tests should be mocked automatically
   // automock: false,
@@ -15,7 +16,7 @@ module.exports = {
   // clearMocks: false,
 
   // Indicates whether the coverage information should be collected while executing the test
-   collectCoverage: true,
+  collectCoverage: true,
 
   // An array of glob patterns indicating a set of files for which coverage information should be collected
   // collectCoverageFrom: undefined,
@@ -71,8 +72,8 @@ module.exports = {
     //   "json",
     //   "jsx",
     'ts',
-  //   "tsx",
-  //   "node"
+    //   "tsx",
+    //   "node"
   ],
 
   // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
@@ -169,10 +170,7 @@ module.exports = {
   },
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
-  // transformIgnorePatterns: [
-  //   "\\\\node_modules\\\\"
-  // ],
-
+  transformIgnorePatterns: ['/node_modules/(?!(inversify|@inversifyjs)/)'],
   // An array of regexp pattern strings that are matched against all modules before the module loader will automatically return a mock for them
   // unmockedModulePathPatterns: undefined,
 

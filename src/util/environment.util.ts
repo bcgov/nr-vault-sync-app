@@ -56,4 +56,11 @@ export default class EnvironmentUtil {
     }
     throw new Error(`Unsupported env: ${environment}`);
   }
+
+  /**
+   * Get an array of all short environment names
+   */
+  public static getShortNames(): string[] {
+    return Object.keys(envShortToLong);
+  }
 }

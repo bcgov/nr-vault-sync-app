@@ -1,7 +1,11 @@
-name: Vault Sync App Continuous Intergation
+name: Vault Sync App Continuous Integration
 
 # Controls when the action will run.
 on: [push, pull_request]
+
+# Allow minimal permissions for the workflow
+permissions:
+  contents: read
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -13,13 +17,13 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           ref: ${{ github.event.workflow_run.head_branch }}
       - name: Use Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
-          node-version: 20
+          node-version: 24
           cache: 'npm'
       - run: npm ci
       - run: npm run lint

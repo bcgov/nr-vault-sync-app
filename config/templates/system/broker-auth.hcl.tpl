@@ -21,5 +21,19 @@ path "<%= secretKvAppsPath %>/subkeys/tools/+/+" {
   capabilities = ["read"]
 }
 path "<%= secretKvAppsPath %>/data/tools/+/+" {
-  capabilities = ["create", "update", "patch"]
+  capabilities = ["create", "read", "update", "patch"]
 }
+
+<% envs.forEach(function(env){ %>
+path "<%= secretKvAppsPath %>/subkeys/<%= env %>/+/infrastructure" {
+  capabilities = ["read"]
+}
+
+path "<%= secretKvAppsPath %>/data/<%= env %>/+/infrastructure/nr-broker-sync" {
+  capabilities = ["read"]
+}
+
+path "<%= secretKvPath %>/metadata/<%= env %>/+/infrastructure/nr-broker-sync" {
+  capabilities = ["create", "read", "list", "update", "patch"]
+}
+<% }); %>
