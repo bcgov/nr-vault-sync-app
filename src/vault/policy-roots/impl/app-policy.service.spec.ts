@@ -93,6 +93,11 @@ describe('app-policy.service', () => {
       },
       {
         group: VAULT_ROOT_APPS,
+        templateName: 'project-kv-infra',
+        data: dataEnvProd,
+      },
+      {
+        group: VAULT_ROOT_APPS,
         templateName: 'app-kv-read',
         data: dataEnvProd,
       },

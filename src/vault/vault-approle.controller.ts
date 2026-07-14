@@ -92,6 +92,7 @@ export default class VaultApproleController {
                 data: {
                   authMount: VAULT_APPROLE_MOUNT_POINT,
                   secretKvPath: 'apps',
+                  envs: EnvironmentUtil.getShortNames(),
                 },
               }),
             );
