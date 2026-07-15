@@ -91,8 +91,6 @@ export default class VaultApproleController {
                 templateName: 'broker-auth',
                 data: {
                   authMount: VAULT_APPROLE_MOUNT_POINT,
-                  secretKvPath: 'apps',
-                  envs: EnvironmentUtil.getShortNames(),
                 },
               }),
             );
@@ -190,6 +188,7 @@ export default class VaultApproleController {
         mount_point: VAULT_APPROLE_MOUNT_POINT,
         bind_secret_id: ar.bind_secret_id,
         bound_cidr_list: ar.token_bound_cidrs,
+        envs: EnvironmentUtil.getShortNames(),
         policies: ar.token_policies,
         secret_id_num_uses: ar.secret_id_num_uses,
         secret_id_ttl: ar.secret_id_ttl,
