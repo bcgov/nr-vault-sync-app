@@ -33,7 +33,7 @@ path "<%= secretKvAppsPath %>/data/<%= env %>/+/infrastructure/nr-broker-sync" {
   capabilities = ["read"]
 }
 
-path "<%= secretKvPath %>/metadata/<%= env %>/+/infrastructure/nr-broker-sync" {
+path "<%= secretKvAppsPath %>/metadata/<%= env %>/+/infrastructure/nr-broker-sync" {
   capabilities = ["create", "read", "list", "update", "patch"]
 }
 <% }); %>
