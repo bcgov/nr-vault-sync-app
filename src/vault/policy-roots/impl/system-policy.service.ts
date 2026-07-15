@@ -9,6 +9,7 @@ import oidcData from '../oidc-data.deco';
 import { VAULT_APPROLE_MOUNT_POINT } from '../../vault-approle.controller';
 import { AppService } from '../../../services/app.service';
 import { HlcRenderSpec } from '../../../util/hcl.util';
+import EnvironmentUtil from '../../../util/environment.util';
 
 @injectable()
 /**
@@ -67,6 +68,7 @@ export class SystemPolicyService implements PolicyRootService<undefined> {
       restrictedPaths: await this.restrictedBrokerAppPaths(),
       secretDbPath: 'db',
       secretKvAppsPath: 'apps',
+      envs: EnvironmentUtil.getShortNames(),
     };
     for (const file of templateFiles) {
       if (file.endsWith('.hcl.tpl') && !file.startsWith('kv-')) {
