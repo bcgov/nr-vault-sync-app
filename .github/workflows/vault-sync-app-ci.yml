@@ -1,7 +1,7 @@
 name: Vault Sync App Continuous Integration
 
 # Controls when the action will run.
-on: [push, pull_request]
+on: [pull_request]
 
 # Allow minimal permissions for the workflow
 permissions:

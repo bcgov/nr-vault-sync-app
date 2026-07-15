@@ -183,6 +183,7 @@ describe('vault-approle.controller', () => {
       token_max_ttl: 798897,
       token_num_uses: 44,
       token_ttl: 546,
+      envs: ['prod', 'test', 'dev', 'tools'],
     });
   });
 
