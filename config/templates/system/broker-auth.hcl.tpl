@@ -24,6 +24,18 @@ path "<%= secretKvAppsPath %>/data/tools/+/+" {
   capabilities = ["create", "read", "update", "patch"]
 }
 
+path "cloud/subkeys/openshift/+/+" {
+  capabilities = ["read"]
+}
+
+path "cloud/data/openshift/+/+" {
+  capabilities = ["read"]
+}
+
+path "cloud/metadata/openshift/+/+" {
+  capabilities = ["create", "read", "list", "update", "patch"]
+}
+
 <% envs.forEach(function(env){ %>
 path "<%= secretKvAppsPath %>/subkeys/<%= env %>/+/infrastructure" {
   capabilities = ["read"]

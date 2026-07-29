@@ -3,6 +3,7 @@ import { HlcRenderSpec } from '../../util/hcl.util';
 export const VAULT_ROOT_SYSTEM = 'system';
 export const VAULT_ROOT_APPS = 'apps';
 export const VAULT_ROOT_GROUPS = 'groups';
+export const VAULT_ROOT_CLOUD = 'cloud';
 
 /**
  * Policy service root

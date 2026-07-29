@@ -2,6 +2,7 @@
   "db": [],
   "kv": [
     "apps",
+    "cloud",
     "groups"
   ],
   "appActorDefaults": {
