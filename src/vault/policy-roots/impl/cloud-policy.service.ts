@@ -14,7 +14,7 @@ export class CloudPolicyService implements PolicyRootService<undefined> {
   /**
    * Constructor.
    */
-  constructor(@inject(TYPES.Logger) private logger: winston.Logger) { }
+  constructor(@inject(TYPES.Logger) private logger: winston.Logger) {}
 
   /**
    * The name of this policy root
