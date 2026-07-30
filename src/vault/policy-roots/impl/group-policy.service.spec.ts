@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import winston from 'winston';
 import { ConfigService } from '../../../services/config.service';
-import { HlcRenderSpec } from '../../../util/hcl.util';
+import { HclRenderSpec } from '../../../util/hcl.util';
 import { VAULT_ROOT_GROUPS } from '../policy-root.service';
 import { GroupPolicyService } from './group-policy.service';
 
@@ -33,7 +33,7 @@ describe('group-policy.service', () => {
 
     jest
       .spyOn(gps, 'buildGroup')
-      .mockReturnValue({} as unknown as HlcRenderSpec);
+      .mockReturnValue({} as unknown as HclRenderSpec);
     jest.spyOn(gps, 'buildGroups').mockReturnValue(Promise.resolve([]));
     await gps.build();
 

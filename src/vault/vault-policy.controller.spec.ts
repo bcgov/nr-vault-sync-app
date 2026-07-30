@@ -3,7 +3,7 @@ import nv from 'node-vault';
 import winston from 'winston';
 import VaultPolicyController from './vault-policy.controller';
 import { RegistrationService } from '../services/registration.service';
-import HclUtil, { HlcRenderSpec } from '../util/hcl.util';
+import HclUtil, { HclRenderSpec } from '../util/hcl.util';
 import { PolicyRootService } from './policy-roots/policy-root.service';
 
 interface FactoryArgs {
@@ -95,7 +95,7 @@ describe('vault-policy.controller', () => {
       hclUtil: mockHclUtil,
       registrationService: mockRegistrationService,
     });
-    await vp.addPolicy({} as HlcRenderSpec);
+    await vp.addPolicy({} as HclRenderSpec);
 
     expect(mockHclUtil.renderName).toHaveBeenCalledTimes(1);
     expect(mockHclUtil.renderName).toHaveBeenCalledWith({});
@@ -136,7 +136,7 @@ describe('vault-policy.controller', () => {
       hclUtil: mockHclUtil,
       registrationService: mockRegistrationService,
     });
-    await vp.addPolicy({} as HlcRenderSpec);
+    await vp.addPolicy({} as HclRenderSpec);
 
     expect(mockHclUtil.renderName).toHaveBeenCalledTimes(1);
     expect(mockHclUtil.renderName).toHaveBeenCalledWith({});

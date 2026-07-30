@@ -1,6 +1,6 @@
 import { vsContainer } from '../../inversify.config';
 import { TYPES } from '../../inversify.types';
-import { HlcRenderSpec } from '../../util/hcl.util';
+import { HclRenderSpec } from '../../util/hcl.util';
 import VaultApi from '../vault.api';
 
 let oidcDecoData: ejs.Data | undefined;
@@ -16,7 +16,7 @@ export default function oidcData(
   propertyName: string,
   descriptor: PropertyDescriptor,
 ): void {
-  const method = descriptor.value as () => Promise<HlcRenderSpec[]>;
+  const method = descriptor.value as () => Promise<HclRenderSpec[]>;
 
   descriptor.value = async function (...args: any) {
     const specArr = await method.apply(this, args);

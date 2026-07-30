@@ -7,7 +7,7 @@ import EnvironmentUtil from './environment.util';
 import FsUtil from './fs.util';
 import { TYPES } from '../inversify.types';
 
-export interface HlcRenderSpec {
+export interface HclRenderSpec {
   group: string;
   templateName: string;
   data?: ejs.Data | undefined;
@@ -30,7 +30,7 @@ export default class HclUtil {
    * Renders a body from the template
    * @param spec The information to use to render the body
    */
-  public renderBody(spec: HlcRenderSpec): string {
+  public renderBody(spec: HclRenderSpec): string {
     const pathArray = [
       HclUtil.templatesdir,
       spec.group,
@@ -49,7 +49,7 @@ export default class HclUtil {
    * Renders a name from the template if it exists or parameters
    * @param spec The information to use to render the body
    */
-  public renderName(spec: HlcRenderSpec): string {
+  public renderName(spec: HclRenderSpec): string {
     const pathArray = [
       HclUtil.templatesdir,
       spec.group,

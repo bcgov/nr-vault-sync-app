@@ -49,7 +49,7 @@ describe('environment util', () => {
   });
 
   it('normalize - SMTTEST', () => {
-    const rVal = EnvironmentUtil.normalize('TEST');
+    const rVal = EnvironmentUtil.normalize('SMTTEST');
     expect(rVal).toBe('test');
   });
 

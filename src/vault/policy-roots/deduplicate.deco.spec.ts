@@ -8,7 +8,7 @@ describe('deduplicate.deco', () => {
     jest.clearAllMocks();
   });
 
-  test('deduplicates HlcRenderSpec from array of HlcRenderSpec', async () => {
+  test('deduplicates HclRenderSpec from array of HclRenderSpec', async () => {
     const mockHclUtilInstance = {
       // Simple test for now. Only the first value should go through
       renderName: jest.fn().mockReturnValue('policyname'),

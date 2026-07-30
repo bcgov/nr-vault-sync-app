@@ -8,7 +8,7 @@ import { ConfigService } from '../../../services/config.service';
 import oidcData from '../oidc-data.deco';
 import { VAULT_APPROLE_MOUNT_POINT } from '../../vault-approle.controller';
 import { AppService } from '../../../services/app.service';
-import { HlcRenderSpec } from '../../../util/hcl.util';
+import { HclRenderSpec } from '../../../util/hcl.util';
 import EnvironmentUtil from '../../../util/environment.util';
 
 @injectable()
@@ -35,10 +35,10 @@ export class SystemPolicyService implements PolicyRootService<undefined> {
 
   /**
    * Builds the hlc render spec for this policy root
-   * @returns An array of HlcRenderSpec
+   * @returns An array of HclRenderSpec
    */
   @oidcData
-  async build(): Promise<HlcRenderSpec[]> {
+  async build(): Promise<HclRenderSpec[]> {
     return [
       ...(await this.buildSystem()),
       ...(await this.buildKvSecretEngines()),
@@ -56,9 +56,9 @@ export class SystemPolicyService implements PolicyRootService<undefined> {
   /**
    * Sync system policies to vault
    */
-  public async buildSystem(): Promise<HlcRenderSpec[]> {
+  public async buildSystem(): Promise<HclRenderSpec[]> {
     this.logger.debug(`Build system - global`);
-    const sysSpecs: HlcRenderSpec[] = [];
+    const sysSpecs: HclRenderSpec[] = [];
     const templateFiles = fs.readdirSync(
       SystemPolicyService.sysPolicyConfigPath,
     );
@@ -73,7 +73,7 @@ export class SystemPolicyService implements PolicyRootService<undefined> {
     for (const file of templateFiles) {
       if (file.endsWith('.hcl.tpl') && !file.startsWith('kv-')) {
         const templateName = path.basename(file, '.hcl.tpl');
-        const spec: HlcRenderSpec = {
+        const spec: HclRenderSpec = {
           group: VAULT_ROOT_SYSTEM,
           templateName,
           data,
@@ -87,9 +87,9 @@ export class SystemPolicyService implements PolicyRootService<undefined> {
   /**
    * Sync kv engine policies to vault
    */
-  public async buildKvSecretEngines(): Promise<HlcRenderSpec[]> {
+  public async buildKvSecretEngines(): Promise<HclRenderSpec[]> {
     this.logger.debug(`Build system - kv`);
-    const kvSpecs: HlcRenderSpec[] = [];
+    const kvSpecs: HclRenderSpec[] = [];
     for (const secretKvPath of await this.config.getKvStores()) {
       kvSpecs.push({
         group: VAULT_ROOT_SYSTEM,

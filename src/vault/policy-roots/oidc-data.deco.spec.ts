@@ -8,7 +8,7 @@ describe('oidc-data.deco', () => {
     jest.clearAllMocks();
   });
 
-  test('adds OIDC info to the HlcRenderSpec', async () => {
+  test('adds OIDC info to the HclRenderSpec', async () => {
     const mockVaultApi = {
       // Simple test for now. Only the first value should go through
       getOidcAccessors: jest.fn().mockResolvedValue(['accessorId']),

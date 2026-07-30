@@ -74,11 +74,13 @@ export default class Init extends Command {
       const token = result.root_token;
 
       vault.token = token;
-      fs.writeFileSync('VAULT_ROOT_TOKEN', token);
+      fs.writeFileSync('VAULT_ROOT_TOKEN', token, { mode: 0o600 });
       if (flags['secret-shares'] === 1) {
-        fs.writeFileSync('VAULT_UNSEAL_KEY', result.keys[0]);
+        fs.writeFileSync('VAULT_UNSEAL_KEY', result.keys[0], { mode: 0o600 });
       } else {
-        fs.writeFileSync('VAULT_UNSEAL_KEY', JSON.stringify(result.keys));
+        fs.writeFileSync('VAULT_UNSEAL_KEY', JSON.stringify(result.keys), {
+          mode: 0o600,
+        });
       }
       let unsealCnt = 0;
       for (const key of result.keys) {

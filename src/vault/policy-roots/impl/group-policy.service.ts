@@ -1,4 +1,4 @@
-import { HlcRenderSpec } from '../../../util/hcl.util';
+import { HclRenderSpec } from '../../../util/hcl.util';
 import { PolicyRootService, VAULT_ROOT_GROUPS } from '../policy-root.service';
 import winston from 'winston';
 import { inject, injectable } from 'inversify';
@@ -28,9 +28,9 @@ export class GroupPolicyService implements PolicyRootService<GroupConfig> {
 
   /**
    * Builds the hlc render spec for this policy root
-   * @returns An array of HlcRenderSpec
+   * @returns An array of HclRenderSpec
    */
-  async build(limitTo?: GroupConfig): Promise<HlcRenderSpec[]> {
+  async build(limitTo?: GroupConfig): Promise<HclRenderSpec[]> {
     if (limitTo) {
       return [this.buildGroup(limitTo)];
     }
@@ -40,7 +40,7 @@ export class GroupPolicyService implements PolicyRootService<GroupConfig> {
   /**
    * Syncs policies with vault for groups
    */
-  public async buildGroups(): Promise<HlcRenderSpec[]> {
+  public async buildGroups(): Promise<HclRenderSpec[]> {
     const groups = await this.config.getGroups();
     return groups.map((group) => this.buildGroup(group));
   }
@@ -48,7 +48,7 @@ export class GroupPolicyService implements PolicyRootService<GroupConfig> {
   /**
    * Syncs policies with vault for groups
    */
-  public buildGroup(group: GroupConfig): HlcRenderSpec {
+  public buildGroup(group: GroupConfig): HclRenderSpec {
     this.logger.debug(`Build group: ${group.name}`);
     return {
       group: VAULT_ROOT_GROUPS,
