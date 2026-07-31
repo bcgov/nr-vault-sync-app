@@ -63,4 +63,11 @@ export class ConfigFileService implements ConfigService {
   getGroups(): Promise<GroupConfig[]> {
     return Promise.resolve(ConfigFileService.config.groups);
   }
+
+  /**
+   * Return configured cloud provider names
+   */
+  getClouds(): Promise<string[]> {
+    return Promise.resolve(ConfigFileService.config.clouds ?? []);
+  }
 }

@@ -44,6 +44,7 @@ const mockConfigService = {
   getDbType: jest.fn(),
   getKvStores: jest.fn(),
   getGroups: jest.fn(),
+  getClouds: jest.fn(),
 };
 
 describe('app-file.service', () => {

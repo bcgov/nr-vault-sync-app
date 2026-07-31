@@ -1,1 +1,0 @@
-openshift/cloud-kv-read

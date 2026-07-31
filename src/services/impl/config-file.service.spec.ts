@@ -17,6 +17,7 @@ const mockConfig: VaultConfig = {
   },
   db: [{ name: 'jasper', type: 'oracle' }],
   kv: ['bob'],
+  clouds: ['openshift'],
   groups: [
     {
       kv: 'groups',
@@ -80,5 +81,12 @@ describe('config-file.service', () => {
     const rVal = await cfs.getGroups();
 
     expect(rVal).toEqual(mockConfig.groups);
+  });
+
+  it('getClouds', async () => {
+    const cfs = new ConfigFileService();
+    const rVal = await cfs.getClouds();
+
+    expect(rVal).toEqual(mockConfig.clouds);
   });
 });
