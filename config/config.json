@@ -15,8 +15,8 @@
     "developer": {
       "tools": ["project-kv-read", "project-kv-write", "app-db-readwrite"],
       "dev": ["project-kv-read", "project-kv-write", "app-db-readwrite"],
-      "test": ["project-kv-read", "project-kv-infra", "app-db-read"],
-      "prod": ["project-kv-infra"]
+      "test": ["project-kv-read", "app-db-read"],
+      "prod": []
     }
   },
   "groups": [

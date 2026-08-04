@@ -31,17 +31,3 @@ path "clouds/data/+/+/nr-broker-sync" {
 path "clouds/subkeys/+/+/nr-broker-sync" {
   capabilities = ["read"]
 }
-
-<% envs.forEach(function(env){ %>
-path "<%= secretKvAppsPath %>/subkeys/<%= env %>/+/infrastructure" {
-  capabilities = ["read"]
-}
-
-path "<%= secretKvAppsPath %>/data/<%= env %>/+/infrastructure/nr-broker-sync" {
-  capabilities = ["read"]
-}
-
-path "<%= secretKvAppsPath %>/metadata/<%= env %>/+/infrastructure/nr-broker-sync" {
-  capabilities = ["create", "read", "list", "update", "patch"]
-}
-<% }); %>
