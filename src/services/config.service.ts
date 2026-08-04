@@ -74,6 +74,8 @@ export interface VaultConfig {
   db: DbConfig[];
   /** Array of key value secret engines. */
   kv: string[];
+  /** array of cloud names used by the file-backed config service. */
+  clouds?: string[];
   /** Group configuration */
   groups: GroupConfig[];
 }
@@ -106,4 +108,9 @@ export interface ConfigService {
    * Return all groups in the configuration
    */
   getGroups(): Promise<GroupConfig[]>;
+
+  /**
+   * Return configured cloud provider names
+   */
+  getClouds(): Promise<string[]>;
 }

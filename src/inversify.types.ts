@@ -8,6 +8,7 @@ const TYPES = {
   BrokerMonitorController: Symbol.for('BrokerMonitorController'),
   BrokerToken: Symbol.for('BrokerToken'),
   ConfigService: Symbol.for('ConfigService'),
+  CloudPolicyService: Symbol.for('CloudPolicyService'),
   EnvironmentUtil: Symbol.for('EnvironmentUtil'),
   FsUtil: Symbol.for('FsUtil'),
   GroupPolicyService: Symbol.for('GroupPolicyService'),
