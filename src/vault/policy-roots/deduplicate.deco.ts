@@ -1,6 +1,6 @@
 import { vsContainer } from '../../inversify.config';
 import { TYPES } from '../../inversify.types';
-import HclUtil, { HlcRenderSpec } from '../../util/hcl.util';
+import HclUtil, { HclRenderSpec } from '../../util/hcl.util';
 
 /**
  * Policy deduplication decorator
@@ -13,7 +13,7 @@ export default function deduplicate(
   propertyName: string,
   descriptor: PropertyDescriptor,
 ): void {
-  const method = descriptor.value as () => Promise<HlcRenderSpec[]>;
+  const method = descriptor.value as () => Promise<HclRenderSpec[]>;
 
   descriptor.value = async function (...args: any) {
     const set = new Set<string>();

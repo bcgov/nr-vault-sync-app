@@ -2,7 +2,7 @@ import nv from 'node-vault';
 import { inject, injectable, multiInject } from 'inversify';
 import { TYPES } from '../inversify.types';
 import winston from 'winston';
-import HclUtil, { HlcRenderSpec } from '../util/hcl.util';
+import HclUtil, { HclRenderSpec } from '../util/hcl.util';
 import { PolicyRootService } from './policy-roots/policy-root.service';
 import { RegistrationService } from '../services/registration.service';
 
@@ -51,7 +51,7 @@ export default class VaultPolicyController {
    * Adds a policy to vault
    * @param spec The policy spec to render and add to Vault
    */
-  public async addPolicy(spec: HlcRenderSpec): Promise<void> {
+  public async addPolicy(spec: HclRenderSpec): Promise<void> {
     const name = this.hclUtil.renderName(spec);
     const policy = this.hclUtil.renderBody(spec);
     if (await this.registrationService.isSameValue(name, policy)) {

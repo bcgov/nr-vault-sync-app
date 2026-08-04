@@ -51,7 +51,7 @@ export default class Monitor extends Command {
   async run(): Promise<void> {
     const { flags } = await this.parse(Monitor);
 
-    this.log('Vault Monitered Sync');
+    this.log('Vault Monitored Sync');
 
     bindVault(flags['vault-addr'], await resolveVaultToken(flags));
     bindBroker(flags['broker-api-url'], flags['broker-token']);

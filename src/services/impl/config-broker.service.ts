@@ -8,6 +8,8 @@ import {
 import { ConfigFileService } from './config-file.service';
 import { BrokerApi } from '../../broker/broker.api';
 
+const VAULT_SERVICE_VERTEX_ID = '644c4d302e2f63acef6bb72c';
+
 @injectable()
 /**
  * Service for configuration details
@@ -38,7 +40,7 @@ export class ConfigBrokerService implements ConfigService {
     return [
       ...(await this.config.getGroups()),
       ...(await this.brokerApi
-        .searchVertices('team', 'uses', '644c4d302e2f63acef6bb72c')
+        .searchVertices('team', 'uses', VAULT_SERVICE_VERTEX_ID)
         .then((configs) => {
           return configs
             .map((config) => {
@@ -61,6 +63,22 @@ export class ConfigBrokerService implements ConfigService {
             })
             .filter((config) => !!config) as GroupConfig[];
         })),
+    ];
+  }
+
+  async getClouds(): Promise<string[]> {
+    const clouds = await this.brokerApi.searchVertices('cloud');
+    return [
+      ...new Set(
+        clouds
+          .map((vertex) => {
+            const cloudVertex = vertex as typeof vertex & {
+              name?: string;
+            };
+            return cloudVertex.name ?? vertex.prop?.name;
+          })
+          .filter((cloudName): cloudName is string => !!cloudName),
+      ),
     ];
   }
 }

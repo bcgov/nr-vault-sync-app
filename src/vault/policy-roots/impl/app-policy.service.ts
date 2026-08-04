@@ -1,7 +1,7 @@
 import winston from 'winston';
 import { inject, injectable } from 'inversify';
 import { TYPES } from '../../../inversify.types';
-import { HlcRenderSpec } from '../../../util/hcl.util';
+import { HclRenderSpec } from '../../../util/hcl.util';
 import { PolicyRootService, VAULT_ROOT_APPS } from '../policy-root.service';
 import { Application, AppService } from '../../../services/app.service';
 import EnvironmentUtil from '../../../util/environment.util';
@@ -33,9 +33,9 @@ export class AppPolicyService implements PolicyRootService<Application> {
 
   /**
    * Builds the hlc render spec for this policy root
-   * @returns An array of HlcRenderSpec
+   * @returns An array of HclRenderSpec
    */
-  async build(limitTo?: Application): Promise<HlcRenderSpec[]> {
+  async build(limitTo?: Application): Promise<HclRenderSpec[]> {
     if (limitTo) {
       return this.buildApplication(limitTo);
     }
@@ -46,8 +46,8 @@ export class AppPolicyService implements PolicyRootService<Application> {
    * Builds the hlc render spec for all applications. Duplicates are removed by decorator.
    */
   @deduplicate
-  public async buildApplications(): Promise<HlcRenderSpec[]> {
-    const appSpecs: HlcRenderSpec[] = [];
+  public async buildApplications(): Promise<HclRenderSpec[]> {
+    const appSpecs: HclRenderSpec[] = [];
     for (const application of await this.appService.getAllApps()) {
       appSpecs.push(...(await this.buildApplication(application)));
     }
@@ -60,9 +60,9 @@ export class AppPolicyService implements PolicyRootService<Application> {
    */
   public async buildApplication(
     appInfo: Application,
-  ): Promise<HlcRenderSpec[]> {
+  ): Promise<HclRenderSpec[]> {
     this.logger.debug(`Build app policy: ${appInfo.app}`);
-    const appSpecs: HlcRenderSpec[] = [];
+    const appSpecs: HclRenderSpec[] = [];
     for (const environment of appInfo.env) {
       appSpecs.push(
         ...(await this.buildApplicationForEnv(appInfo, environment)),
@@ -80,7 +80,7 @@ export class AppPolicyService implements PolicyRootService<Application> {
   public async buildApplicationForEnv(
     appInfo: Application,
     environment: string,
-  ): Promise<HlcRenderSpec[]> {
+  ): Promise<HclRenderSpec[]> {
     let normEvn;
     try {
       normEvn = EnvironmentUtil.normalize(environment);
@@ -99,7 +99,7 @@ export class AppPolicyService implements PolicyRootService<Application> {
       appCanReadProject: appInfo.config?.policyOptions?.kvReadProject,
       appProjectSharedSync: ['aws-ssm-sync'],
     };
-    const renderSpecs: HlcRenderSpec[] = [];
+    const renderSpecs: HclRenderSpec[] = [];
     renderSpecs.push({
       group: VAULT_ROOT_APPS,
       templateName: 'project-kv-read',

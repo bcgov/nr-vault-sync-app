@@ -6,6 +6,7 @@ import { ConfigService } from '../services/config.service';
 import VaultApi from './vault.api';
 import { AppPolicyService } from './policy-roots/impl/app-policy.service';
 import { GroupPolicyService } from './policy-roots/impl/group-policy.service';
+import { CloudPolicyService } from './policy-roots/impl/cloud-policy.service';
 import { AppService } from '../services/app.service';
 import HclUtil from '../util/hcl.util';
 import { RegistrationService } from '../services/registration.service';
@@ -34,11 +35,16 @@ describe('vault-group.controller', () => {
     getGroups: jest.fn(() => {
       return [];
     }),
+    getClouds: jest.fn(async () => Promise.resolve(['openshift'])),
   } as unknown as ConfigService;
 
   const mockGroupPolicyService = {} as unknown as GroupPolicyService;
 
   const mockAppPolicyService = {} as unknown as AppPolicyService;
+
+  const mockCloudPolicyService = {
+    build: jest.fn(async () => Promise.resolve([])),
+  } as unknown as CloudPolicyService;
 
   const mockAppService = {
     getAllApps: jest.fn(() => ['app1', 'app2']),
@@ -68,6 +74,7 @@ describe('vault-group.controller', () => {
 
   interface FactoryArgs {
     mockConfigService?: ConfigService;
+    mockCloudPolicyService?: CloudPolicyService;
   }
 
   /**
@@ -83,6 +90,9 @@ describe('vault-group.controller', () => {
       mockRegistrationService,
       mockGroupPolicyService,
       mockAppPolicyService,
+      fArgs.mockCloudPolicyService
+        ? fArgs.mockCloudPolicyService
+        : mockCloudPolicyService,
       mockLogger,
     );
   }
@@ -92,16 +102,55 @@ describe('vault-group.controller', () => {
     mockConfigService.getGroups = jest.fn(async () => {
       return Promise.resolve([]);
     });
+    mockConfigService.getClouds = jest.fn(async () =>
+      Promise.resolve(['openshift']),
+    );
   });
 
   test('sync', async () => {
     const vc = vgcFactory({});
     jest.spyOn(vc, 'syncUserGroups').mockReturnValue(Promise.resolve());
     jest.spyOn(vc, 'syncAppGroups').mockReturnValue(Promise.resolve());
+    jest.spyOn(vc, 'syncCloudGroups').mockReturnValue(Promise.resolve());
     await vc.sync();
 
     expect(vc.syncUserGroups).toHaveBeenCalledTimes(1);
     expect(vc.syncAppGroups).toHaveBeenCalledTimes(1);
+    expect(vc.syncCloudGroups).toHaveBeenCalledTimes(1);
+  });
+
+  test('syncCloudGroups: syncs write and read groups per cloud', async () => {
+    const cloudSpecs = [
+      {
+        group: 'clouds',
+        templateName: 'cloud-kv-read',
+        data: { secretKvCloudPath: 'clouds', cloudName: 'openshift' },
+      },
+      {
+        group: 'clouds',
+        templateName: 'cloud-kv-write',
+        data: { secretKvCloudPath: 'clouds', cloudName: 'openshift' },
+      },
+    ];
+    const localCloudService = {
+      build: jest.fn(async () => Promise.resolve(cloudSpecs)),
+    } as unknown as CloudPolicyService;
+    mockHclUtil.renderName = jest.fn((spec) => {
+      return `clouds/${spec.data?.cloudName}/${spec.templateName}`;
+    });
+    const vc = vgcFactory({ mockCloudPolicyService: localCloudService });
+    jest.spyOn(vc, 'syncGroup').mockResolvedValue();
+
+    await vc.syncCloudGroups();
+
+    expect(localCloudService.build).toHaveBeenCalledWith('openshift');
+    expect(vc.syncGroup).toHaveBeenNthCalledWith(
+      1,
+      'oidc-css-cloud/openshift',
+      'cloud_openshift',
+      ['clouds/openshift/cloud-kv-write'],
+    );
+    expect(vc.syncGroup).toHaveBeenCalledTimes(1);
   });
 
   test('syncGroup: group exists', async () => {
