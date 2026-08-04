@@ -9,6 +9,14 @@ path "auth/<%= authMount %>/role/<%= project %>_<%= application %>_<%= environme
   capabilities = ["update"]
 }
 
+path "auth/<%= authMount %>/role/<%= project %>_<%= application %>_<%= environment %>/secret-id/destroy" {
+  capabilities = ["update"]
+}
+
+path "auth/<%= authMount %>/role/<%= project %>_<%= application %>_<%= environment %>/secret-id-accessor/destroy" {
+  capabilities = ["update"]
+}
+
 path "<%= secretKvPath %>/subkeys/tools/<%= project %>/<%= application %>" {
   capabilities = ["read"]
 }

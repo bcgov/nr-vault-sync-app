@@ -15,6 +15,7 @@ import { PolicyRootService } from './vault/policy-roots/policy-root.service';
 import { SystemPolicyService } from './vault/policy-roots/impl/system-policy.service';
 import { AppPolicyService } from './vault/policy-roots/impl/app-policy.service';
 import { GroupPolicyService } from './vault/policy-roots/impl/group-policy.service';
+import { CloudPolicyService } from './vault/policy-roots/impl/cloud-policy.service';
 import VaultApproleController from './vault/vault-approle.controller';
 import { ConfigBrokerService } from './services/impl/config-broker.service';
 import { BrokerApi } from './broker/broker.api';
@@ -47,6 +48,9 @@ vsContainer
 vsContainer
   .bind<PolicyRootService<unknown>>(TYPES.PolicyRootService)
   .to(GroupPolicyService);
+vsContainer
+  .bind<PolicyRootService<unknown>>(TYPES.PolicyRootService)
+  .to(CloudPolicyService);
 // Bind policy roots for individual inject
 vsContainer
   .bind<SystemPolicyService>(TYPES.SystemPolicyService)
@@ -55,7 +59,9 @@ vsContainer.bind<AppPolicyService>(TYPES.AppPolicyService).to(AppPolicyService);
 vsContainer
   .bind<GroupPolicyService>(TYPES.GroupPolicyService)
   .to(GroupPolicyService);
-
+vsContainer
+  .bind<CloudPolicyService>(TYPES.CloudPolicyService)
+  .to(CloudPolicyService);
 // Controllers
 vsContainer
   .bind<BrokerMonitorController>(TYPES.BrokerMonitorController)

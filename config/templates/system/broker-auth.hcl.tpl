@@ -24,6 +24,14 @@ path "<%= secretKvAppsPath %>/data/tools/+/+" {
   capabilities = ["create", "read", "update", "patch"]
 }
 
+path "clouds/data/+/+/nr-broker-sync" {
+  capabilities = ["read"]
+}
+
+path "clouds/subkeys/+/+/nr-broker-sync" {
+  capabilities = ["read"]
+}
+
 <% envs.forEach(function(env){ %>
 path "<%= secretKvAppsPath %>/subkeys/<%= env %>/+/infrastructure" {
   capabilities = ["read"]

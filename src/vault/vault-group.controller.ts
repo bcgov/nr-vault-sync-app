@@ -8,11 +8,13 @@ import VaultApi from './vault.api';
 import HclUtil from '../util/hcl.util';
 import { GroupPolicyService } from './policy-roots/impl/group-policy.service';
 import { AppPolicyService } from './policy-roots/impl/app-policy.service';
+import { CloudPolicyService } from './policy-roots/impl/cloud-policy.service';
 import { VAULT_ROOT_SYSTEM } from './policy-roots/policy-root.service';
 import { RegistrationService } from '../services/registration.service';
 
 export const VAULT_GROUP_KEYCLOAK_DEVELOPERS = 'oidc-css-developer';
 export const VAULT_GROUP_KEYCLOAK_GROUPS = 'oidc-css-group';
+export const VAULT_GROUP_KEYCLOAK_CLOUDS = 'oidc-css-cloud';
 
 @injectable()
 /**
@@ -33,6 +35,8 @@ export default class VaultGroupController {
     @inject(TYPES.GroupPolicyService)
     private groupRootService: GroupPolicyService,
     @inject(TYPES.AppPolicyService) private appRootService: AppPolicyService,
+    @inject(TYPES.CloudPolicyService)
+    private cloudRootService: CloudPolicyService,
     @inject(TYPES.Logger) private logger: winston.Logger,
   ) {}
 
@@ -41,6 +45,7 @@ export default class VaultGroupController {
    */
   public async sync(): Promise<void> {
     await this.syncAppGroups();
+    await this.syncCloudGroups();
     await this.syncUserGroups();
     // TODO: Remove no longer used groups
     await this.registrationService.clear();
@@ -94,6 +99,29 @@ export default class VaultGroupController {
         );
       } catch (error) {
         this.logger.error(`Error syncing dev app group: ${app.app}`);
+      }
+    }
+  }
+
+  /**
+   * Sync cloud collection groups. Each cloud maps an external role to its cloud policies.
+   */
+  public async syncCloudGroups(): Promise<void> {
+    const clouds = await this.config.getClouds();
+    for (const cloud of clouds) {
+      try {
+        const specs = await this.cloudRootService.build(cloud);
+        const writePolicyNames = specs
+          .filter((spec) => spec.templateName.endsWith('-write'))
+          .map((spec) => this.hclUtil.renderName(spec));
+
+        await this.syncGroup(
+          `${VAULT_GROUP_KEYCLOAK_CLOUDS}/${cloud.toLowerCase()}`,
+          `cloud_${cloud.toLowerCase()}`,
+          writePolicyNames,
+        );
+      } catch (error) {
+        this.logger.error(`Error syncing cloud group: ${cloud}`);
       }
     }
   }
