@@ -112,11 +112,6 @@ export class AppPolicyService implements PolicyRootService<Application> {
     });
     renderSpecs.push({
       group: VAULT_ROOT_APPS,
-      templateName: 'project-kv-infra',
-      data: policyData,
-    });
-    renderSpecs.push({
-      group: VAULT_ROOT_APPS,
       templateName: 'app-kv-read',
       data: policyData,
     });
