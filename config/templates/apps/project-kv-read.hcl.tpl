@@ -3,27 +3,27 @@ path "<%= secretKvPath %>/metadata" {
   capabilities = ["list"]
 }
 
-path "apps/metadata/<%= environment %>" {
+path "<%= secretKvPath %>/metadata/<%= environment %>" {
   capabilities = ["list"]
 }
 
-path "apps/metadata/<%= environment %>/<%= project %>" {
+path "<%= secretKvPath %>/metadata/<%= environment %>/<%= project %>" {
   capabilities = ["read", "list"]
 }
 
-path "apps/metadata/<%= environment %>/<%= project %>/+" {
+path "<%= secretKvPath %>/metadata/<%= environment %>/<%= project %>/+" {
   capabilities = ["read", "list"]
 }
 
-path "apps/subkeys/<%= environment %>/<%= project %>" {
+path "<%= secretKvPath %>/subkeys/<%= environment %>/<%= project %>" {
   capabilities = ["read"]
 }
 
-path "apps/subkeys/<%= environment %>/<%= project %>/+" {
+path "<%= secretKvPath %>/subkeys/<%= environment %>/<%= project %>/+" {
   capabilities = ["read"]
 }
 
-path "apps/subkeys/<%= environment %>/<%= project %>/+/+" {
+path "<%= secretKvPath %>/subkeys/<%= environment %>/<%= project %>/+/+" {
   capabilities = ["read"]
 }
 
