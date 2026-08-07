@@ -2,7 +2,11 @@ import winston from 'winston';
 import { inject, injectable } from 'inversify';
 import { TYPES } from '../../../inversify.types';
 import { HclRenderSpec } from '../../../util/hcl.util';
-import { PolicyRootService, VAULT_ROOT_APPS } from '../policy-root.service';
+import {
+  PolicyRootService,
+  VAULT_ROOT_APPS,
+  VAULT_ROOT_DB,
+} from '../policy-root.service';
 import { Application, AppService } from '../../../services/app.service';
 import EnvironmentUtil from '../../../util/environment.util';
 import deduplicate from '../deduplicate.deco';
@@ -92,8 +96,8 @@ export class AppPolicyService implements PolicyRootService<Application> {
     const policyData = {
       application: appInfo.app.toLowerCase(),
       authMount: VAULT_APPROLE_MOUNT_POINT,
-      secretKvPath: 'apps',
-      secretDbPath: 'db',
+      secretKvPath: VAULT_ROOT_APPS,
+      secretDbPath: VAULT_ROOT_DB,
       project: appInfo.project.toLowerCase(),
       environment: normEvn,
       appCanReadProject: appInfo.config?.policyOptions?.kvReadProject,

@@ -2,7 +2,13 @@ import fs from 'fs';
 import path from 'path';
 import winston from 'winston';
 import { inject, injectable } from 'inversify';
-import { PolicyRootService, VAULT_ROOT_SYSTEM } from '../policy-root.service';
+import {
+  PolicyRootService,
+  VAULT_ROOT_APPS,
+  VAULT_ROOT_CLOUDS,
+  VAULT_ROOT_DB,
+  VAULT_ROOT_SYSTEM,
+} from '../policy-root.service';
 import { TYPES } from '../../../inversify.types';
 import { ConfigService } from '../../../services/config.service';
 import oidcData from '../oidc-data.deco';
@@ -66,8 +72,9 @@ export class SystemPolicyService implements PolicyRootService<undefined> {
       kvPaths: await this.config.getKvStores(),
       authMount: VAULT_APPROLE_MOUNT_POINT,
       restrictedPaths: await this.restrictedBrokerAppPaths(),
-      secretDbPath: 'db',
-      secretKvAppsPath: 'apps',
+      secretDbPath: VAULT_ROOT_DB,
+      secretKvAppsPath: VAULT_ROOT_APPS,
+      secretKvCloudsPath: VAULT_ROOT_CLOUDS,
       envs: EnvironmentUtil.getShortNames(),
     };
     for (const file of templateFiles) {
@@ -101,7 +108,7 @@ export class SystemPolicyService implements PolicyRootService<undefined> {
         templateName: 'kv-developer',
         data: { secretKvPath },
       });
-      if (secretKvPath === 'apps') {
+      if (secretKvPath === VAULT_ROOT_APPS) {
         kvSpecs.push({
           group: VAULT_ROOT_SYSTEM,
           templateName: 'kv-tools-read',

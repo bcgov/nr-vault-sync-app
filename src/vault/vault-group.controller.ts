@@ -9,7 +9,10 @@ import HclUtil from '../util/hcl.util';
 import { GroupPolicyService } from './policy-roots/impl/group-policy.service';
 import { AppPolicyService } from './policy-roots/impl/app-policy.service';
 import { CloudPolicyService } from './policy-roots/impl/cloud-policy.service';
-import { VAULT_ROOT_SYSTEM } from './policy-roots/policy-root.service';
+import {
+  VAULT_ROOT_APPS,
+  VAULT_ROOT_SYSTEM,
+} from './policy-roots/policy-root.service';
 import { RegistrationService } from '../services/registration.service';
 
 export const VAULT_GROUP_KEYCLOAK_DEVELOPERS = 'oidc-css-developer';
@@ -89,7 +92,7 @@ export default class VaultGroupController {
           this.hclUtil.renderName({
             group: VAULT_ROOT_SYSTEM,
             templateName: 'kv-developer',
-            data: { secretKvPath: 'apps' },
+            data: { secretKvPath: VAULT_ROOT_APPS },
           }),
         );
         await this.syncGroup(
@@ -112,7 +115,11 @@ export default class VaultGroupController {
       try {
         const specs = await this.cloudRootService.build(cloud);
         const writePolicyNames = specs
-          .filter((spec) => spec.templateName.endsWith('-write'))
+          .filter(
+            (spec) =>
+              spec.templateName === 'cloud-kv-write' ||
+              spec.templateName === 'cloud-kv-read',
+          )
           .map((spec) => this.hclUtil.renderName(spec));
 
         await this.syncGroup(
