@@ -55,8 +55,7 @@ export class CloudPolicyService implements PolicyRootService<string> {
     const cloudSpecs: HclRenderSpec[] = [];
     const templateFiles = fs
       .readdirSync(CloudPolicyService.cloudPolicyConfigPath)
-      .filter((file) => file.endsWith('.hcl.tpl'))
-      .sort();
+      .filter((spec) => spec.endsWith('.hcl.tpl'));
     for (const cloud of clouds) {
       const data = {
         secretKvCloudPath: VAULT_ROOT_CLOUDS,

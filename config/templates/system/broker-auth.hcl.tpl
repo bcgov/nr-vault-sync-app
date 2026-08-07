@@ -24,10 +24,10 @@ path "<%= secretKvAppsPath %>/data/tools/+/+" {
   capabilities = ["create", "read", "update", "patch"]
 }
 
-path "clouds/data/+/+/nr-broker-sync" {
+path "<%= secretKvCloudPath %>/subkeys/+/+/nr-broker-sync" {
   capabilities = ["read"]
 }
 
-path "clouds/subkeys/+/+/nr-broker-sync" {
+path "<%= secretKvCloudPath %>/data/+/+/nr-broker-sync" {
   capabilities = ["read"]
 }

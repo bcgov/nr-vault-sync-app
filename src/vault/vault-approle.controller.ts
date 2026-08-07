@@ -99,7 +99,7 @@ export default class VaultApproleController {
                 group: VAULT_ROOT_SYSTEM,
                 templateName: 'kv-tools-read',
                 data: {
-                  secretKvPath: 'apps',
+                  secretKvPath: VAULT_ROOT_APPS,
                 },
               }),
             );

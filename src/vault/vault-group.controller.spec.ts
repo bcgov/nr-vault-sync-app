@@ -148,7 +148,7 @@ describe('vault-group.controller', () => {
       1,
       'oidc-css-cloud/openshift',
       'cloud_openshift',
-      ['clouds/openshift/cloud-kv-write'],
+      ['clouds/openshift/cloud-kv-read', 'clouds/openshift/cloud-kv-write'],
     );
     expect(vc.syncGroup).toHaveBeenCalledTimes(1);
   });
