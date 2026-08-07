@@ -58,7 +58,7 @@ export class CloudPolicyService implements PolicyRootService<string> {
       .filter((spec) => spec.endsWith('.hcl.tpl'));
     for (const cloud of clouds) {
       const data = {
-        secretKvCloudPath: VAULT_ROOT_CLOUDS,
+        secretKvCloudsPath: VAULT_ROOT_CLOUDS,
         cloudName: cloud,
       };
       for (const file of templateFiles) {

@@ -1,28 +1,28 @@
 
-path "<%= secretKvCloudPath %>/subkeys/<%= cloudName %>/+/nr-broker-sync" {
+path "<%= secretKvCloudsPath %>/subkeys/<%= cloudName %>/+/nr-broker-sync" {
   capabilities = ["read"]
 }
 
-path "<%= secretKvCloudPath %>/data/<%= cloudName %>/+/+" {
+path "<%= secretKvCloudsPath %>/data/<%= cloudName %>/+/+" {
   capabilities = ["create", "update", "read", "delete", "patch"]
 }
 
-path "<%= secretKvCloudPath %>/metadata/<%= cloudName %>" {
+path "<%= secretKvCloudsPath %>/metadata/<%= cloudName %>" {
   capabilities = ["create", "read", "update", "delete", "list"]
 }
 
-path "<%= secretKvCloudPath %>/metadata/<%= cloudName %>/+" {
+path "<%= secretKvCloudsPath %>/metadata/<%= cloudName %>/+" {
   capabilities = ["create", "update", "patch", "delete"]
 }
 
-path "<%= secretKvCloudPath %>/metadata/<%= cloudName %>/+/+" {
+path "<%= secretKvCloudsPath %>/metadata/<%= cloudName %>/+/+" {
   capabilities = ["create", "update", "patch", "delete"]
 }
 
-path "<%= secretKvCloudPath %>/undelete/<%= cloudName %>/+/+" {
+path "<%= secretKvCloudsPath %>/undelete/<%= cloudName %>/+/+" {
   capabilities = ["update"]
 }
 
-path "<%= secretKvCloudPath %>/destroy/<%= cloudName %>/+/+" {
+path "<%= secretKvCloudsPath %>/destroy/<%= cloudName %>/+/+" {
   capabilities = ["update"]
 }
