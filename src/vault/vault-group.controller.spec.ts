@@ -124,12 +124,12 @@ describe('vault-group.controller', () => {
       {
         group: 'clouds',
         templateName: 'cloud-kv-read',
-        data: { secretKvCloudPath: 'clouds', cloudName: 'openshift' },
+        data: { secretKvCloudsPath: 'clouds', cloudName: 'openshift' },
       },
       {
         group: 'clouds',
         templateName: 'cloud-kv-write',
-        data: { secretKvCloudPath: 'clouds', cloudName: 'openshift' },
+        data: { secretKvCloudsPath: 'clouds', cloudName: 'openshift' },
       },
     ];
     const localCloudService = {

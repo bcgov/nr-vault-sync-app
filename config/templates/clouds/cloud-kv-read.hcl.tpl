@@ -1,20 +1,20 @@
 
-path "<%= secretKvCloudPath %>/metadata" {
+path "<%= secretKvCloudsPath %>/metadata" {
   capabilities = ["list"]
 }
 
-path "<%= secretKvCloudPath %>/metadata/<%= cloudName %>" {
+path "<%= secretKvCloudsPath %>/metadata/<%= cloudName %>" {
   capabilities = ["list"]
 }
 
-path "<%= secretKvCloudPath %>/metadata/<%= cloudName %>/*" {
+path "<%= secretKvCloudsPath %>/metadata/<%= cloudName %>/*" {
   capabilities = ["list"]
 }
 
-path "<%= secretKvCloudPath %>/subkeys/<%= cloudName %>/* {
+path "<%= secretKvCloudsPath %>/subkeys/<%= cloudName %>/* {
   capabilities = ["read"]
 }
 
-path "<%= secretKvCloudPath %>/data/<%= cloudName %>/+/+" {
+path "<%= secretKvCloudsPath %>/data/<%= cloudName %>/+/+" {
   capabilities = ["read"]
 }

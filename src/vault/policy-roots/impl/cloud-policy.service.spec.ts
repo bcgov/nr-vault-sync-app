@@ -44,12 +44,12 @@ describe('cloud-policy.service', () => {
       {
         group: VAULT_ROOT_CLOUDS,
         templateName: 'cloud-kv-read',
-        data: { secretKvCloudPath: VAULT_ROOT_CLOUDS, cloudName: 'openshift' },
+        data: { secretKvCloudsPath: VAULT_ROOT_CLOUDS, cloudName: 'openshift' },
       },
       {
         group: VAULT_ROOT_CLOUDS,
         templateName: 'cloud-kv-write',
-        data: { secretKvCloudPath: VAULT_ROOT_CLOUDS, cloudName: 'openshift' },
+        data: { secretKvCloudsPath: VAULT_ROOT_CLOUDS, cloudName: 'openshift' },
       },
     ]);
   });
@@ -66,7 +66,7 @@ describe('cloud-policy.service', () => {
       {
         group: VAULT_ROOT_CLOUDS,
         templateName: 'cloud-kv-read',
-        data: { secretKvCloudPath: VAULT_ROOT_CLOUDS, cloudName: 'openshift' },
+        data: { secretKvCloudsPath: VAULT_ROOT_CLOUDS, cloudName: 'openshift' },
       },
     ]);
   });
@@ -90,7 +90,7 @@ describe('cloud-policy.service', () => {
       {
         group: VAULT_ROOT_CLOUDS,
         templateName: 'cloud-kv-write',
-        data: { secretKvCloudPath: VAULT_ROOT_CLOUDS, cloudName: 'aws' },
+        data: { secretKvCloudsPath: VAULT_ROOT_CLOUDS, cloudName: 'aws' },
       },
     ]);
   });
@@ -108,7 +108,7 @@ describe('cloud-policy.service', () => {
       {
         group: VAULT_ROOT_CLOUDS,
         templateName: 'cloud-kv-read',
-        data: { secretKvCloudPath: VAULT_ROOT_CLOUDS, cloudName: 'aws' },
+        data: { secretKvCloudsPath: VAULT_ROOT_CLOUDS, cloudName: 'aws' },
       },
     ]);
   });
