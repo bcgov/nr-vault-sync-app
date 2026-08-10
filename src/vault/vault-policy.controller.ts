@@ -60,11 +60,17 @@ export default class VaultPolicyController {
     } else {
       this.logger.info(`Add policy: ${name}`);
       await this.registrationService.register(name, policy);
-      // Using vault.write because vault.addPolicy is not encoding the name correctly
-      await this.vault.write(`sys/policies/acl/${encodeURIComponent(name)}`, {
-        name,
-        policy,
-      });
+      try {
+        // Using vault.write because vault.addPolicy is not encoding the name correctly
+        await this.vault.write(`sys/policies/acl/${encodeURIComponent(name)}`, {
+          name,
+          policy,
+        });
+      } catch (error) {
+        this.logger.error(`Failed to write policy: ${name}`);
+        this.logger.error(`Policy body: ${policy}`);
+        throw error;
+      }
     }
   }
 
