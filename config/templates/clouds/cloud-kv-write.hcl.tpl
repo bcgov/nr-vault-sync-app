@@ -1,4 +1,3 @@
-
 path "<%= secretKvCloudsPath %>/subkeys/<%= cloudName %>/+/nr-broker-sync" {
   capabilities = ["read"]
 }

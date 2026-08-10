@@ -124,12 +124,12 @@ describe('vault-group.controller', () => {
       {
         group: 'clouds',
         templateName: 'cloud-kv-read',
-        data: { secretKvCloudsPath: 'clouds', cloudName: 'openshift' },
+        data: { secretKvCloudsPath: 'clouds', cloudName: 'ocp-silver-c3123d' },
       },
       {
         group: 'clouds',
         templateName: 'cloud-kv-write',
-        data: { secretKvCloudsPath: 'clouds', cloudName: 'openshift' },
+        data: { secretKvCloudsPath: 'clouds', cloudName: 'ocp-silver-c3123d' },
       },
     ];
     const localCloudService = {
@@ -148,7 +148,10 @@ describe('vault-group.controller', () => {
       1,
       'oidc-css-cloud/openshift',
       'cloud_openshift',
-      ['clouds/openshift/cloud-kv-read', 'clouds/openshift/cloud-kv-write'],
+      [
+        'clouds/ocp-silver-c3123d/cloud-kv-read',
+        'clouds/ocp-silver-c3123d/cloud-kv-write',
+      ],
     );
     expect(vc.syncGroup).toHaveBeenCalledTimes(1);
   });
