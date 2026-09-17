@@ -7,7 +7,7 @@ path "sys/policy/*" {
 }
 
 # Read sanitized state
-path "/sys/config/state/sanitized" {
+path "sys/config/state/sanitized" {
     policy = "read"
 }
 
