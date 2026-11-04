@@ -6,13 +6,16 @@ spec:
   lifecycle: production
   owner: Oscar
 metadata:
-  name: nr-vault-sync-app
-  description: NodeJS Tool that updates vault policies, groups and appRoles
-  title: Vault Sync Tool
+  name: vsync
+  description: The Vault Sync generates Vault policies, groups and AppRoles.
+  title: NR Vault Sync
   tags:
     - ""
   annotations:
     license: Apache-2.0
-    github.com/project-slug: bcgov/nr-auth-sync-app
-    playbook.io.nrs.gov.bc.ca/instances: '[{"env":"development"},{"env":"test"},{"env":"production"}]'
-    composer.io.nrs.gov.bc.ca/generators: backstage
+    github.com/project-slug: bcgov-c/tenant-gitops-7e553b
+  links:
+    - type: instance
+      env: production
+      title: production
+      url: https://console.apps.emerald.devops.gov.bc.ca
