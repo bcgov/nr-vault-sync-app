@@ -13,7 +13,7 @@ metadata:
     - ""
   annotations:
     license: Apache-2.0
-    github.com/project-slug: bcgov-c/tenant-gitops-7e553b
+    github.com/project-slug: bcgov/nr-vault-sync-app
   links:
     - type: instance
       env: production
