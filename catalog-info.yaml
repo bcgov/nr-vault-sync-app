@@ -1,0 +1,21 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+spec:
+  system: vault
+  type: service
+  lifecycle: production
+  owner: Oscar
+metadata:
+  name: vsync
+  description: The Vault Sync generates Vault policies, groups and AppRoles.
+  title: NR Vault Sync
+  tags:
+    - ""
+  annotations:
+    license: Apache-2.0
+    github.com/project-slug: bcgov/nr-vault-sync-app
+  links:
+    - type: instance
+      env: production
+      title: production
+      url: https://console.apps.emerald.devops.gov.bc.ca
